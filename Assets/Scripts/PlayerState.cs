@@ -28,7 +28,7 @@ namespace PlayerStates
         {
             curState = Player.State.Up;
             order.animator.SetTrigger("Up");
-            order.spriteTransform.localRotation = Quaternion.Euler(45, 0, 0);
+            //order.spriteTransform.localRotation = Quaternion.Euler(45, 0, 0);
         }
         public override IEnumerator Middle(Player order)
         {
@@ -52,7 +52,7 @@ namespace PlayerStates
         {
             curState = Player.State.Down;
             order.animator.SetTrigger("Down");
-            order.spriteTransform.localRotation = Quaternion.Euler(45, 0, 0);
+            //order.spriteTransform.localRotation = Quaternion.Euler(45, 0, 0);
         }
         public override IEnumerator Middle(Player order)
         {
@@ -77,8 +77,8 @@ namespace PlayerStates
         {
             curState = Player.State.Horizontal;
             order.animator.SetTrigger("Horizontal");
-            order.RotateState();
-            order.spriteTransform.localRotation = Quaternion.Euler(45, 0, 0);
+            //order.RotateState();
+            //order.spriteTransform.localRotation = Quaternion.Euler(45, 0, 0);
         }
         public override IEnumerator Middle(Player order)
         {
@@ -103,7 +103,7 @@ namespace PlayerStates
         {
             curState = Player.State.HoUp;
             order.animator.SetTrigger("Up");
-            order.spriteTransform.localRotation = Quaternion.Euler(45,15, 0);
+            //order.spriteTransform.localRotation = Quaternion.Euler(45,15, 0);
         }
         public override IEnumerator Middle(Player order)
         {
@@ -127,7 +127,7 @@ namespace PlayerStates
         {
             curState = Player.State.HoDown;
             order.animator.SetTrigger("Down");
-            order.spriteTransform.localRotation = Quaternion.Euler(45,-15, 0);
+            //order.spriteTransform.localRotation = Quaternion.Euler(45,-15, 0);
         }
         public override IEnumerator Middle(Player order)
         {
@@ -142,6 +142,7 @@ namespace PlayerStates
                 order.Move();
                 yield return null;
             }
+            
         }
     }
 
