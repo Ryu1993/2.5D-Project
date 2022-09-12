@@ -9,10 +9,7 @@ public class ShaderChanger : MonoBehaviour
     [SerializeField]
     [Header("원본부터 멀어질 거리")]
     Vector3 posiiton;
-    Material temp;
-    [SerializeField]
     MeshRenderer[] renderers;
-    [SerializeField]
     SkinnedMeshRenderer[] skinRenderes;
 
     static readonly int Position = Shader.PropertyToID("_Position");
