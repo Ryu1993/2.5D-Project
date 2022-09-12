@@ -10,9 +10,12 @@ public class ShaderChanger : MonoBehaviour
     [Header("원본부터 멀어질 거리")]
     Vector3 posiiton;
     Material temp;
+    [SerializeField]
     MeshRenderer[] renderers;
+    [SerializeField]
     SkinnedMeshRenderer[] skinRenderes;
-    
+
+    static readonly int Position = Shader.PropertyToID("_Position");
 
     public void SearchRenderer()
     {
@@ -27,7 +30,7 @@ public class ShaderChanger : MonoBehaviour
             foreach(Material material in meshRenderer.sharedMaterials)
             {
                 material.shader = targetShader;
-                material.SetVector("Position", posiiton);
+                material.SetVector(Position, posiiton);
             }
         }
         foreach(SkinnedMeshRenderer skinnedMeshRenderer in skinRenderes)
@@ -35,7 +38,7 @@ public class ShaderChanger : MonoBehaviour
             foreach(Material material in skinnedMeshRenderer.sharedMaterials)
             {
                 material.shader = targetShader;
-                material.SetVector("Position", posiiton);
+                material.SetVector(Position, posiiton);
             }
 
         }
