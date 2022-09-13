@@ -43,6 +43,10 @@ public static class AddressObject
     }
 
 
+    public static void Release(GameObject obj)
+    {
+        Addressables.Release(obj);
+    }
 
 
 }
