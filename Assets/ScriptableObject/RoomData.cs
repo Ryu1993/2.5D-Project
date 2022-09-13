@@ -7,12 +7,12 @@ using UnityEngine.AddressableAssets;
 public class RoomData : ScriptableObject
 {
     public enum State { Battle,Shop,Boss}
-    public State curState;
-    public AssetLabelReference map_label;
+    [SerializeField]
+    private State _curState;
+    public State curState { get { return _curState; } }
+    public AssetLabelReference map_pack;
     public AssetLabelReference monster_pack;
     public AssetLabelReference npc_pack;
-
-
-
+    public AssetLabelReference reward_pack;
 
 }
