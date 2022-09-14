@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
-[CreateAssetMenu(menuName ="Mapdata/Room")]
+[CreateAssetMenu(menuName ="MapData/Room")]
 public class RoomData : ScriptableObject
 {
     public enum State { Battle,Shop,Boss}

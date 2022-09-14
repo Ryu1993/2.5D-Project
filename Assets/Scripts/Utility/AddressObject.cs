@@ -37,7 +37,7 @@ public static class AddressObject
         Queue<IResourceLocation> locationQueue = new Queue<IResourceLocation>(locations);
         for (int i = 0; i < limit; i++)
         {
-            if (locations.Count != 0)
+            if (locationQueue.Count != 0)
             {
                 objects.Add(Addressables.InstantiateAsync(locationQueue.Dequeue()).Result);
             }
@@ -92,9 +92,9 @@ public static class AddressObject
     }
 
 
-    public static void Release(GameObject obj)
+    public static bool Release(GameObject obj)
     {
-        Addressables.Release(obj);
+        return Addressables.ReleaseInstance(obj);
     }
 
 

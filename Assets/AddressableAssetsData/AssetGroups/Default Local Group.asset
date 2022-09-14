@@ -16,13 +16,9 @@ MonoBehaviour:
   m_Data:
     m_SerializedData: []
   m_GUID: f914b3cb75218294c8000d87b9c8a32a
-  m_SerializeEntries:
-  - m_GUID: 60e2e65a91c23f34aacf326b9cea4e88
-    m_Address: Assets/ScriptableObject/Player/Player.asset
-    m_ReadOnly: 0
-    m_SerializedLabels: []
+  m_SerializeEntries: []
   m_ReadOnly: 0
-  m_Settings: {fileID: 0}
+  m_Settings: {fileID: 11400000, guid: a36bbc9cce32b754382bb97867bcb24f, type: 2}
   m_SchemaSet:
     m_Schemas:
     - {fileID: 11400000, guid: 2932a534db8b62f48a2fae2ec5402e27, type: 2}

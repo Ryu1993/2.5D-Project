@@ -5,71 +5,77 @@ using System.Linq;
 
 public class RoomManager : MonoBehaviour
 {
-    enum Object {player,enemy,npc,reward}
-    [SerializeField]
-    RoomData roomData;
-    Dictionary<Object, List<Transform>> spawn = new Dictionary<Object, List<Transform>>();
-    Object[] objects = {Object.player,Object.enemy,Object.npc,Object.reward};
+    enum Object {Enemy,Npc,Reward}
+    public RoomData roomData;
+    [SerializeField] Transform gatePointer;
+    [SerializeField] Transform enemyPointer;
+    [SerializeField] Transform npcPointer;
+    [SerializeField] Transform rewardPointer;
+    [SerializeField] Transform upGate;
+    [SerializeField] Transform downGate;
+    [SerializeField] Transform leftGate;
+    [SerializeField] Transform rightGate;
+    Dictionary<Object, List<Transform>> SpawnPoint = new Dictionary<Object, List<Transform>>();
+    Dictionary<MapManager.GateDirection,Transform> Gate = new Dictionary<MapManager.GateDirection,Transform>();
 
-
-    private void Awake()
+    void CreateSpawnPoint()
     {
-        CreateDic();
+        SpawnPoint.Clear();
+        SpawnPoint.Add(Object.Enemy, CreateChildList(enemyPointer));
+        SpawnPoint.Add(Object.Npc, CreateChildList(npcPointer));
+        SpawnPoint.Add(Object.Reward,CreateChildList(rewardPointer));
+    }
+    private void CreateGate()
+    {
+        Gate.Clear();
+        Gate.Add(MapManager.GateDirection.Up, upGate);
+        Gate.Add(MapManager.GateDirection.Down, downGate);
+        Gate.Add(MapManager.GateDirection.Left, leftGate);
+        Gate.Add(MapManager.GateDirection.Right, rightGate);
     }
 
-    void CreateDic()
+    private List<Transform> CreateChildList(Transform transform)
     {
-        for (int i = 0; i < transform.childCount; i++)
+        List<Transform> childList = new List<Transform>();
+        for(int i = 0; i < transform.childCount; i++)
         {
-            spawn.Add(objects[i],new List<Transform>());
-            Transform temp = transform.GetChild(i);
-            if(temp.childCount>0)
-            {
-                for(int j = 0; j< temp.childCount; j++)
-                {
-                    spawn[objects[i]].Add(temp.GetChild(j));
-                }
-            }
-            else
-            {
-                spawn[objects[i]].Add(temp);
-            }
+            childList.Add(transform.GetChild(i));
         }
+        return childList;
     }
 
-    void PlayerSpawn(Transform player)
+    void PlayerSpawn(Transform player,MapManager.GateDirection direction)
     {
-        player.transform.position = spawn[Object.player][0].position;
+        player.position = Gate[direction].position;
     }
 
     void EnemySpawn()
     {
-        foreach(Transform enemy in spawn[Object.enemy])
+        int count = SpawnPoint[Object.Enemy].Count;
+        if (count > 0)
         {
-            AddressObject.RandonInstinate(roomData.map_pack).transform.position = enemy.position;
+            foreach (Transform enemy in SpawnPoint[Object.Enemy])
+            {
+                AddressObject.RandonInstinate(roomData.map_pack).transform.position = enemy.position;
+            }
         }
     }
 
     void NPCSpawn()
     {
-        int count = spawn[Object.npc].Count - 1;
-        if (count>0)
+        int count = SpawnPoint[Object.Npc].Count;
+        if (count > 0)
         {
             List<GameObject> npc = AddressObject.LimitInstinates(roomData.npc_pack, count);
-            for(int i = 0; i < npc.Count; i++)
+            for (int i = 0; i < npc.Count; i++)
             {
-                npc[i].transform.position = spawn[Object.npc][i].position;
+                npc[i].transform.position = SpawnPoint[Object.Npc][i].position;
             }
-
         }
     }
 
     void RewardSpawn()
     {
-        List<GameObject> rewards = AddressObject.LimitRandomInstinates(roomData.reward_pack,spawn[Object.reward].Count);
-
+        List<GameObject> rewards = AddressObject.LimitRandomInstinates(roomData.reward_pack, SpawnPoint[Object.Reward].Count);
     }
-
-
-
 }
