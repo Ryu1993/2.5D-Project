@@ -85,6 +85,10 @@ MonoBehaviour:
   m_LabelTable:
     m_LabelNames:
     - default
+    - TestMap_Label
+    - TestEnemy_Label
+    - TestReward_Label
+    - TestNPC_Label
   m_SchemaTemplates: []
   m_GroupTemplateObjects:
   - {fileID: 11400000, guid: bb16e0181677ac74b95368d51420f5dc, type: 2}

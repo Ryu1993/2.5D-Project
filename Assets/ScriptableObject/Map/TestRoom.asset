@@ -12,12 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc0325e3806d6b340bf5046fc518168c, type: 3}
   m_Name: TestRoom
   m_EditorClassIdentifier: 
-  _curState: 0
+  curRoomType: 3
+  icon: {fileID: 0}
   map_pack:
-    m_LabelString: 
+    m_LabelString: TestMap_Label
   monster_pack:
-    m_LabelString: 
+    m_LabelString: TestEnemy_Label
   npc_pack:
-    m_LabelString: 
+    m_LabelString: TestNPC_Label
   reward_pack:
-    m_LabelString: 
+    m_LabelString: TestReward_Label

@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   startRoom: {fileID: 11400000, guid: e37c944adff88bc4fb4073015801af3b, type: 2}
   progressRooms:
-  - {fileID: 11400000, guid: d121536ad2107b5468e0fa3beb716ceb, type: 2}
-  - {fileID: 11400000, guid: afc35363a8ae9364a99ad3405c1cfa4f, type: 2}
-  - {fileID: 11400000, guid: 4327e77aa54c7e9448604ddfce9b3466, type: 2}
-  - {fileID: 11400000, guid: 4327e77aa54c7e9448604ddfce9b3466, type: 2}
-  - {fileID: 11400000, guid: afc35363a8ae9364a99ad3405c1cfa4f, type: 2}
-  - {fileID: 11400000, guid: 72d2a0d0a7ec3594981dab5071d63a87, type: 2}
-  endRoom: {fileID: 11400000, guid: 72d2a0d0a7ec3594981dab5071d63a87, type: 2}
+  - {fileID: 11400000, guid: e37c944adff88bc4fb4073015801af3b, type: 2}
+  - {fileID: 11400000, guid: e37c944adff88bc4fb4073015801af3b, type: 2}
+  - {fileID: 11400000, guid: e37c944adff88bc4fb4073015801af3b, type: 2}
+  - {fileID: 11400000, guid: e37c944adff88bc4fb4073015801af3b, type: 2}
+  - {fileID: 11400000, guid: e37c944adff88bc4fb4073015801af3b, type: 2}
+  - {fileID: 11400000, guid: e37c944adff88bc4fb4073015801af3b, type: 2}
+  endRoom: {fileID: 11400000, guid: e37c944adff88bc4fb4073015801af3b, type: 2}

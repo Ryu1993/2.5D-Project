@@ -4,7 +4,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
-public class Player : MonoBehaviour
+public class Player : Singleton<Player>
 {
  
     public Transform spriteTransform;
@@ -22,9 +22,15 @@ public class Player : MonoBehaviour
     [SerializeField]
     float moveSpeed;
 
-    private void Awake()
+
+    protected override void Awake()
     {
-        SettingStateMachine();
+        base.Awake();
+        //SettingStateMachine();
+    }
+    private void Update()
+    {
+        Move();
     }
 
     void SettingStateMachine()
@@ -72,6 +78,11 @@ public class Player : MonoBehaviour
         moveZ = Input.GetAxis("Vertical");
         moveVec = new Vector3(moveX, 0, moveZ).normalized * Time.deltaTime * moveSpeed;
         rigi.velocity = moveVec;
+    }
+
+    public void PlayerKinematic()
+    {
+        rigi.isKinematic = !rigi.isKinematic;
     }
 
 }
