@@ -564,7 +564,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gateDirections: 00000000010000000200000003000000
   mapUI: {fileID: 596420138}
-  connectedList: []
   map: {fileID: 11400000, guid: 1f53ce2d142e8f34492668594e61be24, type: 2}
 --- !u!4 &781958401
 Transform:
@@ -1018,14 +1017,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   roomData: {fileID: 0}
-  gatePointer: {fileID: 0}
-  enemyPointer: {fileID: 0}
-  npcPointer: {fileID: 0}
-  rewardPointer: {fileID: 0}
-  upGate: {fileID: 0}
-  downGate: {fileID: 0}
-  leftGate: {fileID: 0}
-  rightGate: {fileID: 0}
+  enemyPointer: {fileID: 1644098447}
+  npcPointer: {fileID: 951157421}
+  rewardPointer: {fileID: 1242933058}
+  upGate: {fileID: 1742240977}
+  downGate: {fileID: 341264098}
+  leftGate: {fileID: 2122591103}
+  rightGate: {fileID: 112678299}
 --- !u!1 &1644098446
 GameObject:
   m_ObjectHideFlags: 0
