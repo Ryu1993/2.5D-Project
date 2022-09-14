@@ -6,10 +6,7 @@ using UnityEngine.AddressableAssets;
 [CreateAssetMenu(menuName ="MapData/Room")]
 public class RoomData : ScriptableObject
 {
-    public enum State { Battle,Shop,Boss}
-    [SerializeField]
-    private State _curState;
-    public State curState { get { return _curState; } }
+    public Sprite icon;
     public AssetLabelReference map_pack;
     public AssetLabelReference monster_pack;
     public AssetLabelReference npc_pack;
