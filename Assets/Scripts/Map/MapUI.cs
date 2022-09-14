@@ -9,7 +9,6 @@ public class MapUI : MonoBehaviour
     RoomIconUI roomIcon;
     [SerializeField]
     float roomIconLength;
-
     public void CreateRoomIcon(List<MapManager.RoomConnectInfo> allRoomList)
     {
         foreach(MapManager.RoomConnectInfo roomInfo in allRoomList)

@@ -8,7 +8,8 @@ public class MapManager : Singleton<MapManager>
     public enum GateDirection { Up, Down,Left,Right }
     [HideInInspector]
     public GateDirection[] gateDirections = {GateDirection.Up,GateDirection.Down,GateDirection.Left,GateDirection.Right};
-    [System.Serializable]
+    [SerializeField]
+    MapUI mapUI;
     public class RoomConnectInfo
     {
         [HideInInspector]
@@ -49,15 +50,15 @@ public class MapManager : Singleton<MapManager>
         }
 
     }
-    [SerializeField]
-    MapUI mapUI;
     List<RoomConnectInfo> checkList;
     List<RoomConnectInfo> outputList;
-    [SerializeField]
     List<RoomConnectInfo> connectedList;
     List<RoomConnectInfo> allRoomList;
     RoomConnectInfo startInfo;
     RoomConnectInfo endInfo;
+    RoomConnectInfo curRoomInfo;
+    RoomManager curRoomManager;
+    Transform player;
     public void RoomCreate(MapInfo mapInfo)
     {
         int num = 0;
@@ -196,11 +197,33 @@ public class MapManager : Singleton<MapManager>
             return new Vector2(x-1, y);
         }
     }
-
     private void MapUIIconCreate()
     {
         mapUI.CreateRoomIcon(allRoomList);
     }
+
+
+    public void InGameEneter(MapInfo mapInfo)
+    {
+        RoomCreate(mapInfo);
+        curRoomInfo = startInfo;
+    }
+
+    public void MapEnter(GateDirection direction)
+    {
+        curRoomManager = AddressObject.RandonInstinate(curRoomInfo.room.map_pack).GetComponent<RoomManager>();
+        curRoomManager.roomData = curRoomInfo.room;
+        curRoomManager.ConnectedSet(curRoomInfo.GateCheck());
+
+
+
+    }
+
+
+
+
+
+
 
     [SerializeField]
     MapInfo map;

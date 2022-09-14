@@ -7,7 +7,6 @@ public class RoomManager : MonoBehaviour
 {
     enum Object {Enemy,Npc,Reward}
     public RoomData roomData;
-    [SerializeField] Transform gatePointer;
     [SerializeField] Transform enemyPointer;
     [SerializeField] Transform npcPointer;
     [SerializeField] Transform rewardPointer;
@@ -17,6 +16,7 @@ public class RoomManager : MonoBehaviour
     [SerializeField] Transform rightGate;
     Dictionary<Object, List<Transform>> SpawnPoint = new Dictionary<Object, List<Transform>>();
     Dictionary<MapManager.GateDirection,Transform> Gate = new Dictionary<MapManager.GateDirection,Transform>();
+    List<MapManager.GateDirection> connectedDirection = new List<MapManager.GateDirection>();
 
     void CreateSpawnPoint()
     {
@@ -34,15 +34,11 @@ public class RoomManager : MonoBehaviour
         Gate.Add(MapManager.GateDirection.Right, rightGate);
     }
 
-    private List<Transform> CreateChildList(Transform transform)
+    public void ConnectedSet(List<MapManager.GateDirection> directions)
     {
-        List<Transform> childList = new List<Transform>();
-        for(int i = 0; i < transform.childCount; i++)
-        {
-            childList.Add(transform.GetChild(i));
-        }
-        return childList;
+        connectedDirection = directions;
     }
+
 
     void PlayerSpawn(Transform player,MapManager.GateDirection direction)
     {
@@ -78,4 +74,16 @@ public class RoomManager : MonoBehaviour
     {
         List<GameObject> rewards = AddressObject.LimitRandomInstinates(roomData.reward_pack, SpawnPoint[Object.Reward].Count);
     }
+
+    private List<Transform> CreateChildList(Transform transform)
+    {
+        List<Transform> childList = new List<Transform>();
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            childList.Add(transform.GetChild(i));
+        }
+        return childList;
+    }
+
+
 }

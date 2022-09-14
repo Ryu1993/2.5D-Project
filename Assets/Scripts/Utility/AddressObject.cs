@@ -9,7 +9,6 @@ public static class AddressObject
 {
     static List<GameObject> objects = new List<GameObject>();
     static GameObject obj;
-    static Queue<GameObject> objQueue;
 
     public static List<GameObject> Instinates(AssetLabelReference label)
     {
