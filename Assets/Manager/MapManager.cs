@@ -96,7 +96,7 @@ public class MapManager : Singleton<MapManager>
                 allRoomList.Add(matchRoom);
             }
         }
-
+        allRoomList.Add(startInfo);
         while (true)
         {
             RoomConnectInfo endConnetRoom = connectedList[Random.Range(0, connectedList.Count)];
@@ -115,7 +115,6 @@ public class MapManager : Singleton<MapManager>
                 endInfo.gate.Add(endRoomDirection, endConnetRoom);
                 endInfo.rectPosition = endRoomPosition;
                 allRoomList.Add(endInfo);
-                allRoomList.Add(startInfo);
                 break;
             }
         }
