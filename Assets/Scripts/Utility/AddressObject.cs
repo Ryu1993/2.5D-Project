@@ -46,11 +46,16 @@ public static class AddressObject
         }
         return objectList;
     }
+
+
     public static GameObject RandomInstinate(AssetLabelReference label)
     {
         var locations = Addressables.LoadResourceLocationsAsync(label.labelString).WaitForCompletion();
         return Addressables.InstantiateAsync(locations[Random.Range(0, locations.Count)]).WaitForCompletion();
     }
+
+
+
 
     public static GameObject Instinate(AssetLabelReference label)
     {
