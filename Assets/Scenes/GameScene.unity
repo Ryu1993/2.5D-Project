@@ -889,7 +889,7 @@ MonoBehaviour:
   animator: {fileID: 0}
   mousePointer: {fileID: 0}
   rigi: {fileID: 2083750305}
-  moveSpeed: 50
+  moveSpeed: 300
 --- !u!54 &2083750305
 Rigidbody:
   m_ObjectHideFlags: 0

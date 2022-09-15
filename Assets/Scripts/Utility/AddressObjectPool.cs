@@ -48,7 +48,6 @@ public class AddressObjectPool : Singleton<AddressObjectPool>
         for (int i = 0; i < poolInfo.start; i++)
         {
             GameObject go = Instantiate(poolInfo.poolObject, deactive);
-            go.SetActive(false);
             poolDic[poolInfo].Enqueue(go);
         }
         return poolInfo;
@@ -68,7 +67,6 @@ public class AddressObjectPool : Singleton<AddressObjectPool>
         for(int i = 0; i < poolInfo.add; i++)
         {
             GameObject go = Instantiate(poolInfo.poolObject, deactive);
-            go.SetActive(false);
             queue.Enqueue(go);
         }
     }

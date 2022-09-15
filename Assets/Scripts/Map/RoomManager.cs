@@ -104,7 +104,7 @@ public class RoomManager : MonoBehaviour
             foreach (Transform enemyPostion in SpawnPoint[Object.Enemy])
             {
                 var pool = enemyPools[Random.Range(0, enemyPools.Count)];
-                var monster = AddressObjectPool.instance.Call(pool).GetComponent<Monster>();
+                var monster = AddressObjectPool.instance.Call(pool,enemyPostion.position).GetComponent<Monster>();
                 monster.dieEvent += SubMonsterCountEvent;
                 monster.PoolInfoSet(pool);
             }          
