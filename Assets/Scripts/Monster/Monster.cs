@@ -6,16 +6,15 @@ using UnityEngine.Events;
 public class Monster : MonoBehaviour,IReturnable
 {
     public UnityAction dieEvent;
-    public AddressObjectPool.PoolInfo poolInfo;
-
-    public void PoolInfoSet(AddressObjectPool.PoolInfo pool)
+    private NewObjectPool.PoolInfo poolInfo;
+    public void PoolInfoSet(NewObjectPool.PoolInfo pool)
     {
         poolInfo = pool;
         dieEvent += Return;
     }
     public void Return()
     {
-        AddressObjectPool.instance.Return(this.gameObject, poolInfo);
+        NewObjectPool.instance.Return(this.gameObject, poolInfo);
     }
 
 }

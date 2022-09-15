@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AddressObjectPool : Singleton<AddressObjectPool>
+public class NewObjectPool : Singleton<NewObjectPool>
 {
     [System.Serializable]
     public class PoolInfo
@@ -16,7 +16,13 @@ public class AddressObjectPool : Singleton<AddressObjectPool>
             start = _start;
             add = _add;
         }
+        public bool MemberCheck()
+        {
+            return poolObject != null && start != 0 && add != 0;
+        }
     }
+    [SerializeField]
+    PoolInfo[] poolInfos;
     Dictionary<string, PoolInfo> poolInfoDic = new Dictionary<string, PoolInfo>();
     Dictionary<PoolInfo, Queue<GameObject>> poolDic = new Dictionary<PoolInfo, Queue<GameObject>>();
     Transform active;
@@ -26,6 +32,7 @@ public class AddressObjectPool : Singleton<AddressObjectPool>
     {
         base.Awake();
         ActiveNoneActiveSet();
+        AwakePoolInfoSet();
     }
     private void ActiveNoneActiveSet()
     {
@@ -34,6 +41,33 @@ public class AddressObjectPool : Singleton<AddressObjectPool>
         active.gameObject.SetActive(true);
         deactive.gameObject.SetActive(false);
     }
+    private void AwakePoolInfoSet()
+    {
+        if(poolInfos.Length>0)
+        {
+            foreach(PoolInfo poolInfo in poolInfos)
+            {
+                if(poolInfo.MemberCheck())
+                {
+                    if (ReturnableCheck(poolInfo.poolObject))
+                    {
+                        continue;
+                    }
+                    if (PoolInfoSearch(poolInfo.poolObject)==null)
+                    {
+                        poolInfoDic.Add(poolInfo.poolObject.name, poolInfo);
+                        poolDic.Add(poolInfo, new Queue<GameObject>());
+                        for (int i = 0; i < poolInfo.start; i++)
+                        {
+                            GameObject go = Instantiate(poolInfo.poolObject, deactive);
+                            poolDic[poolInfo].Enqueue(go);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
 
     public PoolInfo PoolInfoSet(GameObject gameObject, int start, int add)
     {
@@ -42,13 +76,12 @@ public class AddressObjectPool : Singleton<AddressObjectPool>
         {
             return poolInfo;
         }
-        if(gameObject.GetComponent<IReturnable>()==null)
+        if(ReturnableCheck(gameObject))
         {
-            Debug.Log("오브젝트 풀에 적합하지 않은 오브젝트");
             return null;
         }
         poolInfo = new PoolInfo(gameObject, start, add);
-        poolInfoDic.Add(gameObject.name, poolInfo);
+        poolInfoDic.Add(poolInfo.poolObject.name, poolInfo);
         poolDic.Add(poolInfo, new Queue<GameObject>());
         for (int i = 0; i < poolInfo.start; i++)
         {
@@ -57,6 +90,16 @@ public class AddressObjectPool : Singleton<AddressObjectPool>
         }
         return poolInfo;
     }
+    private bool ReturnableCheck(GameObject gameObject)
+    {
+        bool isReturnable = gameObject.GetComponent<IReturnable>() != null;
+        if(!isReturnable)
+        {
+            Debug.Log("오브젝트 풀에 적합하지 않은 오브젝트");
+        }
+        return isReturnable;
+    }
+
     public PoolInfo PoolInfoSearch(GameObject gameObject)
     {
         if(poolInfoDic.ContainsKey(gameObject.name))

@@ -22,7 +22,7 @@ public class RoomManager : MonoBehaviour
     Dictionary<Object, List<Transform>> SpawnPoint = new Dictionary<Object, List<Transform>>();
     Dictionary<MapManager.GateDirection,Transform> Gate = new Dictionary<MapManager.GateDirection,Transform>();
     List<MapManager.GateDirection> connectedDirection = new List<MapManager.GateDirection>();
-    List<AddressObjectPool.PoolInfo> enemyPools = new List<AddressObjectPool.PoolInfo>();
+    List<NewObjectPool.PoolInfo> enemyPools = new List<NewObjectPool.PoolInfo>();
     int monsterCounter = 0;
 
     private void Awake()
@@ -99,12 +99,12 @@ public class RoomManager : MonoBehaviour
             List<GameObject> enemys = AddressObject.GameObjectsSet(roomData.monster_pack);
             foreach(GameObject enemy in enemys)
             {
-                enemyPools.Add(AddressObjectPool.instance.PoolInfoSet(enemy, 5, 3));
+                enemyPools.Add(NewObjectPool.instance.PoolInfoSet(enemy, 5, 3));
             }
             foreach (Transform enemyPostion in SpawnPoint[Object.Enemy])
             {
                 var pool = enemyPools[Random.Range(0, enemyPools.Count)];
-                var monster = AddressObjectPool.instance.Call(pool,enemyPostion.position).GetComponent<Monster>();
+                var monster = NewObjectPool.instance.Call(pool,enemyPostion.position).GetComponent<Monster>();
                 monster.dieEvent += SubMonsterCountEvent;
                 monster.PoolInfoSet(pool);
             }          
@@ -119,7 +119,7 @@ public class RoomManager : MonoBehaviour
             if(subCount<monsterCounter)
             {
                 var pool = enemyPools[Random.Range(0, enemyPools.Count)];
-                var monster = AddressObjectPool.instance.Call(pool).GetComponent<Monster>();
+                var monster = NewObjectPool.instance.Call(pool).GetComponent<Monster>();
                 monster.dieEvent += SubMonsterCountEvent;
                 monster.PoolInfoSet(pool);
             }

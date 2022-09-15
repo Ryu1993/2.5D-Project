@@ -4,7 +4,7 @@ using UnityEngine;
 
 public interface IReturnable
 {
-    public void PoolInfoSet(AddressObjectPool.PoolInfo pool);
+    public void PoolInfoSet(NewObjectPool.PoolInfo pool);
     public void Return();
 
 
