@@ -14,4 +14,6 @@ public class Gate : MonoBehaviour
     {
         MapManager.instance.MapEnter(curDirection);
     }
+
+
 }

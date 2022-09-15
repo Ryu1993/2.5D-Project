@@ -1,9 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
-using UnityEngine.ResourceManagement.AsyncOperations;
-using UnityEngine.ResourceManagement.ResourceLocations;
 
 public class MapManager : Singleton<MapManager>
 {
@@ -26,7 +23,7 @@ public class MapManager : Singleton<MapManager>
         }
         public List<GateDirection> NullGateCheck()
         {
-            List<GateDirection> result = new List<GateDirection>();
+            var result = new List<GateDirection>();
             foreach(var gateDirection in MapManager.instance.gateDirections)
             {
                 if(!gate.ContainsKey(gateDirection))
@@ -38,7 +35,7 @@ public class MapManager : Singleton<MapManager>
         }
         public List<GateDirection> GateCheck()
         {
-            List<GateDirection> result = new List<GateDirection>();
+            var result = new List<GateDirection>();
             foreach (var gateDirection in MapManager.instance.gateDirections)
             {
                 if (gate.ContainsKey(gateDirection))
@@ -58,7 +55,10 @@ public class MapManager : Singleton<MapManager>
     RoomConnectInfo endInfo;
     RoomConnectInfo curRoomInfo;
     RoomManager curRoomManager;
+    GameObject curRoom;
     Transform player;
+
+    #region RoomConnectSetting
     public void RoomCreate(MapInfo mapInfo)
     {
         RoomListCreate(mapInfo);
@@ -162,10 +162,15 @@ public class MapManager : Singleton<MapManager>
         return true;
 
     }
+    #endregion
+
+
     private void MapUIIconCreate()
     {
         mapUI.CreateRoomIcon(allRoomList);
     }
+
+
     public void GameEneter(MapInfo mapInfo)
     {
         player = Player.instance.transform;
@@ -175,23 +180,23 @@ public class MapManager : Singleton<MapManager>
         MapEnter(GateDirection.Start);
     }
 
- 
-
     public void MapEnter(GateDirection direction)
     {
-        if (direction != GateDirection.Start) { curRoomInfo.isClear = true; curRoomInfo = curRoomInfo.gate[direction]; }
-        //GameObject temp = Addressables.InstantiateAsync(curRoomInfo.room.map_pack.labelString).WaitForCompletion();
-        //GameObject temp = AddressObject<GameObject>.RandomInstinate(curRoomInfo.room.map_pack);
-        List<GameObject> temps = AddressObject.Instinates(curRoomInfo.room.map_pack);
-        GameObject temp = temps[0];
-        curRoomManager = temp.GetComponent<RoomManager>();
+        Player.instance.PlayerKinematic();
+        if (direction != GateDirection.Start)
+        {
+            curRoomInfo.isClear = true;
+            curRoomInfo = curRoomInfo.gate[direction]; 
+            AddressObject.Release(curRoom);
+        }
+        curRoom = AddressObject.RandomInstinate(curRoomInfo.room.map_pack);
+        curRoomManager = curRoom.GetComponent<RoomManager>();
         curRoomManager.roomData = curRoomInfo.room;
         curRoomManager.ConnectedSet(curRoomInfo.GateCheck());
-        if (!curRoomInfo.isClear) curRoomManager.RoomSetting();
-        if (direction == GateDirection.Start) curRoomManager.ActivateGate();
-        curRoomManager.PlayerSpawn(player, direction);
+        if(!curRoomInfo.isClear)curRoomManager.RoomSetting();
+        if(curRoomInfo.isClear)curRoomManager.ActivateGate();
+        curRoomManager.PlayerSpawn(player, MatchDirection(direction));
         Player.instance.PlayerKinematic();
-
     }
 
 

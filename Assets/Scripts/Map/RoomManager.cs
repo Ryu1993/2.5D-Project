@@ -43,7 +43,7 @@ public class RoomManager : MonoBehaviour
         Gate.Add(MapManager.GateDirection.Down, downGate);
         Gate.Add(MapManager.GateDirection.Left, leftGate);
         Gate.Add(MapManager.GateDirection.Right, rightGate);
-        foreach(MapManager.GateDirection direction in Gate.Keys)
+        foreach(MapManager.GateDirection direction in MapManager.instance.gateDirections)
         {
             Gate[direction].GetComponent<Gate>().DirectionSet(direction);
             Gate[direction].gameObject.SetActive(false);
@@ -87,7 +87,8 @@ public class RoomManager : MonoBehaviour
             player.position = center.position;
             return;
         }
-        player.position = Gate[direction].position;
+        player.position = center.position;
+        //player.position = Gate[direction].position;
     }
     private void EnemySpawn()
     {
@@ -127,11 +128,11 @@ public class RoomManager : MonoBehaviour
     }
     private void RewardSpawn()
     {
-        List<GameObject> rewards = AddressObject.LimitRandomInstinates(roomData.reward_pack, SpawnPoint[Object.Reward].Count);
-        for(int i = 0; i < rewards.Count; i++)
-        {
-            rewards[i].transform.position = SpawnPoint[Object.Reward][i].position;
-        }
+        //List<GameObject> rewards = AddressObject.LimitRandomInstinates(roomData.reward_pack, SpawnPoint[Object.Reward].Count);
+        //for(int i = 0; i < rewards.Count; i++)
+        //{
+        //    rewards[i].transform.position = SpawnPoint[Object.Reward][i].position;
+        //}
         ActivateGate();
     }
 
