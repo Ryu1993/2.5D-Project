@@ -49,11 +49,11 @@ public class Player : Singleton<Player>
     {
         if(transform.position.x<target.x)
         {
-            transform.localScale = new Vector3(1, 1, 1);
+            spriteTransform.localScale = new Vector3(1, 1, 1);
         }
         else
         {
-            transform.localScale = new Vector3(-1, 1, 1);
+            spriteTransform.localScale = new Vector3(-1, 1, 1);
         }
     }
 

@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Polyart_Default
-  m_Shader: {fileID: -6465566751694194690, guid: 98147b37ccd559f44836a83059479a9f,
+  m_Shader: {fileID: -6465566751694194690, guid: 3520ec640dab0ae4c8f4efe7d8977767,
     type: 3}
   m_ValidKeywords: []
   m_InvalidKeywords: []
@@ -71,6 +71,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _Alpha: 1
     - _BumpScale: 1
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1

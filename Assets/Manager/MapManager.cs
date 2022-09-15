@@ -165,17 +165,11 @@ public class MapManager : Singleton<MapManager>
     #endregion
 
 
-    private void MapUIIconCreate()
-    {
-        mapUI.CreateRoomIcon(allRoomList);
-    }
-
-
     public void GameEneter(MapInfo mapInfo)
     {
         player = Player.instance.transform;
         RoomCreate(mapInfo);
-        MapUIIconCreate();
+        mapUI.CreateRoomIcon(allRoomList);
         curRoomInfo = startInfo;
         MapEnter(GateDirection.Start);
     }
@@ -188,6 +182,7 @@ public class MapManager : Singleton<MapManager>
             curRoomInfo.isClear = true;
             curRoomInfo = curRoomInfo.gate[direction]; 
             AddressObject.Release(curRoom);
+            mapUI.MapMove(direction);
         }
         curRoom = AddressObject.RandomInstinate(curRoomInfo.room.map_pack);
         curRoomManager = curRoom.GetComponent<RoomManager>();
