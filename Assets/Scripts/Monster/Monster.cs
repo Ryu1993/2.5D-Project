@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class Monster : MonoBehaviour
+public class Monster : MonoBehaviour,IReturnable
 {
     public UnityAction dieEvent;
     public AddressObjectPool.PoolInfo poolInfo;
@@ -11,9 +11,9 @@ public class Monster : MonoBehaviour
     public void PoolInfoSet(AddressObjectPool.PoolInfo pool)
     {
         poolInfo = pool;
-        dieEvent += DieReturn;
+        dieEvent += Return;
     }
-    protected void DieReturn()
+    public void Return()
     {
         AddressObjectPool.instance.Return(this.gameObject, poolInfo);
     }

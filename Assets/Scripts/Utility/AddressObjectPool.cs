@@ -22,7 +22,6 @@ public class AddressObjectPool : Singleton<AddressObjectPool>
     Transform active;
     Transform deactive;
 
-
     protected override void Awake()
     {
         base.Awake();
@@ -38,11 +37,17 @@ public class AddressObjectPool : Singleton<AddressObjectPool>
 
     public PoolInfo PoolInfoSet(GameObject gameObject, int start, int add)
     {
-        if(PoolInfoSearch(gameObject)!=null)
+        PoolInfo poolInfo = PoolInfoSearch(gameObject);
+        if (poolInfo!=null)
         {
+            return poolInfo;
+        }
+        if(gameObject.GetComponent<IReturnable>()==null)
+        {
+            Debug.Log("오브젝트 풀에 적합하지 않은 오브젝트");
             return null;
         }
-        PoolInfo poolInfo = new PoolInfo(gameObject, start, add);
+        poolInfo = new PoolInfo(gameObject, start, add);
         poolInfoDic.Add(gameObject.name, poolInfo);
         poolDic.Add(poolInfo, new Queue<GameObject>());
         for (int i = 0; i < poolInfo.start; i++)
@@ -114,68 +119,5 @@ public class AddressObjectPool : Singleton<AddressObjectPool>
         gameObject.transform.SetParent(deactive);
         poolDic[poolInfo].Enqueue(gameObject);
     }
-
-
-
-
-    //public void Add(string name)
-    //{
-    //    PoolInfo temp;
-    //    poolInfoDic.TryGetValue(name, out temp);
-    //    if (temp == null)
-    //    {
-    //        Debug.Log("풀 목록에 존재하지 않는 오브젝트");
-    //        return;
-    //    }
-    //    for (int i = 0; i < temp.add; i++)
-    //    {
-    //        InPoolObj tempobj = Instantiate(temp.obj, deactive);
-    //        tempobj.gameObject.SetActive(false);
-    //        poolDict[name + "(Clone)"].Enqueue(tempobj);
-    //    }
-    //}
-
-    //public void AddStart(string name)
-    //{
-    //    PoolInfo temp;
-    //    poolInfoDic.TryGetValue(name, out temp);
-    //    for (int i = 0; i < temp.start; i++)
-    //    {
-    //        InPoolObj tempobj = Instantiate(temp.obj, deactive);
-    //        tempobj.gameObject.SetActive(false);
-    //        poolDict[name + "(Clone)"].Enqueue(tempobj);
-    //    }
-    //}
-
-    //public Transform Call(string name, Vector3 positon, Vector3 rotate)
-    //{
-    //    if (!poolDict.ContainsKey(name + "(Clone)"))
-    //    {
-    //        return null;
-    //    }
-    //    if (poolDict[name + "(Clone)"].Count == 0)
-    //    {
-    //        Add(name);
-    //    }
-    //    Transform temp = poolDict[name + "(Clone)"]?.Dequeue().transform;
-    //    temp.position = positon;
-    //    temp.rotation = Quaternion.Euler(rotate);
-    //    temp.SetParent(active);
-    //    return temp;
-    //}
-
-    //public void Return(InPoolObj obj)
-    //{
-    //    if (!poolDict.ContainsKey(obj.gameObject.name))
-    //    {
-    //        return;
-    //    }
-    //    obj.transform.SetParent(deactive);
-    //    poolDict[obj.gameObject.name].Enqueue(obj);
-
-    //}
-
-
-
 
 }
