@@ -1,6 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
+using UnityEngine.ResourceManagement.ResourceLocations;
 
 public class MapManager : Singleton<MapManager>
 {
@@ -172,16 +175,23 @@ public class MapManager : Singleton<MapManager>
         MapEnter(GateDirection.Start);
     }
 
+ 
+
     public void MapEnter(GateDirection direction)
     {
         if (direction != GateDirection.Start) { curRoomInfo.isClear = true; curRoomInfo = curRoomInfo.gate[direction]; }
-        curRoomManager = AddressObject.RandonInstinate(curRoomInfo.room.map_pack).GetComponent<RoomManager>();
+        //GameObject temp = Addressables.InstantiateAsync(curRoomInfo.room.map_pack.labelString).WaitForCompletion();
+        //GameObject temp = AddressObject<GameObject>.RandomInstinate(curRoomInfo.room.map_pack);
+        List<GameObject> temps = AddressObject.Instinates(curRoomInfo.room.map_pack);
+        GameObject temp = temps[0];
+        curRoomManager = temp.GetComponent<RoomManager>();
         curRoomManager.roomData = curRoomInfo.room;
         curRoomManager.ConnectedSet(curRoomInfo.GateCheck());
         if (!curRoomInfo.isClear) curRoomManager.RoomSetting();
-        else curRoomManager.ActivateGate();
+        if (direction == GateDirection.Start) curRoomManager.ActivateGate();
         curRoomManager.PlayerSpawn(player, direction);
         Player.instance.PlayerKinematic();
+
     }
 
 

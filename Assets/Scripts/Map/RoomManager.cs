@@ -1,6 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
+using UnityEngine.ResourceManagement.ResourceLocations;
 using System.Linq;
 using UnityEngine.SocialPlatforms.GameCenter;
 
@@ -20,7 +23,6 @@ public class RoomManager : MonoBehaviour
     Dictionary<MapManager.GateDirection,Transform> Gate = new Dictionary<MapManager.GateDirection,Transform>();
     List<MapManager.GateDirection> connectedDirection = new List<MapManager.GateDirection>();
     int monsterCounter = 0;
-    bool delay;
 
     private void Awake()
     {
@@ -41,29 +43,20 @@ public class RoomManager : MonoBehaviour
         Gate.Add(MapManager.GateDirection.Down, downGate);
         Gate.Add(MapManager.GateDirection.Left, leftGate);
         Gate.Add(MapManager.GateDirection.Right, rightGate);
-        upGate.gameObject.SetActive(false);
-        downGate.gameObject.SetActive(false);
-        leftGate.gameObject.SetActive(false);
-        rightGate.gameObject.SetActive(false);
+        foreach(MapManager.GateDirection direction in Gate.Keys)
+        {
+            Gate[direction].GetComponent<Gate>().DirectionSet(direction);
+            Gate[direction].gameObject.SetActive(false);
+        }
     }
     public void ActivateGate()
     {
-        Delay(new WaitForSeconds(2f));
-        if(!delay)
+        foreach (MapManager.GateDirection direction in connectedDirection)
         {
-            foreach (MapManager.GateDirection direction in connectedDirection)
-            {
-                Gate[direction].gameObject.SetActive(true);
-            }
+            Gate[direction].gameObject.SetActive(true);
         }
     }
-    private IEnumerator Delay(WaitForSeconds wait)
-    {
-        delay = true;
-        yield return wait;
-        delay = false;
 
-    }
     public void ConnectedSet(List<MapManager.GateDirection> directions)
     {
         connectedDirection = directions;
@@ -103,7 +96,9 @@ public class RoomManager : MonoBehaviour
         {
             foreach (Transform enemy in SpawnPoint[Object.Enemy])
             {
-                Monster temp = AddressObject.RandonInstinate(roomData.map_pack).GetComponent<Monster>();
+                GameObject tempObj = AddressObject.RandomInstinate(roomData.monster_pack);
+                
+                Monster temp = tempObj.GetComponent<Monster>();
                 temp.transform.position = enemy.position;
                 temp.dieEvent += SubMonsterCountEvent;
             }

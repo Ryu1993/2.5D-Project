@@ -19,6 +19,6 @@ MonoBehaviour:
   monster_pack:
     m_LabelString: TestEnemy_Label
   npc_pack:
-    m_LabelString: TestNPC_Label
+    m_LabelString: default
   reward_pack:
-    m_LabelString: TestReward_Label
+    m_LabelString: default

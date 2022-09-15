@@ -4,90 +4,57 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.ResourceManagement.ResourceLocations;
+using static UnityEditor.FilePathAttribute;
 
 public static class AddressObject
 {
-    static List<GameObject> objects = new List<GameObject>();
-    static GameObject obj;
 
     public static List<GameObject> Instinates(AssetLabelReference label)
     {
-        IList<IResourceLocation> locations = new List<IResourceLocation>();
-        objects = new List<GameObject>();
-        Addressables.LoadResourceLocationsAsync(label.labelString).Completed += (handle) =>
-        {
-            locations = handle.Result;
-        };
+        List<GameObject> objectList = new List<GameObject>();
+        var locations = Addressables.LoadResourceLocationsAsync(label.labelString).WaitForCompletion();
         foreach (var location in locations)
         {
-            objects.Add(Addressables.InstantiateAsync(location).Result);
+            objectList.Add(Addressables.InstantiateAsync(location).WaitForCompletion());
         }
-        return objects;
+        return objectList;
     }
 
     public static List<GameObject> LimitInstinates(AssetLabelReference label, int limit)
     {
-        IList<IResourceLocation> locations = new List<IResourceLocation>();
-        objects = new List<GameObject>();
-        Addressables.LoadResourceLocationsAsync(label.labelString).Completed += (handle) =>
-        {
-            locations = handle.Result;
-        };
-        Queue<IResourceLocation> locationQueue = new Queue<IResourceLocation>(locations);
+        List<GameObject> objectList = new List<GameObject>();
+        var locations = Addressables.LoadResourceLocationsAsync(label.labelString).WaitForCompletion();
         for (int i = 0; i < limit; i++)
         {
-            if (locationQueue.Count != 0)
+            if(locations.Count > 0)
             {
-                objects.Add(Addressables.InstantiateAsync(locationQueue.Dequeue()).Result);
+                IResourceLocation location = locations[Random.Range(0, locations.Count)];
+                objectList.Add(Addressables.InstantiateAsync(location).WaitForCompletion());
+                locations.Remove(location);
             }
         }
-        return objects;
+        return objectList;
     }
 
     public static List<GameObject> LimitRandomInstinates(AssetLabelReference label,int limit)
     {
-        IList<IResourceLocation> locations = new List<IResourceLocation>();
-        objects = new List<GameObject>();
-        Addressables.LoadResourceLocationsAsync(label.labelString).Completed += (handle) =>
-        {
-            locations = handle.Result;
-        };
+        List<GameObject> objectList = new List<GameObject>();
+        var locations = Addressables.LoadResourceLocationsAsync(label.labelString).WaitForCompletion();
         for (int i = 0; i < limit; i++)
         {
-            objects.Add(Addressables.InstantiateAsync(locations[Random.Range(0, locations.Count)]).Result);
+            objectList.Add(Addressables.InstantiateAsync(locations[Random.Range(0, locations.Count)]).WaitForCompletion());
         }
-        return objects;
+        return objectList;
     }
-
-
-    public static int LabelCount(AssetLabelReference label)
+    public static GameObject RandomInstinate(AssetLabelReference label)
     {
-        int count = 0;
-        Addressables.LoadResourceLocationsAsync(label.labelString).Completed += (handle) =>
-        {
-            var location = handle.Result;
-            if (location != null)
-            {
-                count = location.Count;
-            }
-        };
-        return count;
-    }
-
-
-    public static GameObject RandonInstinate(AssetLabelReference label)
-    {
-        Addressables.LoadResourceLocationsAsync(label.labelString).Completed += (handle) =>
-        {
-            var location = handle.Result;
-            obj = Addressables.InstantiateAsync(location[Random.Range(0, location.Count)]).Result;
-        };
-        return obj;
+        var locations = Addressables.LoadResourceLocationsAsync(label.labelString).WaitForCompletion();
+        return Addressables.InstantiateAsync(locations[Random.Range(0, locations.Count)]).WaitForCompletion();
     }
 
     public static GameObject Instinate(AssetLabelReference label)
     {
-        return Addressables.InstantiateAsync(label.labelString).Result;
+        return Addressables.InstantiateAsync(label.labelString).WaitForCompletion();
     }
 
 
