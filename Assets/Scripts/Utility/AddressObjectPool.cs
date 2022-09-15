@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AdressObjectPool : Singleton<AdressObjectPool>
+public class AddressObjectPool : Singleton<AddressObjectPool>
 {
     [System.Serializable]
     public class PoolInfo
@@ -36,11 +36,11 @@ public class AdressObjectPool : Singleton<AdressObjectPool>
         deactive.gameObject.SetActive(false);
     }
 
-    public void PoolInfoSet(GameObject gameObject, int start, int add)
+    public PoolInfo PoolInfoSet(GameObject gameObject, int start, int add)
     {
         if(PoolInfoSearch(gameObject)!=null)
         {
-            return;
+            return null;
         }
         PoolInfo poolInfo = new PoolInfo(gameObject, start, add);
         poolInfoDic.Add(gameObject.name, poolInfo);
@@ -51,6 +51,7 @@ public class AdressObjectPool : Singleton<AdressObjectPool>
             go.SetActive(false);
             poolDic[poolInfo].Enqueue(go);
         }
+        return poolInfo;
     }
     public PoolInfo PoolInfoSearch(GameObject gameObject)
     {
@@ -114,7 +115,6 @@ public class AdressObjectPool : Singleton<AdressObjectPool>
     {
         gameObject.transform.SetParent(deactive);
         poolDic[poolInfo].Enqueue(gameObject);
-
     }
 
 

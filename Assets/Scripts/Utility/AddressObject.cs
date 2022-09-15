@@ -77,9 +77,18 @@ public static class AddressObject
         return gameObjects;
     }
 
-
-
-
+    public static List<GameObject> RandomGameObjectsSet(AssetLabelReference label)
+    {
+        var gameObjects = new List<GameObject>();
+        var locations = Locations(label);
+        while(locations.Count > 0)
+        {
+            var location = locations[Random.Range(0, locations.Count)];
+            gameObjects.Add(Addressables.LoadAssetAsync<GameObject>(location).WaitForCompletion());
+            locations.Remove(location);
+        }
+        return gameObjects;
+    }
 
     #region Location
     public static IResourceLocation RandomLocation(AssetLabelReference label)
@@ -108,8 +117,6 @@ public static class AddressObject
         return locations;
     }
     #endregion
-
-
 
     public static GameObject Instinate(AssetLabelReference label)
     {

@@ -174,7 +174,6 @@ public class MapManager : Singleton<MapManager>
     public void GameEneter(MapInfo mapInfo)
     {
         player = Player.instance.transform;
-        Player.instance.PlayerKinematic();
         RoomCreate(mapInfo);
         curRoomInfo = startInfo;
         MapEnter(GateDirection.Start);

@@ -22,6 +22,7 @@ public class RoomManager : MonoBehaviour
     Dictionary<Object, List<Transform>> SpawnPoint = new Dictionary<Object, List<Transform>>();
     Dictionary<MapManager.GateDirection,Transform> Gate = new Dictionary<MapManager.GateDirection,Transform>();
     List<MapManager.GateDirection> connectedDirection = new List<MapManager.GateDirection>();
+    List<AddressObjectPool.PoolInfo> enemyPools = new List<AddressObjectPool.PoolInfo>();
     int monsterCounter = 0;
 
     private void Awake()
@@ -95,16 +96,37 @@ public class RoomManager : MonoBehaviour
         monsterCounter = SpawnPoint[Object.Enemy].Count;
         if (monsterCounter > 0)
         {
-            foreach (Transform enemy in SpawnPoint[Object.Enemy])
+            List<GameObject> enemys = AddressObject.GameObjectsSet(roomData.monster_pack);
+            foreach(GameObject enemy in enemys)
             {
-                GameObject tempObj = AddressObject.RandomInstinate(roomData.monster_pack);
-                
-                Monster temp = tempObj.GetComponent<Monster>();
-                temp.transform.position = enemy.position;
-                temp.dieEvent += SubMonsterCountEvent;
+                enemyPools.Add(AddressObjectPool.instance.PoolInfoSet(enemy, 5, 3));
             }
+            foreach (Transform enemyPostion in SpawnPoint[Object.Enemy])
+            {
+                var pool = enemyPools[Random.Range(0, enemyPools.Count)];
+                var monster = AddressObjectPool.instance.Call(pool).GetComponent<Monster>();
+                monster.dieEvent += SubMonsterCountEvent;
+                monster.PoolInfoSet(pool);
+            }          
         }
     }
+    public void EnemyAdd(int num)
+    {
+        int subCount = 0;
+        for(int i = 0; i < num; i++)
+        {
+            subCount++;
+            if(subCount<monsterCounter)
+            {
+                var pool = enemyPools[Random.Range(0, enemyPools.Count)];
+                var monster = AddressObjectPool.instance.Call(pool).GetComponent<Monster>();
+                monster.dieEvent += SubMonsterCountEvent;
+                monster.PoolInfoSet(pool);
+            }
+        }
+
+    }
+
     private void SubMonsterCountEvent()
     {
         monsterCounter--;
