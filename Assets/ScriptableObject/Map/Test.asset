@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   startRoom: {fileID: 11400000, guid: e37c944adff88bc4fb4073015801af3b, type: 2}
   progressRooms:
-  - {fileID: 11400000, guid: e37c944adff88bc4fb4073015801af3b, type: 2}
-  - {fileID: 11400000, guid: e37c944adff88bc4fb4073015801af3b, type: 2}
-  - {fileID: 11400000, guid: e37c944adff88bc4fb4073015801af3b, type: 2}
+  - {fileID: 11400000, guid: de7f0e4fc98497c4195bd0f0d61b5075, type: 2}
+  - {fileID: 11400000, guid: de7f0e4fc98497c4195bd0f0d61b5075, type: 2}
+  - {fileID: 11400000, guid: de7f0e4fc98497c4195bd0f0d61b5075, type: 2}
   - {fileID: 11400000, guid: e37c944adff88bc4fb4073015801af3b, type: 2}
   - {fileID: 11400000, guid: e37c944adff88bc4fb4073015801af3b, type: 2}
   - {fileID: 11400000, guid: e37c944adff88bc4fb4073015801af3b, type: 2}

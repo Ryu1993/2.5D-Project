@@ -26,11 +26,7 @@ public class Player : Singleton<Player>
     protected override void Awake()
     {
         base.Awake();
-        //SettingStateMachine();
-    }
-    private void Update()
-    {
-        Move();
+        SettingStateMachine();
     }
 
     void SettingStateMachine()

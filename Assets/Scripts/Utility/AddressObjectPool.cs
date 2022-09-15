@@ -38,11 +38,12 @@ public class AddressObjectPool : Singleton<AddressObjectPool>
 
     public PoolInfo PoolInfoSet(GameObject gameObject, int start, int add)
     {
-        if(PoolInfoSearch(gameObject)!=null)
+        PoolInfo poolInfo = PoolInfoSearch(gameObject);
+        if(poolInfo!=null)
         {
-            return null;
+            return poolInfo;
         }
-        PoolInfo poolInfo = new PoolInfo(gameObject, start, add);
+        poolInfo = new PoolInfo(gameObject, start, add);
         poolInfoDic.Add(gameObject.name, poolInfo);
         poolDic.Add(poolInfo, new Queue<GameObject>());
         for (int i = 0; i < poolInfo.start; i++)

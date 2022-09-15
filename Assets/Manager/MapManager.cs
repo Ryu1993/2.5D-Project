@@ -175,6 +175,7 @@ public class MapManager : Singleton<MapManager>
     {
         player = Player.instance.transform;
         RoomCreate(mapInfo);
+        MapUIIconCreate();
         curRoomInfo = startInfo;
         MapEnter(GateDirection.Start);
     }
