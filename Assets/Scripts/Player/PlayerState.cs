@@ -6,12 +6,18 @@ using UnityEngine;
 
 namespace PlayerStates
 {
+
+
     public class BaseState : State<Player>
     {
+        protected Player.State curDirection;
         protected Player.State curState;
+        protected Player.State nextDirection;
         protected Player.State nextState;
         public override void Enter(Player order)
-        {           
+        {
+            curDirection = order.DirectionState();
+            curState = order.curAction;
         }
         public override IEnumerator Middle(Player order)
         {
@@ -19,98 +25,78 @@ namespace PlayerStates
         }
         public override void Exit(Player order)
         {
+
+
+        }
+
+        protected virtual void DirectionCheck(Player order)
+        {
+            nextDirection = order.DirectionState();
+            if (curDirection != nextDirection)
+            {
+                order.animator.SetTrigger(nextDirection.ToString());
+                curDirection = nextDirection;
+            }
+        }
+        protected virtual bool IsNextActionCheck(Player order)
+        {
+            nextState = order.curAction;
+            if (curState != nextState)
+            {
+                order.animator.SetTrigger(nextState.ToString());
+                order.ChangeState(nextState);
+                return true;
+            }
+            return false;
         }
     }
-
-    #region DirectionMove
     public class DirectionState : BaseState
     {
         public override IEnumerator Middle(Player order)
         {
             while (true)
             {
-                nextState = order.RotateState();
-                if (curState != nextState)
-                {
-                    order.animator.SetTrigger(nextState.ToString());
-                    order.ChangeState(nextState);
-                    break;
-                }
-                order.Move();
+                DirectionCheck(order);
+                order.ActionCheck.Invoke();
+                if (IsNextActionCheck(order)) break;
                 yield return null;
             }
         }
     }
 
-    public class UpState : DirectionState
+    public class MoveState : BaseState
     {
-        public override void Enter(Player order)
-        {
-            curState = Player.State.Up;
-        }
         public override IEnumerator Middle(Player order)
         {
-            return base.Middle(order);
-        }
-    }
-
-    public class DownState : DirectionState
-    {
-        public override void Enter(Player order)
-        {
-            curState = Player.State.Down;
-        }
-        public override IEnumerator Middle(Player order)
-        {
-            return base.Middle(order);
-        }
-
-    }
-
-    public class HorizontalState : DirectionState
-    {
-        public override void Enter(Player order)
-        {
-            curState = Player.State.Horizontal;
-        }
-        public override IEnumerator Middle(Player order)
-        {
-            return base.Middle(order);
-        }
-    }
-
-
-    public class HoUpState : DirectionState
-    {
-        public override void Enter(Player order)
-        {
-            curState = Player.State.HoUp;
-        }
-        public override IEnumerator Middle(Player order)
-        {
-            while (true)
+            while(true)
             {
-                return base.Middle(order);
+                DirectionCheck(order);
+                order.ActionCheck.Invoke();
+                order.PlayerMove.Invoke();
+                if (IsNextActionCheck(order)) break;
+                yield return null;
             }
         }
     }
 
-    public class HoDownSate : DirectionState
+    public class AttackState : BaseState
     {
-        public override void Enter(Player order)
-        {
-            curState = Player.State.HoDown;
-        }
-        public override IEnumerator Middle(Player order)
-        {
-            while (true)
-            {
-                return base.Middle(order);
-            }
-            
-        }
+
     }
-    #endregion
+
+    public class SkiilState : BaseState
+    {
+
+    }
+
+    public class DashState : BaseState
+    {
+
+    }
+
+    
+
+
 
 
 

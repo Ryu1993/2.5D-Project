@@ -7,8 +7,8 @@ using UnityEngine.Events;
 [RequireComponent(typeof(Rigidbody))]
 public class Player : Singleton<Player>
 {
-    public enum State { Up, Down, Horizontal, HoUp, HoDown }
-
+    public enum State { Up, Down, Horizontal, HoUp, HoDown ,Move,Idle,Hit,Attack,Skill,Dash}
+    private State[] directionsIdle = { State.Up, State.Down, State.Horizontal, State.HoUp, State.HoDown,State.Idle };
     public Transform spriteTransform;
     public Animator animator;
     public float moveSpeed;
@@ -17,16 +17,17 @@ public class Player : Singleton<Player>
     [SerializeField]
     private Rigidbody rigi;
     private StateMachine<State, Player> stateMachine;
-    private Vector3 moveVec;
+    public Vector3 moveVec;
     private float moveX;
     private float moveZ;
     private State curDirection;
-    private State curState;
     public UnityAction<State> ChangeState;
     public UnityAction PlayerKinematic;
+    public UnityAction PlayerMove;
     private UnityAction<Vector3> CheckRight;
-    
 
+    public State curAction;
+    public UnityAction ActionCheck;
 
     protected override void Awake()
     {
@@ -37,19 +38,28 @@ public class Player : Singleton<Player>
     void Setting()
     {
         stateMachine = new StateMachine<State, Player>(this);
-        stateMachine.AddState(State.Up, new PlayerStates.UpState());
-        stateMachine.AddState(State.Down, new PlayerStates.DownState());
-        stateMachine.AddState(State.Horizontal, new PlayerStates.HorizontalState());
-        stateMachine.AddState(State.HoUp, new PlayerStates.HoUpState());
-        stateMachine.AddState(State.HoDown, new PlayerStates.HoDownSate());
+        stateMachine.AddState(State.Idle, new PlayerStates.DirectionState());
+        stateMachine.AddState(State.Move, new PlayerStates.MoveState());
+        #region UnityActionTemplate
         ChangeState += (state) => { stateMachine.ChangeState(state); };
         CheckRight += (target) => { if (transform.position.x < target.x) spriteTransform.localScale = new Vector3(1, 1, 1); else spriteTransform.localScale = new Vector3(-1, 1, 1); };
         PlayerKinematic += () => { rigi.isKinematic = !rigi.isKinematic; };
-        ChangeState(State.Up);
+        PlayerMove += () => { rigi.velocity = moveVec; };
+        #endregion
+        #region ActionControllerTemplate
+
+        ActionCheck += MoveInput;
+        ActionCheck += AttackInput;
+        ActionCheck += SkillInput;
+        ActionCheck += DashInput;
+        curAction = State.Idle;
+
+        #endregion
+        curDirection = State.Up;
+        ChangeState(curAction);
     }
 
-
-    public State RotateState()
+    public State DirectionState()
     {
         CheckRight(mousePointer.position);
         float dot = Vector3.Dot(transform.forward, (mousePointer.position-transform.position).normalized);
@@ -60,18 +70,33 @@ public class Player : Singleton<Player>
         else curDirection = State.Down;
         return curDirection;
     }
-
-
-
-
-    public void Move()
+    public void MoveInput()
     {
         moveX = Input.GetAxis("Horizontal");
         moveZ = Input.GetAxis("Vertical");
         moveVec = new Vector3(moveX, 0, moveZ).normalized * Time.deltaTime * moveSpeed;
-        rigi.velocity = moveVec;
+        if (moveVec == Vector3.zero)
+        {
+            curAction = State.Idle;
+        }
+        else
+        {
+            curAction = State.Move;
+        }
     }
 
+    public void AttackInput()
+    {
+
+    }
+    public void DashInput()
+    {
+
+    }
+    public void SkillInput()
+    {
+
+    }
 
 
 }

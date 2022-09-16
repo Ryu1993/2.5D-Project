@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028334, g: 0.22571328, b: 0.3069217, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -735,6 +735,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09ea766e992466043b23bd129a4ff0eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  poolInfos: []
 --- !u!4 &979509359
 Transform:
   m_ObjectHideFlags: 0
@@ -996,6 +997,12 @@ PrefabInstance:
       propertyPath: mousePointer
       value: 
       objectReference: {fileID: 304846068}
+    - target: {fileID: 5527693462222730152, guid: 1e87290fd8db7f14186ce67341a2ca63,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -985174234, guid: b3f514cdf8fcc234dbfe4e3f7a4530fe,
+        type: 3}
     - target: {fileID: 5527693462435759681, guid: 1e87290fd8db7f14186ce67341a2ca63,
         type: 3}
       propertyPath: m_Name
