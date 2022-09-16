@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.Events;
 
 [RequireComponent(typeof(Rigidbody))]
-public class Player : Singleton<Player>
+public class Player : Singleton<Player> , IDamageable
 {
     public enum State { Up, Down, Horizontal, HoUp, HoDown ,Move,Idle,Hit,Attack,Skill,Dash}
     private State[] directionsIdle = { State.Up, State.Down, State.Horizontal, State.HoUp, State.HoDown,State.Idle };
@@ -17,7 +17,8 @@ public class Player : Singleton<Player>
     [SerializeField]
     private Rigidbody rigi;
     private StateMachine<State, Player> stateMachine;
-    public Vector3 moveVec;
+    private Vector3 moveVec;
+    private Vector3 crashVec;
     private float moveX;
     private float moveZ;
     private State curDirection;
@@ -25,21 +26,32 @@ public class Player : Singleton<Player>
     public UnityAction PlayerKinematic;
     public UnityAction PlayerMove;
     private UnityAction<Vector3> CheckRight;
-
+    public UnityAction InputCheck;
+    public UnityAction<UnityAction> RemoveInput;
+    public UnityAction<IDamageable> HitInput;
+    [HideInInspector]
     public State curAction;
-    public UnityAction ActionCheck;
+    [HideInInspector]
+    public bool isHit;
+    public float invincibilityTime;
+    public WaitForSeconds hitDelay;
+
 
     protected override void Awake()
     {
         base.Awake();
         Setting();
     }
-
     void Setting()
     {
+        hitDelay = new WaitForSeconds(invincibilityTime);
         stateMachine = new StateMachine<State, Player>(this);
         stateMachine.AddState(State.Idle, new PlayerStates.DirectionState());
         stateMachine.AddState(State.Move, new PlayerStates.MoveState());
+        stateMachine.AddState(State.Attack, new PlayerStates.AttackState());
+        stateMachine.AddState(State.Skill, new PlayerStates.SkiilState());
+        stateMachine.AddState(State.Dash,new PlayerStates.DashState());
+        stateMachine.AddState(State.Hit,new PlayerStates.HitState());
         #region UnityActionTemplate
         ChangeState += (state) => { stateMachine.ChangeState(state); };
         CheckRight += (target) => { if (transform.position.x < target.x) spriteTransform.localScale = new Vector3(1, 1, 1); else spriteTransform.localScale = new Vector3(-1, 1, 1); };
@@ -47,18 +59,16 @@ public class Player : Singleton<Player>
         PlayerMove += () => { rigi.velocity = moveVec; };
         #endregion
         #region ActionControllerTemplate
-
-        ActionCheck += MoveInput;
-        ActionCheck += AttackInput;
-        ActionCheck += SkillInput;
-        ActionCheck += DashInput;
+        RemoveInput = (actionInput)=>InputCheck -= actionInput;
+        InputCheck += MoveInput;
+        InputCheck += AttackInput;
+        InputCheck += SkillInput;
+        InputCheck += DashInput;
         curAction = State.Idle;
-
         #endregion
         curDirection = State.Up;
         ChangeState(curAction);
     }
-
     public State DirectionState()
     {
         CheckRight(mousePointer.position);
@@ -70,6 +80,7 @@ public class Player : Singleton<Player>
         else curDirection = State.Down;
         return curDirection;
     }
+
     public void MoveInput()
     {
         moveX = Input.GetAxis("Horizontal");
@@ -84,9 +95,9 @@ public class Player : Singleton<Player>
             curAction = State.Move;
         }
     }
-
     public void AttackInput()
     {
+
 
     }
     public void DashInput()
@@ -98,7 +109,26 @@ public class Player : Singleton<Player>
 
     }
 
+    public void Hit()
+    {
+        rigi.velocity = Vector3.zero;
+        rigi.AddForce(crashVec * 30);
+    }
 
+    public void OnCollisionEnter(Collision collision)
+    {
+        if(isHit)
+        {
+            return;
+        }
+        IAttackable crashgo = collision.transform.GetComponent<IAttackable>();
+        if(crashgo!=null)
+        {
+            HitInput = crashgo.Attack;
+            isHit = true;
+            crashVec = -1 * (collision.transform.position - transform.position).normalized;
+        }
+    }
 }
 
 

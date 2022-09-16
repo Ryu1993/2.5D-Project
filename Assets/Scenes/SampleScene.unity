@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028334, g: 0.22571328, b: 0.3069217, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -261,6 +261,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Slime_03
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 7659a6ef22b894842a56fc22a9efc269,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7659a6ef22b894842a56fc22a9efc269, type: 3}
 --- !u!1001 &308638983
@@ -434,6 +439,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: RunA_Front ex Humanoid and add-bone
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 034a053a9aa6164409ba91b3dd3b7645,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3500566639550128078, guid: 034a053a9aa6164409ba91b3dd3b7645,
         type: 3}
@@ -821,6 +831,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: ModularCharacterPolyart (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: c0ca516bd562d72468e6ff3ccd08dc70,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1889185521465350431, guid: c0ca516bd562d72468e6ff3ccd08dc70,
         type: 3}
@@ -1376,6 +1391,24 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 45, y: 0, z: 0}
+--- !u!1 &1787517413 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3193904467656977404, guid: 3f2ad4ee19aaecc46b1d05159f9762d5,
+    type: 3}
+  m_PrefabInstance: {fileID: 2347060270567101018}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1787517414
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1787517413}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75f36ee6cd0f5ea41ae232aa164e13ed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1888466833
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1442,6 +1475,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: SlimeTest
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 514c8cc9dcd3b8c43bd24ff1c2f470aa,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5382746794101172870, guid: 514c8cc9dcd3b8c43bd24ff1c2f470aa,
         type: 3}
@@ -1521,6 +1559,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Slime_02
+      objectReference: {fileID: 0}
+    - target: {fileID: 3193904467656977404, guid: 3f2ad4ee19aaecc46b1d05159f9762d5,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3f2ad4ee19aaecc46b1d05159f9762d5, type: 3}
@@ -1636,6 +1679,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: ModularCharacterPolyart
       objectReference: {fileID: 0}
+    - target: {fileID: 3392488878618466633, guid: 46d50fcf9ffdaea4db97409dfa03e8b2,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3866679526334823996, guid: 46d50fcf9ffdaea4db97409dfa03e8b2,
         type: 3}
       propertyPath: m_Enabled
@@ -1711,6 +1759,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 5527693461302671918, guid: 1e87290fd8db7f14186ce67341a2ca63,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5527693461302671919, guid: 1e87290fd8db7f14186ce67341a2ca63,
         type: 3}
       propertyPath: mousePointer
@@ -1726,6 +1779,21 @@ PrefabInstance:
       propertyPath: mousePointer
       value: 
       objectReference: {fileID: 1253433005}
+    - target: {fileID: 5527693462435759682, guid: 1e87290fd8db7f14186ce67341a2ca63,
+        type: 3}
+      propertyPath: invincibilityTime
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5527693462435759683, guid: 1e87290fd8db7f14186ce67341a2ca63,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5527693462435759683, guid: 1e87290fd8db7f14186ce67341a2ca63,
+        type: 3}
+      propertyPath: m_Center.y
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 5527693462435759708, guid: 1e87290fd8db7f14186ce67341a2ca63,
         type: 3}
       propertyPath: m_RootOrder
@@ -1734,17 +1802,17 @@ PrefabInstance:
     - target: {fileID: 5527693462435759708, guid: 1e87290fd8db7f14186ce67341a2ca63,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.54
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5527693462435759708, guid: 1e87290fd8db7f14186ce67341a2ca63,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5527693462435759708, guid: 1e87290fd8db7f14186ce67341a2ca63,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -3.33
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5527693462435759708, guid: 1e87290fd8db7f14186ce67341a2ca63,
         type: 3}
@@ -1780,6 +1848,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5712508574096165386, guid: 1e87290fd8db7f14186ce67341a2ca63,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1e87290fd8db7f14186ce67341a2ca63, type: 3}

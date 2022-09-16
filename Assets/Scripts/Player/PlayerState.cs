@@ -49,15 +49,31 @@ namespace PlayerStates
             }
             return false;
         }
+        protected virtual bool IsHitCheck(Player order)
+        {
+            if(order.isHit)
+            {
+                order.HitInput.Invoke(order);
+                order.curAction = Player.State.Hit;
+                order.animator.SetTrigger(order.curAction.ToString());
+                order.ChangeState(order.curAction);
+                return true;
+            }
+            return false;
+        }
+
+
     }
     public class DirectionState : BaseState
     {
         public override IEnumerator Middle(Player order)
         {
+            Debug.Log("Idle¡¯¿‘");
             while (true)
             {
+                if (IsHitCheck(order)) break;
                 DirectionCheck(order);
-                order.ActionCheck.Invoke();
+                order.InputCheck.Invoke();
                 if (IsNextActionCheck(order)) break;
                 yield return null;
             }
@@ -70,8 +86,9 @@ namespace PlayerStates
         {
             while(true)
             {
+                if (IsHitCheck(order)) break;
                 DirectionCheck(order);
-                order.ActionCheck.Invoke();
+                order.InputCheck.Invoke();
                 order.PlayerMove.Invoke();
                 if (IsNextActionCheck(order)) break;
                 yield return null;
@@ -94,6 +111,26 @@ namespace PlayerStates
 
     }
 
+    public class HitState : BaseState
+    {
+        public override void Enter(Player order)
+        {
+            curState = order.curAction;
+        }
+        public override IEnumerator Middle(Player order)
+        {
+            yield return order.hitDelay;
+            order.curAction = Player.State.Idle;
+            order.ChangeState(Player.State.Idle);
+        }
+        public override void Exit(Player order)
+        {
+            order.HitInput = null;
+            order.isHit = false;
+        }
+            
+
+    }
     
 
 

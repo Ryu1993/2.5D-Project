@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028334, g: 0.22571328, b: 0.3069217, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -751,6 +751,12 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &1103610892 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5527693461302671918, guid: 1e87290fd8db7f14186ce67341a2ca63,
+    type: 3}
+  m_PrefabInstance: {fileID: 1721777572}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1502562433
 GameObject:
   m_ObjectHideFlags: 0
@@ -1018,6 +1024,16 @@ PrefabInstance:
       propertyPath: mousePointer
       value: 
       objectReference: {fileID: 304846068}
+    - target: {fileID: 5527693462435759682, guid: 1e87290fd8db7f14186ce67341a2ca63,
+        type: 3}
+      propertyPath: directionCircle
+      value: 
+      objectReference: {fileID: 1103610892}
+    - target: {fileID: 5527693462435759682, guid: 1e87290fd8db7f14186ce67341a2ca63,
+        type: 3}
+      propertyPath: invincibilityTime
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 5527693462435759683, guid: 1e87290fd8db7f14186ce67341a2ca63,
         type: 3}
       propertyPath: m_Enabled
