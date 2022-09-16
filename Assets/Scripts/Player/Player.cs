@@ -109,10 +109,21 @@ public class Player : Singleton<Player> , IDamageable
 
     }
 
+
+
     public void Hit()
     {
         rigi.velocity = Vector3.zero;
         rigi.AddForce(crashVec * 30);
+    }
+    public void DotHit(IAttackable.DotType type)
+    {
+
+    }
+
+    public void CrowdControlHit(IAttackable.CCType type)
+    {
+
     }
 
     public void OnCollisionEnter(Collision collision)
