@@ -154,6 +154,7 @@ public class NewObjectPool : Singleton<NewObjectPool>
             Add(poolInfo);
         }
         Transform callObject = pool.Dequeue().transform;
+        callObject.SetParent(active);
         return callObject;
     }
     #endregion
