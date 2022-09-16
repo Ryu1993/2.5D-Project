@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AddressObjectPool : Singleton<AddressObjectPool>
+public class NewObjectPool : Singleton<NewObjectPool>
 {
     [System.Serializable]
     public class PoolInfo
@@ -16,17 +16,23 @@ public class AddressObjectPool : Singleton<AddressObjectPool>
             start = _start;
             add = _add;
         }
+        public bool MemberCheck()
+        {
+            return poolObject != null && start != 0 && add != 0;
+        }
     }
+    [SerializeField]
+    PoolInfo[] poolInfos;
     Dictionary<string, PoolInfo> poolInfoDic = new Dictionary<string, PoolInfo>();
     Dictionary<PoolInfo, Queue<GameObject>> poolDic = new Dictionary<PoolInfo, Queue<GameObject>>();
     Transform active;
     Transform deactive;
 
-
     protected override void Awake()
     {
         base.Awake();
         ActiveNoneActiveSet();
+        AwakePoolInfoSet();
     }
     private void ActiveNoneActiveSet()
     {
@@ -35,16 +41,47 @@ public class AddressObjectPool : Singleton<AddressObjectPool>
         active.gameObject.SetActive(true);
         deactive.gameObject.SetActive(false);
     }
+    private void AwakePoolInfoSet()
+    {
+        if(poolInfos.Length>0)
+        {
+            foreach(PoolInfo poolInfo in poolInfos)
+            {
+                if(poolInfo.MemberCheck())
+                {
+                    if (ReturnableCheck(poolInfo.poolObject))
+                    {
+                        continue;
+                    }
+                    if (PoolInfoSearch(poolInfo.poolObject)==null)
+                    {
+                        poolInfoDic.Add(poolInfo.poolObject.name, poolInfo);
+                        poolDic.Add(poolInfo, new Queue<GameObject>());
+                        for (int i = 0; i < poolInfo.start; i++)
+                        {
+                            GameObject go = Instantiate(poolInfo.poolObject, deactive);
+                            poolDic[poolInfo].Enqueue(go);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
 
     public PoolInfo PoolInfoSet(GameObject gameObject, int start, int add)
     {
         PoolInfo poolInfo = PoolInfoSearch(gameObject);
-        if(poolInfo!=null)
+        if (poolInfo!=null)
         {
             return poolInfo;
         }
+        if(ReturnableCheck(gameObject))
+        {
+            return null;
+        }
         poolInfo = new PoolInfo(gameObject, start, add);
-        poolInfoDic.Add(gameObject.name, poolInfo);
+        poolInfoDic.Add(poolInfo.poolObject.name, poolInfo);
         poolDic.Add(poolInfo, new Queue<GameObject>());
         for (int i = 0; i < poolInfo.start; i++)
         {
@@ -53,6 +90,16 @@ public class AddressObjectPool : Singleton<AddressObjectPool>
         }
         return poolInfo;
     }
+    private bool ReturnableCheck(GameObject gameObject)
+    {
+        bool isReturnable = gameObject.GetComponent<IReturnable>() != null;
+        if(!isReturnable)
+        {
+            Debug.Log("오브젝트 풀에 적합하지 않은 오브젝트");
+        }
+        return isReturnable;
+    }
+
     public PoolInfo PoolInfoSearch(GameObject gameObject)
     {
         if(poolInfoDic.ContainsKey(gameObject.name))
@@ -107,6 +154,7 @@ public class AddressObjectPool : Singleton<AddressObjectPool>
             Add(poolInfo);
         }
         Transform callObject = pool.Dequeue().transform;
+        callObject.SetParent(active);
         return callObject;
     }
     #endregion
@@ -115,68 +163,5 @@ public class AddressObjectPool : Singleton<AddressObjectPool>
         gameObject.transform.SetParent(deactive);
         poolDic[poolInfo].Enqueue(gameObject);
     }
-
-
-
-
-    //public void Add(string name)
-    //{
-    //    PoolInfo temp;
-    //    poolInfoDic.TryGetValue(name, out temp);
-    //    if (temp == null)
-    //    {
-    //        Debug.Log("풀 목록에 존재하지 않는 오브젝트");
-    //        return;
-    //    }
-    //    for (int i = 0; i < temp.add; i++)
-    //    {
-    //        InPoolObj tempobj = Instantiate(temp.obj, deactive);
-    //        tempobj.gameObject.SetActive(false);
-    //        poolDict[name + "(Clone)"].Enqueue(tempobj);
-    //    }
-    //}
-
-    //public void AddStart(string name)
-    //{
-    //    PoolInfo temp;
-    //    poolInfoDic.TryGetValue(name, out temp);
-    //    for (int i = 0; i < temp.start; i++)
-    //    {
-    //        InPoolObj tempobj = Instantiate(temp.obj, deactive);
-    //        tempobj.gameObject.SetActive(false);
-    //        poolDict[name + "(Clone)"].Enqueue(tempobj);
-    //    }
-    //}
-
-    //public Transform Call(string name, Vector3 positon, Vector3 rotate)
-    //{
-    //    if (!poolDict.ContainsKey(name + "(Clone)"))
-    //    {
-    //        return null;
-    //    }
-    //    if (poolDict[name + "(Clone)"].Count == 0)
-    //    {
-    //        Add(name);
-    //    }
-    //    Transform temp = poolDict[name + "(Clone)"]?.Dequeue().transform;
-    //    temp.position = positon;
-    //    temp.rotation = Quaternion.Euler(rotate);
-    //    temp.SetParent(active);
-    //    return temp;
-    //}
-
-    //public void Return(InPoolObj obj)
-    //{
-    //    if (!poolDict.ContainsKey(obj.gameObject.name))
-    //    {
-    //        return;
-    //    }
-    //    obj.transform.SetParent(deactive);
-    //    poolDict[obj.gameObject.name].Enqueue(obj);
-
-    //}
-
-
-
 
 }

@@ -19,8 +19,6 @@ public class ObjectPoolClass : Singleton<ObjectPoolClass>
     Transform deactive;
     Dictionary<string, Queue<InPoolObj>> poolDict = new Dictionary<string, Queue<InPoolObj>>();
 
-
-
     protected override void Awake()
     {
         base.Awake();
