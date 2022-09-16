@@ -22,129 +22,96 @@ namespace PlayerStates
         }
     }
 
-    public class UpState : BaseState
+    #region DirectionMove
+    public class DirectionState : BaseState
+    {
+        public override IEnumerator Middle(Player order)
+        {
+            while (true)
+            {
+                nextState = order.RotateState();
+                if (curState != nextState)
+                {
+                    order.animator.SetTrigger(nextState.ToString());
+                    order.ChangeState(nextState);
+                    break;
+                }
+                order.Move();
+                yield return null;
+            }
+        }
+    }
+
+    public class UpState : DirectionState
     {
         public override void Enter(Player order)
         {
             curState = Player.State.Up;
-            order.animator.SetTrigger("Up");
-            //order.spriteTransform.localRotation = Quaternion.Euler(45, 0, 0);
         }
         public override IEnumerator Middle(Player order)
         {
-            while(true)
-            {
-                nextState = order.RotateState();
-                if (curState != nextState)
-                {
-                    order.ChangeState(nextState);
-                    break;
-                }
-                order.Move();
-                yield return null;
-            }
+            return base.Middle(order);
         }
     }
 
-    public class DownState : BaseState
+    public class DownState : DirectionState
     {
         public override void Enter(Player order)
         {
             curState = Player.State.Down;
-            order.animator.SetTrigger("Down");
-            //order.spriteTransform.localRotation = Quaternion.Euler(45, 0, 0);
         }
         public override IEnumerator Middle(Player order)
         {
-            while (true)
-            {
-                nextState = order.RotateState();
-                if (curState != nextState)
-                {
-                    order.ChangeState(nextState);
-                    break;
-                }
-                order.Move();
-                yield return null;
-            }
+            return base.Middle(order);
         }
 
     }
 
-    public class HorizontalState : BaseState
+    public class HorizontalState : DirectionState
     {
         public override void Enter(Player order)
         {
             curState = Player.State.Horizontal;
-            order.animator.SetTrigger("Horizontal");
-            //order.RotateState();
-            //order.spriteTransform.localRotation = Quaternion.Euler(45, 0, 0);
         }
         public override IEnumerator Middle(Player order)
         {
-            while (true)
-            {
-                nextState = order.RotateState();
-                if (curState != nextState)
-                {
-                    order.ChangeState(nextState);
-                    break;
-                }
-                order.Move();
-                yield return null;
-            }
+            return base.Middle(order);
         }
     }
 
 
-    public class HoUpState : BaseState
+    public class HoUpState : DirectionState
     {
         public override void Enter(Player order)
         {
             curState = Player.State.HoUp;
-            order.animator.SetTrigger("Up");
-            //order.spriteTransform.localRotation = Quaternion.Euler(45,15, 0);
         }
         public override IEnumerator Middle(Player order)
         {
             while (true)
             {
-                nextState = order.RotateState();
-                if (curState != nextState)
-                {
-                    order.ChangeState(nextState);
-                    break;
-                }
-                order.Move();
-                yield return null;
+                return base.Middle(order);
             }
         }
     }
 
-    public class HoDownSate : BaseState
+    public class HoDownSate : DirectionState
     {
         public override void Enter(Player order)
         {
             curState = Player.State.HoDown;
-            order.animator.SetTrigger("Down");
-            //order.spriteTransform.localRotation = Quaternion.Euler(45,-15, 0);
         }
         public override IEnumerator Middle(Player order)
         {
             while (true)
             {
-                nextState = order.RotateState();
-                if (curState != nextState)
-                {
-                    order.ChangeState(nextState);
-                    break;
-                }
-                order.Move();
-                yield return null;
+                return base.Middle(order);
             }
             
         }
     }
+    #endregion
+
 
 
 }

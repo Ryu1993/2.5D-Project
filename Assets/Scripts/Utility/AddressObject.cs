@@ -61,34 +61,36 @@ public static class AddressObject
         }
         return gameObjects;
     }
-
     public static GameObject GameObjectSet(AssetLabelReference label)
     {
         return Addressables.LoadAssetAsync<GameObject>(label).WaitForCompletion();
     }
     public static List<GameObject> GameObjectsSet(AssetLabelReference label)
     {
-        var gameObjects = new List<GameObject>();
+        var gameobjects = new List<GameObject>();
         var locations = Locations(label);
-        foreach(var location in locations)
-        {
-            gameObjects.Add(Addressables.LoadAssetAsync<GameObject>(label).WaitForCompletion());
-        }
-        return gameObjects;
+        Addressables.LoadAssetsAsync<GameObject>(locations, (go) => gameobjects.Add(go)).WaitForCompletion();
+        return gameobjects;
     }
 
+  
     public static List<GameObject> RandomGameObjectsSet(AssetLabelReference label)
     {
         var gameObjects = new List<GameObject>();
         var locations = Locations(label);
+        var pickLocations = new List<IResourceLocation>();
         while(locations.Count > 0)
         {
             var location = locations[Random.Range(0, locations.Count)];
-            gameObjects.Add(Addressables.LoadAssetAsync<GameObject>(location).WaitForCompletion());
+            pickLocations.Add(location);
             locations.Remove(location);
         }
+        Addressables.LoadAssetsAsync<GameObject>(pickLocations, (go) => gameObjects.Add(go)).WaitForCompletion();
         return gameObjects;
     }
+
+
+
 
     #region Location
     public static IResourceLocation RandomLocation(AssetLabelReference label)
