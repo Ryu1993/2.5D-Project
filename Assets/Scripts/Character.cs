@@ -11,23 +11,28 @@ public class Character : MonoBehaviour, IDamageable
     [HideInInspector]
     public State curAction;
     public float moveSpeed;
+    [HideInInspector]
     public float curHp;
     public Animator animator;
+    public Rigidbody rigi;
+    [HideInInspector]
     public List<AsyncState.Type> curStatusEffect = new List<AsyncState.Type>();
     public UnityAction<IDamageable> HitInput;
     protected Vector3 crashVec;
     protected Vector3 moveVec;
 
 
-    public virtual void Hit(IAttackable attacker, Vector3 attackPosition)
+    public virtual Character Hit(IAttackable attacker, Vector3 attackPosition)
     {
-        if (HitInput != null) return;
+        if (HitInput != null) return null;
         HitInput = attacker.Attack;
         crashVec = -1 * (attackPosition - transform.position).normalized;
+        return this;
     }
     public virtual void DirectHit()
     {
-
+        rigi.velocity = Vector3.zero;
+        rigi.AddForce(crashVec * 30);
     }
 
 

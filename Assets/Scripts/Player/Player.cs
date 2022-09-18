@@ -15,7 +15,6 @@ public class Player : Character
     private float moveX;
     private float moveZ;
     public Transform mousePointer;
-    public Rigidbody rigi;
     #region ActionList
     public UnityAction<UnityAction> RemoveInput;
     public UnityAction<Vector3> CheckRight;
@@ -95,15 +94,7 @@ public class Player : Character
 
     }
 
-    public override void Hit(IAttackable attacker, Vector3 attackPosition)
-    {
-
-    }
-    public override void DirectHit()
-    {
-        rigi.velocity = Vector3.zero;
-        rigi.AddForce(crashVec * 30);
-    }
+ 
 
 
 

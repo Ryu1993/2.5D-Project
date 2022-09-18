@@ -30,7 +30,7 @@ namespace AsyncState
                 EffectEvent();
                 yield return wait;
             }
-            EnterEvent();
+            ExitEvent();
         }
         protected virtual void EnterEvent()
         {
@@ -53,11 +53,20 @@ namespace AsyncState
             type = Type.Burn;
             order.StartCoroutine(Progress());
         }
+
+        protected override void EnterEvent()
+        {
+            base.EnterEvent();
+            Debug.Log(order.name+"화상진입");
+        }
         protected override void EffectEvent()
         {
-            
+            Debug.Log(order.name + "화상중");
         }
-
+        protected override void ExitEvent()
+        {
+            Debug.Log(order.name + "화상끝");
+        }
 
     }
 
