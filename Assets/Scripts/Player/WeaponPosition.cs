@@ -7,9 +7,6 @@ public class WeaponPosition : MonoBehaviour
     [SerializeField]
     Transform mousePointer;
     Vector3 mouseVec;
-
-
-
     private void Update()
     {
         TraceMousePointer();

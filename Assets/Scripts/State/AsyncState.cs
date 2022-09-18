@@ -6,68 +6,48 @@ using UnityEngine;
 
 namespace AsyncState
 {
-
-
     public enum Type { Burn,Poison,Sturn};
     public class StatusEffect
-    {
-        protected int duration;
-        protected Character order;
+    { 
         protected WaitForSeconds wait = new WaitForSeconds(1);
         protected Type type;
-        public StatusEffect(int duration, Character order)
+        public IEnumerator Progress(int duration,Character order)
         {
-            this.order = order;
-            this.duration = duration;
-        }  // duration 0으로 설정시 effect 무시
-        public IEnumerator Progress()
-        {
-            EnterEvent();
+            EnterEvent(order);
             int count = 0;
             while(count < duration)
             {
                 count++;
-                EffectEvent();
+                EffectEvent(order);
                 yield return wait;
             }
-            ExitEvent();
+            ExitEvent(order);
         }
-        protected virtual void EnterEvent()
-        {
-            order.curStatusEffect.Add(type);
-        }
-        protected virtual void EffectEvent()
-        {
-
-        }
-        protected virtual void ExitEvent()
-        {
-            order.curStatusEffect.Remove(type);
-        }
+        protected virtual void EnterEvent(Character order) { order.curStatusEffect.Add(type); }
+        protected virtual void EffectEvent(Character order) { }
+        protected virtual void ExitEvent(Character order) { order.curStatusEffect.Remove(type); }
     }
 
     public class Burn : StatusEffect
     {
-        public Burn(int duration, Character order) : base(duration, order)
+        public Burn(int duration, Character order)
         {
             type = Type.Burn;
-            order.StartCoroutine(Progress());
+            order.StartCoroutine(Progress(duration,order));
         }
-
-        protected override void EnterEvent()
+        protected override void EnterEvent(Character order)
         {
-            base.EnterEvent();
+            base.EnterEvent(order);
             Debug.Log(order.name+"화상진입");
         }
-        protected override void EffectEvent()
+        protected override void EffectEvent(Character order)
         {
             Debug.Log(order.name + "화상중");
         }
-        protected override void ExitEvent()
+        protected override void ExitEvent(Character order)
         {
             Debug.Log(order.name + "화상끝");
         }
-
     }
 
 }
