@@ -1,10 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public interface IDamageable
 {
-    public void Hit();
-    public void DotHit(IAttackable.DotType type);
-    public void CrowdControlHit(IAttackable.CCType type);
+    public void Hit(IAttackable attacker, Vector3 attackPosition);
+    public void DirectHit();
+
 }

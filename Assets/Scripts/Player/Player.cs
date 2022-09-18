@@ -5,43 +5,36 @@ using UnityEngine;
 using UnityEngine.Events;
 
 [RequireComponent(typeof(Rigidbody))]
-public class Player : Singleton<Player> , IDamageable
+public class Player : Character
 {
-    public enum State { Up, Down, Horizontal, HoUp, HoDown ,Move,Idle,Hit,Attack,Skill,Dash}
     private State[] directionsIdle = { State.Up, State.Down, State.Horizontal, State.HoUp, State.HoDown,State.Idle };
-    public Transform spriteTransform;
-    public Animator animator;
-    public float moveSpeed;
-    [SerializeField]
-    private Transform mousePointer;
-    [SerializeField]
-    private Rigidbody rigi;
+    private State curDirection;
     private StateMachine<State, Player> stateMachine;
-    private Vector3 moveVec;
-    private Vector3 crashVec;
+    [SerializeField]
+    private Transform spriteTransform;
     private float moveX;
     private float moveZ;
-    private State curDirection;
+    public Transform mousePointer;
+    public Rigidbody rigi;
+    #region ActionList
+    public UnityAction<UnityAction> RemoveInput;
+    public UnityAction<Vector3> CheckRight;
     public UnityAction<State> ChangeState;
     public UnityAction PlayerKinematic;
     public UnityAction PlayerMove;
-    private UnityAction<Vector3> CheckRight;
     public UnityAction InputCheck;
-    public UnityAction<UnityAction> RemoveInput;
-    public UnityAction<IDamageable> HitInput;
-    [HideInInspector]
-    public State curAction;
+    #endregion
     [HideInInspector]
     public bool isHit;
     public float invincibilityTime;
     public WaitForSeconds hitDelay;
 
 
-    protected override void Awake()
+    private void Awake()
     {
-        base.Awake();
         Setting();
     }
+
     void Setting()
     {
         hitDelay = new WaitForSeconds(invincibilityTime);
@@ -80,20 +73,13 @@ public class Player : Singleton<Player> , IDamageable
         else curDirection = State.Down;
         return curDirection;
     }
-
     public void MoveInput()
     {
         moveX = Input.GetAxis("Horizontal");
         moveZ = Input.GetAxis("Vertical");
         moveVec = new Vector3(moveX, 0, moveZ).normalized * Time.deltaTime * moveSpeed;
-        if (moveVec == Vector3.zero)
-        {
-            curAction = State.Idle;
-        }
-        else
-        {
-            curAction = State.Move;
-        }
+        if (moveVec == Vector3.zero) curAction = State.Idle;
+        else curAction = State.Move;
     }
     public void AttackInput()
     {
@@ -109,37 +95,18 @@ public class Player : Singleton<Player> , IDamageable
 
     }
 
+    public override void Hit(IAttackable attacker, Vector3 attackPosition)
+    {
 
-
-    public void Hit()
+    }
+    public override void DirectHit()
     {
         rigi.velocity = Vector3.zero;
         rigi.AddForce(crashVec * 30);
     }
-    public void DotHit(IAttackable.DotType type)
-    {
 
-    }
 
-    public void CrowdControlHit(IAttackable.CCType type)
-    {
 
-    }
-
-    public void OnCollisionEnter(Collision collision)
-    {
-        if(isHit)
-        {
-            return;
-        }
-        IAttackable crashgo = collision.transform.GetComponent<IAttackable>();
-        if(crashgo!=null)
-        {
-            HitInput = crashgo.Attack;
-            isHit = true;
-            crashVec = -1 * (collision.transform.position - transform.position).normalized;
-        }
-    }
 }
 
 

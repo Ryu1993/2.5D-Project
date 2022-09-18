@@ -4,7 +4,5 @@ using UnityEngine;
 
 public interface IAttackable
 {
-    public enum DotType {Burn,Posion };
-    public enum CCType { Sturn,Slow};
     public void Attack(IDamageable target);
 }

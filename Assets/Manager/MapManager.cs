@@ -56,7 +56,7 @@ public class MapManager : Singleton<MapManager>
     RoomConnectInfo curRoomInfo;
     RoomManager curRoomManager;
     GameObject curRoom;
-    Transform player;
+    public Player player;
 
     #region RoomConnectSetting
     public void RoomCreate(MapInfo mapInfo)
@@ -167,7 +167,6 @@ public class MapManager : Singleton<MapManager>
 
     public void GameEneter(MapInfo mapInfo)
     {
-        player = Player.instance.transform;
         RoomCreate(mapInfo);
         mapUI.CreateRoomIcon(allRoomList);
         curRoomInfo = startInfo;
@@ -176,7 +175,7 @@ public class MapManager : Singleton<MapManager>
 
     public void MapEnter(GateDirection direction)
     {
-        Player.instance.PlayerKinematic();
+        player.PlayerKinematic.Invoke();
         if (direction != GateDirection.Start)
         {
             curRoomInfo.isClear = true;
@@ -190,8 +189,8 @@ public class MapManager : Singleton<MapManager>
         curRoomManager.ConnectedSet(curRoomInfo.GateCheck());
         if(!curRoomInfo.isClear)curRoomManager.RoomSetting();
         if(curRoomInfo.isClear)curRoomManager.ActivateGate();
-        curRoomManager.PlayerSpawn(player, MatchDirection(direction));
-        Player.instance.PlayerKinematic();
+        curRoomManager.PlayerSpawn(player.transform, MatchDirection(direction));
+        player.PlayerKinematic.Invoke();
     }
 
 

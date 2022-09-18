@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class NewObjectPool : Singleton<NewObjectPool>
 {
@@ -92,7 +93,8 @@ public class NewObjectPool : Singleton<NewObjectPool>
     }
     private bool ReturnableCheck(GameObject gameObject)
     {
-        bool isReturnable = gameObject.GetComponent<IReturnable>() != null;
+        IReturnable temp = gameObject.GetComponent<IReturnable>();
+        bool isReturnable = temp!= null;
         if(!isReturnable)
         {
             Debug.Log("오브젝트 풀에 적합하지 않은 오브젝트");
@@ -120,6 +122,21 @@ public class NewObjectPool : Singleton<NewObjectPool>
     }
 
     #region CallMethod
+
+    public Transform Call(PoolInfo poolInfo,Transform parent, Vector3 rotate)
+    {
+        Queue<GameObject> pool = poolDic[poolInfo];
+        if (pool.Count == 0)
+        {
+            Add(poolInfo);
+        }
+        Transform callObject = pool.Dequeue().transform;
+        callObject.position = parent.position;
+        callObject.rotation = Quaternion.Euler(rotate);
+        callObject.SetParent(parent);
+        return callObject;
+    }
+
     public Transform Call(PoolInfo poolInfo,Vector3 positon, Vector3 rotate)
     {
         Queue<GameObject> pool = poolDic[poolInfo];

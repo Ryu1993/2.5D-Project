@@ -1,13 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Unity.VisualScripting;
 using UnityEngine;
-
+using UnityEngine.Events;
 
 namespace PlayerStates
 {
-
-
     public class BaseState : State<Player>
     {
         protected Player.State curDirection;
@@ -51,28 +50,35 @@ namespace PlayerStates
         }
         protected virtual bool IsHitCheck(Player order)
         {
-            if(order.isHit)
+            if(order.HitInput!=null)
             {
-                order.HitInput.Invoke(order);
-                order.curAction = Player.State.Hit;
-                order.animator.SetTrigger(order.curAction.ToString());
-                order.ChangeState(order.curAction);
+                order.animator.SetTrigger(Player.State.Hit.ToString());
+                order.ChangeState(Player.State.Hit);
                 return true;
             }
             return false;
         }
-
-
+        protected virtual bool IsAsyncStateCheck(Player order)
+        {
+            bool isStop = false;
+            foreach(AsyncState.Type type in order.curStatusEffect)
+            {
+                if (type == AsyncState.Type.Sturn) isStop = true;
+            }
+            if (isStop) order.ChangeState(Player.State.Sturn);
+            return isStop;
+        }
     }
     public class DirectionState : BaseState
     {
         public override IEnumerator Middle(Player order)
         {
-            Debug.Log("Idle¡¯¿‘");
             while (true)
             {
+                if (IsAsyncStateCheck(order)) break;
                 if (IsHitCheck(order)) break;
                 DirectionCheck(order);
+                order.rigi.velocity = Vector3.zero;
                 order.InputCheck.Invoke();
                 if (IsNextActionCheck(order)) break;
                 yield return null;
@@ -88,8 +94,8 @@ namespace PlayerStates
             {
                 if (IsHitCheck(order)) break;
                 DirectionCheck(order);
-                order.InputCheck.Invoke();
                 order.PlayerMove.Invoke();
+                order.InputCheck.Invoke();
                 if (IsNextActionCheck(order)) break;
                 yield return null;
             }
@@ -115,10 +121,11 @@ namespace PlayerStates
     {
         public override void Enter(Player order)
         {
-            curState = order.curAction;
+            order.curAction = Player.State.Hit;
         }
         public override IEnumerator Middle(Player order)
         {
+            order.HitInput?.Invoke(order);
             yield return order.hitDelay;
             order.curAction = Player.State.Idle;
             order.ChangeState(Player.State.Idle);
@@ -126,12 +133,56 @@ namespace PlayerStates
         public override void Exit(Player order)
         {
             order.HitInput = null;
-            order.isHit = false;
+            order.rigi.velocity = Vector3.zero;
         }
-            
-
+           
     }
     
+    public class SturnState : BaseState
+    {
+        bool isHitable = true;
+        public override void Enter(Player order)
+        {
+            order.curAction = Player.State.Sturn;
+        }
+        public override IEnumerator Middle(Player order)
+        {
+            while(true)
+            {
+                IsHitCheck(order);
+                if (!IsAsyncStateCheck(order)) break;
+                yield return null;
+            }
+        }
+        protected override bool IsHitCheck(Player order)
+        {
+            if (order.HitInput!=null&&isHitable)
+            {
+                order.HitInput?.Invoke(order);
+                isHitable = false;
+                order.StartCoroutine(HitDelay(order));
+                return true;
+            }
+            return false;
+        }
+        protected override bool IsAsyncStateCheck(Player order)
+        {
+            bool isStop = false;
+            foreach (AsyncState.Type type in order.curStatusEffect)
+            {
+                if (type==AsyncState.Type.Sturn) isStop = true;
+            }
+            if (!isStop) order.curAction = Player.State.Idle; order.ChangeState(order.curAction);
+            return isStop;
+        }
+        IEnumerator HitDelay(Player order)
+        {
+            yield return order.hitDelay;
+            isHitable = true;
+        }
+
+
+    }
 
 
 
