@@ -17,17 +17,22 @@ namespace PlayerStates
         {
             curDirection = order.DirectionState();
             curState = order.curAction;
+            order.animator.SetTrigger(order.curAction.ToString());
         }
         public override IEnumerator Middle(Player order)
         {
-            yield return null;
+            while (true)
+            {
+                DirectionCheck(order);
+                order.InputCheck.Invoke();
+                if (IsAsyncStateCheck(order)) break;
+                if (IsHitCheck(order)) break;
+                if (IsAttackCheck(order)) break;
+                if (IsMoveCheck(order)) break;
+                yield return null;
+            }
         }
-        public override void Exit(Player order)
-        {
-
-
-        }
-
+        public override void Exit(Player order) { }
         protected virtual void DirectionCheck(Player order)
         {
             nextDirection = order.DirectionState();
@@ -37,22 +42,54 @@ namespace PlayerStates
                 curDirection = nextDirection;
             }
         }
-        protected virtual bool IsNextActionCheck(Player order)
+        protected virtual bool IsMoveCheck(Player order)
         {
-            nextState = order.curAction;
-            if (curState != nextState)
+            if (order.Move!=null&&curState!=Player.State.Move)
             {
-                order.animator.SetTrigger(nextState.ToString());
-                order.ChangeState(nextState);
+                order.curAction = Player.State.Move;
+                order.ChangeState(Player.State.Move);
                 return true;
             }
+            else if(order.Idle != null && curState != Player.State.Idle)
+            {
+                order.curAction = Player.State.Idle;
+                order.ChangeState(Player.State.Idle);
+                return true;
+            }
+            return false;
+        }
+        protected virtual bool IsAttackCheck(Player order)
+        {
+            if(order.Attack!=null)
+            {
+                if(order.weaponContainer.superArmor)
+                {
+                    order.curAction = Player.State.SuperAttack;
+                    order.ChangeState(Player.State.SuperAttack);
+                    return true;
+                }
+                else
+                {
+                    order.curAction = Player.State.Attack;
+                    order.ChangeState(Player.State.Attack);
+                    return true;
+                }
+            }
+            return false;
+        }
+        protected virtual bool IsSkillCheck(Player order)
+        {
+            return false;
+        }
+        protected virtual bool IsDashCheck(Player order)
+        {
             return false;
         }
         protected virtual bool IsHitCheck(Player order)
         {
             if(order.HitInput!=null)
             {
-                order.animator.SetTrigger(Player.State.Hit.ToString());
+                order.curAction = Player.State.Hit;
                 order.ChangeState(Player.State.Hit);
                 return true;
             }
@@ -60,43 +97,42 @@ namespace PlayerStates
         }
         protected virtual bool IsAsyncStateCheck(Player order)
         {
-            bool isStop = false;
+            bool isChange = false;
             foreach(AsyncState.Type type in order.curStatusEffect)
             {
-                if (type == AsyncState.Type.Sturn) isStop = true;
+                if (type == AsyncState.Type.Sturn) { isChange = true; nextState = Player.State.Sturn; }
             }
-            if (isStop) order.ChangeState(Player.State.Sturn);
-            return isStop;
-        }
-    }
-    public class DirectionState : BaseState
-    {
-        public override IEnumerator Middle(Player order)
-        {
-            while (true)
-            {
-                if (IsAsyncStateCheck(order)) break;
-                if (IsHitCheck(order)) break;
-                DirectionCheck(order);
-                order.rigi.velocity = Vector3.zero;
-                order.InputCheck.Invoke();
-                if (IsNextActionCheck(order)) break;
-                yield return null;
-            }
+            if (isChange) order.ChangeState(nextState);
+            return isChange;
         }
     }
 
+    public class NoneReactionHit : BaseState
+    {
+
+
+    }
+    public class DirectionState : BaseState
+    {
+        public override void Enter(Player order)
+        {
+            base.Enter(order);
+            order.Idle?.Invoke();
+        }
+    }
     public class MoveState : BaseState
     {
         public override IEnumerator Middle(Player order)
         {
             while(true)
             {
-                if (IsHitCheck(order)) break;
                 DirectionCheck(order);
-                order.PlayerMove.Invoke();
+                order.Move?.Invoke();
                 order.InputCheck.Invoke();
-                if (IsNextActionCheck(order)) break;
+                if (IsAsyncStateCheck(order)) break;
+                if (IsHitCheck(order)) break;
+                if (IsAttackCheck(order)) break;
+                if (IsMoveCheck(order)) break;
                 yield return null;
             }
         }
@@ -104,7 +140,43 @@ namespace PlayerStates
 
     public class AttackState : BaseState
     {
+        public override void Enter(Player order)
+        {
+            base.Enter (order);
+            order.PlayerIdle();
+            order.Attack?.Invoke();
+        }
+        public override IEnumerator Middle(Player order)
+        {
+            for(int i = 0; i < order.weaponContainer.motionTime; i++)
+            {
+                if (IsAsyncStateCheck(order)) break;
+                if (IsHitCheck(order)) break;
+                order.InputCheck?.Invoke();
+                if (IsDashCheck(order)) break;
+                if (IsSkillCheck(order)) break;
+                if (IsAttackCheck(order)) i = 0;
+                yield return null;
+            }
+        }
+        protected override bool IsAttackCheck(Player order)
+        {
+            return order.Attack != null;
+        }
 
+    }
+
+    public class SuperAttackState : AttackState
+    {
+        public override void Enter(Player order)
+        {
+            base.Enter(order);
+            order.PlayerKinematic();
+        }
+        public override void Exit(Player order)
+        {
+            order.PlayerKinematic();
+        }
     }
 
     public class SkiilState : BaseState
@@ -119,16 +191,13 @@ namespace PlayerStates
 
     public class HitState : BaseState
     {
-        public override void Enter(Player order)
-        {
-            order.curAction = Player.State.Hit;
-        }
+        public override void Enter(Player order) => order.curAction = Player.State.Hit;
         public override IEnumerator Middle(Player order)
         {
             order.HitInput?.Invoke(order);
             yield return order.hitDelay;
             order.curAction = Player.State.Idle;
-            order.ChangeState(Player.State.Idle);
+            order.ChangeState(order.curAction);
         }
         public override void Exit(Player order)
         {
@@ -138,13 +207,10 @@ namespace PlayerStates
            
     }
     
-    public class SturnState : BaseState
+    public class SturnState : NoneReactionHit
     {
-        bool isHitable = true;
-        public override void Enter(Player order)
-        {
-            order.curAction = Player.State.Sturn;
-        }
+  
+        public override void Enter(Player order)=> order.curAction = Player.State.Sturn;
         public override IEnumerator Middle(Player order)
         {
             while(true)
@@ -154,9 +220,10 @@ namespace PlayerStates
                 yield return null;
             }
         }
+        protected bool isHitable = true;
         protected override bool IsHitCheck(Player order)
         {
-            if (order.HitInput!=null&&isHitable)
+            if (order.HitInput != null && isHitable)
             {
                 order.HitInput?.Invoke(order);
                 isHitable = false;
@@ -170,16 +237,17 @@ namespace PlayerStates
             bool isStop = false;
             foreach (AsyncState.Type type in order.curStatusEffect)
             {
-                if (type==AsyncState.Type.Sturn) isStop = true;
+                if (type == AsyncState.Type.Sturn) isStop = true;
             }
-            if (!isStop) order.curAction = Player.State.Idle; order.ChangeState(order.curAction);
+            if (!isStop) { order.curAction = Player.State.Idle; order.ChangeState(order.curAction); }
             return isStop;
         }
-        IEnumerator HitDelay(Player order)
+        protected IEnumerator HitDelay(Player order)
         {
             yield return order.hitDelay;
             isHitable = true;
         }
+
 
 
     }

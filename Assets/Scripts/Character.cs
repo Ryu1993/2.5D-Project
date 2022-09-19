@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 public class Character : MonoBehaviour, IDamageable
 {
-    public enum State { Up, Down, Horizontal, HoUp, HoDown, Move, Idle, Hit, Attack, Skill, Dash, Sturn }
+    public enum State { Up, Down, Horizontal, HoUp, HoDown, Move, Idle, Hit, Attack, Skill, Dash, Sturn,SuperAttack }
     [HideInInspector]
     public State curAction;
     public float moveSpeed;
@@ -20,8 +20,6 @@ public class Character : MonoBehaviour, IDamageable
     public UnityAction<IDamageable> HitInput;
     protected Vector3 crashVec;
     protected Vector3 moveVec;
-
-
     public virtual Character Hit(IAttackable attacker, Vector3 attackPosition)
     {
         if (HitInput != null) return null;

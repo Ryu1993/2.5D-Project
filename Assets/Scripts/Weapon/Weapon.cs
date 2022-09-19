@@ -2,17 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Weapon : MonoBehaviour
+public abstract class Weapon : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public enum WeaponType { Sword}
+    public WeaponType type;
+    public Animator animator;
+    public bool superArmor;
+    public float motionTime;
+    public abstract void WeaponAttack();
 }

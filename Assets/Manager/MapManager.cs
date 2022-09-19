@@ -175,7 +175,7 @@ public class MapManager : Singleton<MapManager>
 
     public void MapEnter(GateDirection direction)
     {
-        player.PlayerKinematic.Invoke();
+        player.PlayerKinematic();
         if (direction != GateDirection.Start)
         {
             curRoomInfo.isClear = true;
@@ -190,7 +190,7 @@ public class MapManager : Singleton<MapManager>
         if(!curRoomInfo.isClear)curRoomManager.RoomSetting();
         if(curRoomInfo.isClear)curRoomManager.ActivateGate();
         curRoomManager.PlayerSpawn(player.transform, MatchDirection(direction));
-        player.PlayerKinematic.Invoke();
+        player.PlayerKinematic();
     }
 
 
