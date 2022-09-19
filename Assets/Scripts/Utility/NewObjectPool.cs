@@ -87,6 +87,7 @@ public class NewObjectPool : Singleton<NewObjectPool>
         for (int i = 0; i < poolInfo.start; i++)
         {
             GameObject go = Instantiate(poolInfo.poolObject, deactive);
+            go.GetComponent<IReturnable>().PoolInfoSet(poolInfo);
             poolDic[poolInfo].Enqueue(go);
         }
         return poolInfo;
@@ -94,12 +95,11 @@ public class NewObjectPool : Singleton<NewObjectPool>
     private bool ReturnableCheck(GameObject gameObject)
     {
         IReturnable temp = gameObject.GetComponent<IReturnable>();
-        bool isReturnable = temp!= null;
-        if(!isReturnable)
+        if(temp==null)
         {
             Debug.Log("오브젝트 풀에 적합하지 않은 오브젝트");
         }
-        return isReturnable;
+        return temp == null;
     }
 
     public PoolInfo PoolInfoSearch(GameObject gameObject)
@@ -117,6 +117,7 @@ public class NewObjectPool : Singleton<NewObjectPool>
         for(int i = 0; i < poolInfo.add; i++)
         {
             GameObject go = Instantiate(poolInfo.poolObject, deactive);
+            go.GetComponent<IReturnable>().PoolInfoSet(poolInfo);
             queue.Enqueue(go);
         }
     }
@@ -177,8 +178,9 @@ public class NewObjectPool : Singleton<NewObjectPool>
     #endregion
     public void Return(GameObject gameObject, PoolInfo poolInfo)
     {
-        gameObject.transform.SetParent(deactive);
         poolDic[poolInfo].Enqueue(gameObject);
+        gameObject.transform.SetParent(deactive);
+
     }
 
 }
