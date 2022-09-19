@@ -16,6 +16,7 @@ public class Player : Character
     private float moveZ;
     public WeaponContainer weaponContainer;
     public Transform mousePointer;
+    public DirectionCircle directionCircle;
     #region ActionList
     public UnityAction InputCheck;
     public UnityAction Attack;
@@ -52,7 +53,7 @@ public class Player : Character
         #endregion
         curAction = State.Idle;
         curDirection = State.Up;
-        ChangeState(curAction);
+        ChangeState(State.Idle);
     }
     public State DirectionState()
     {
@@ -71,16 +72,16 @@ public class Player : Character
         Move = null;
         moveX = Input.GetAxis("Horizontal");
         moveZ = Input.GetAxis("Vertical");
-        moveVec = new Vector3(moveX, 0, moveZ).normalized * Time.deltaTime * moveSpeed;
-        if (moveVec == Vector3.zero) Idle += PlayerIdle;
-        else Move += PlayerMove; 
+        moveVec = new Vector3(moveX, 0, moveZ).normalized* moveSpeed;
+        if (moveVec == Vector3.zero) Idle = PlayerIdle;
+        else Move = PlayerMove; 
     }
     public void AttackInput()
     {
         Attack = null;
-        if (!Input.GetMouseButton(0)) return;
-        if (weaponContainer.weaponAttack == null) return;
-        Attack+=weaponContainer.weaponAttack;
+        if (!Input.GetMouseButton(0)) { weaponContainer.weaponDeactive?.Invoke(); return; }
+        if (weaponContainer.weaponAttack == null) {return; }
+        Attack=weaponContainer.weaponAttack;
     }
     public void DashInput()
     {

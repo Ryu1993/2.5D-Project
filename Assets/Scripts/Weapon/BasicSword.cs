@@ -4,12 +4,25 @@ using UnityEngine;
 
 public class BasicSword : Weapon
 {
-    public new WeaponType type = WeaponType.Sword;
+ 
+    public void Awake()
+    {
+        type = WeaponType.Sword;
+        superArmor = false;
+        bufferedInput = 3;
+    }
+
     public override void WeaponAttack()
     {
-        if (!Input.GetMouseButton(0)) { animator.SetBool("Action", false); return; }
         animator.SetBool("Action", true);
-        
+    }
+    public override void WeaponDeactive()
+    {
+        if(!deactiveDelay)
+        {
+            animator.SetBool("Action", false);
+            Coroutine coroutine = StartCoroutine(Delay());
+        }    
     }
 
 }

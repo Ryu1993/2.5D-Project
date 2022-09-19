@@ -5,8 +5,7 @@ using UnityEngine.Events;
 
 public class WeaponContainer : MonoBehaviour
 {
-    [SerializeField]
-    Player player;
+    public Player player;
     public Animator animator;
     public Weapon curWeapon;
     Material material;
@@ -20,28 +19,22 @@ public class WeaponContainer : MonoBehaviour
     [SerializeField]
     MeshRenderer containerBackRenderer;
     public UnityAction weaponAttack;
+    public UnityAction weaponDeactive;
     public bool superArmor;
-    public float motionTime;
-    private void Start()
-    {
-        TestSet();
-    }
-    private void Update()
-    {
-        weaponAttack?.Invoke();
-    }
+    public bool isProgress;
 
     public void WeaponSet(Weapon weapon)
     {
         curWeapon = weapon;
         curWeapon.animator = animator;
+        curWeapon.player = player;
         material = curWeapon.transform.GetComponent<MeshRenderer>().material;
         containerBackFilter.mesh = curWeapon.transform.GetComponent<MeshFilter>().sharedMesh;
         containerBackRenderer.material = new Material(curWeapon.transform.GetComponent<MeshRenderer>().sharedMaterial);
         containerBackRenderer.material.SetFloat(desolve, 0);
-        weaponAttack += curWeapon.WeaponAttack;
         superArmor = curWeapon.superArmor;
-        motionTime = curWeapon.motionTime;
+        weaponAttack = curWeapon.WeaponAttack;
+        weaponDeactive = curWeapon.WeaponDeactive;
         animator.SetBool(curWeapon.type.ToString(), true);
     }
     public void MaterialNoiseSet() => StartCoroutine(CoMaterialNoise());
@@ -69,6 +62,15 @@ public class WeaponContainer : MonoBehaviour
             material.SetFloat(desolve, 1); 
             containerBackRenderer.material.SetFloat(desolve, 0);
         }
+    }
+
+
+
+
+
+    private void Start()
+    {
+        TestSet();
     }
 
     void TestSet()

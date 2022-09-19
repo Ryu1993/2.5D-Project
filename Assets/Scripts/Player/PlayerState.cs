@@ -23,10 +23,10 @@ namespace PlayerStates
         {
             while (true)
             {
-                DirectionCheck(order);
-                order.InputCheck.Invoke();
                 if (IsAsyncStateCheck(order)) break;
                 if (IsHitCheck(order)) break;
+                DirectionCheck(order);
+                order.InputCheck.Invoke();
                 if (IsAttackCheck(order)) break;
                 if (IsMoveCheck(order)) break;
                 yield return null;
@@ -118,6 +118,7 @@ namespace PlayerStates
         {
             base.Enter(order);
             order.Idle?.Invoke();
+            Debug.Log("아이들");
         }
     }
     public class MoveState : BaseState
@@ -142,28 +143,31 @@ namespace PlayerStates
     {
         public override void Enter(Player order)
         {
-            base.Enter (order);
+            base.Enter(order);
+            Debug.Log("공격");
             order.PlayerIdle();
-            order.Attack?.Invoke();
+            order.directionCircle.isStop = true;
         }
         public override IEnumerator Middle(Player order)
         {
-            for(int i = 0; i < order.weaponContainer.motionTime; i++)
+            order.Attack?.Invoke();
+            yield return null;
+            while (order.weaponContainer.isProgress)
             {
                 if (IsAsyncStateCheck(order)) break;
                 if (IsHitCheck(order)) break;
                 order.InputCheck?.Invoke();
+                order.Attack?.Invoke();
                 if (IsDashCheck(order)) break;
                 if (IsSkillCheck(order)) break;
-                if (IsAttackCheck(order)) i = 0;
                 yield return null;
             }
+            order.directionCircle.isStop = false;
+            order.rigi.velocity = Vector3.zero;
+            order.curAction = Player.State.Idle;
+            order.ChangeState(Player.State.Idle);
         }
-        protected override bool IsAttackCheck(Player order)
-        {
-            return order.Attack != null;
-        }
-
+ 
     }
 
     public class SuperAttackState : AttackState
@@ -172,9 +176,11 @@ namespace PlayerStates
         {
             base.Enter(order);
             order.PlayerKinematic();
+            order.directionCircle.isStop = true;
         }
         public override void Exit(Player order)
         {
+            order.directionCircle.isStop = false;
             order.PlayerKinematic();
         }
     }

@@ -311,7 +311,7 @@ Shader "Universal Render Pipeline/Unlit Sprite"
             #pragma target 2.0
 
             #pragma vertex UniversalVertexMeta
-            #pragma fragment UniversalFragmentMetaUnlit
+            #pragma fragment UniversalFragmentMetaLit
 
             #include "UnlitInput.hlsl"
             #include "UnlitMetaPass.hlsl"
