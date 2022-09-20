@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GameManager : Singleton<GameManager>
 {
-
+    public PlayerInfo playerInfo;
     protected override void Awake()
     {
         base.Awake();

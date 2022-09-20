@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: TestEnemy
   m_EditorClassIdentifier: 
   curRoomType: 1
-  icon: {fileID: 0}
+  icon: {fileID: -8929440768489705544, guid: c902e08bd83e04947b6e8d7f31f385be, type: 3}
   map_pack:
     m_LabelString: TestMap_Label
   monster_pack:

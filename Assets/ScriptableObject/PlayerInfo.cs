@@ -9,8 +9,8 @@ public class PlayerInfo : ScriptableObject
     public string player_name;
     public Equip curEquip;
     public List<Item> inventory;
-    public float player_maxHp;
-    public float player_curHp;
+    public int player_maxHp;
+    public int player_curHp;
 
 
 

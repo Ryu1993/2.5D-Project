@@ -118,7 +118,6 @@ namespace PlayerStates
         {
             base.Enter(order);
             order.Idle?.Invoke();
-            Debug.Log("พฦภฬต้");
         }
     }
     public class MoveState : BaseState
