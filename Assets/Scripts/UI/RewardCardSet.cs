@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.Events;
 
 public class RewardCardSet : MonoBehaviour
 {
-    public Item item;
     [SerializeField]
     Image backBg;
     [SerializeField]
@@ -27,9 +27,10 @@ public class RewardCardSet : MonoBehaviour
     TextMeshProUGUI nameTag;
     [SerializeField]
     TextMeshProUGUI itemText;
+    UnityAction onclick;
+    
 
-
-    public void OnEnable()
+    public void RewardCardSetting(Item item,UnityAction action)
     {
         backBg.sprite = item.backBg;
         backFrame.sprite = item.backFrame;
@@ -40,8 +41,12 @@ public class RewardCardSet : MonoBehaviour
         simpleRarity.sprite = item.simpleRarity;
         nameTag.text = item.Name;
         itemText.text = item.itemCardText;
+        onclick += action;
     }
-
+    public void OnClickEvent()
+    {
+        onclick?.Invoke();
+    }
 
 
 
