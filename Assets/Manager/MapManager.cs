@@ -17,35 +17,19 @@ public class MapManager : Singleton<MapManager>
         public Dictionary<GateDirection, RoomConnectInfo> gate = new Dictionary<GateDirection, RoomConnectInfo>();
         public Vector2 rectPosition;
         public bool isClear = false;
-        public RoomConnectInfo(RoomData _room)
-        {
-            room = _room;
-        }
+        public RoomConnectInfo(RoomData _room)=> room = _room;
         public List<GateDirection> NullGateCheck()
         {
             var result = new List<GateDirection>();
-            foreach(var gateDirection in MapManager.instance.gateDirections)
-            {
-                if(!gate.ContainsKey(gateDirection))
-                {
-                    result.Add(gateDirection);
-                }
-            }
+            foreach(var gateDirection in MapManager.instance.gateDirections) if (!gate.ContainsKey(gateDirection)) result.Add(gateDirection);
             return result;
         }
         public List<GateDirection> GateCheck()
         {
             var result = new List<GateDirection>();
-            foreach (var gateDirection in MapManager.instance.gateDirections)
-            {
-                if (gate.ContainsKey(gateDirection))
-                {
-                    result.Add(gateDirection);
-                }
-            }
+            foreach (var gateDirection in MapManager.instance.gateDirections) if (gate.ContainsKey(gateDirection)) result.Add(gateDirection);
             return result;
         }
-
     }
     List<RoomConnectInfo> checkList;
     List<RoomConnectInfo> outputList;
@@ -109,13 +93,7 @@ public class MapManager : Singleton<MapManager>
         {
             if (!matchingRoom.gate.ContainsKey(direction))
             {
-                if(connectedList.Contains(matchingRoom))
-                {
-                    if(matchingRoom.rectPosition != RectPositionFromDirection(direction, curRoom))
-                    {
-                        continue;
-                    }
-                }
+                if(connectedList.Contains(matchingRoom)) if (matchingRoom.rectPosition != RectPositionFromDirection(direction, curRoom)) continue;
                 matchRooms.Add(matchingRoom);
             }
         }
@@ -152,15 +130,8 @@ public class MapManager : Singleton<MapManager>
     }
     private bool CheckRectPosition(Vector2 vec)
     {
-        foreach(RoomConnectInfo room in allRoomList)
-        {
-            if(room.rectPosition == vec)
-            {
-                return false;
-            }
-        }
+        foreach(RoomConnectInfo room in allRoomList) if (room.rectPosition == vec) return false;
         return true;
-
     }
     #endregion
 
