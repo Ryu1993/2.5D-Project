@@ -2069,6 +2069,7 @@ MonoBehaviour:
   - {fileID: 1990990193}
   - {fileID: 26204097}
   - {fileID: 1631339327}
+  rewardCardFrame: {fileID: 0}
   count: 0
 --- !u!1 &1846606013
 GameObject:
