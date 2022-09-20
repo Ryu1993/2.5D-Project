@@ -19,14 +19,12 @@ public class BasicSword : Weapon , IAttackable
     }
     public override void WeaponAttack()
     {
-        Debug.Log("무기공격");
         for(int i = 0; i < colliders.Length; i++) colliders[i] = null;
         Physics.OverlapBoxNonAlloc(transform.position, new Vector3(0.5f, 0.5f,0.5f), colliders,Quaternion.identity,layerMask);
         for (int i = 0; i < colliders.Length; i++)
         {
             if (colliders[i]!=null)
             {
-                Debug.Log("IDamagabel있음");
                 IDamageable target = colliders[i].GetComponent<IDamageable>();
                 target?.Hit(this, transform.position);
             }
@@ -38,10 +36,10 @@ public class BasicSword : Weapon , IAttackable
         target.DirectHit();
     }
 
-    private void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawCube(transform.position, new Vector3(1, 1, 1));
-    }
+    //private void OnDrawGizmosSelected()
+    //{
+    //    Gizmos.color = Color.red;
+    //    Gizmos.DrawCube(transform.position, new Vector3(1, 1, 1));
+    //}
 
 }

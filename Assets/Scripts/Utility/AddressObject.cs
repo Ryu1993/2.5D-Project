@@ -8,6 +8,24 @@ using static UnityEditor.FilePathAttribute;
 
 public static class AddressObject
 {
+    public static ScriptableObject RandomInstinateScriptable(AssetLabelReference label)
+    {
+        var location = RandomLocation(label);
+        return Addressables.LoadAssetAsync<ScriptableObject>(location).WaitForCompletion();
+    }
+    public static ScriptableObject InstinateScriptable(AssetLabelReference label)
+    {
+        return Addressables.LoadAssetAsync<ScriptableObject>(label).WaitForCompletion();
+    }
+
+    public static List<ScriptableObject> InstinatesScriptable(AssetLabelReference label)
+    {
+        var loaction = Locations(label);
+        List<ScriptableObject> scriptables = new List<ScriptableObject>();
+        Addressables.LoadAssetsAsync<ScriptableObject>(loaction, (go) => scriptables.Add(go)).WaitForCompletion();
+        return scriptables;
+    }
+
     public static List<GameObject> Instinates(AssetLabelReference label)
     {
         List<GameObject> objectList = new List<GameObject>();
@@ -129,6 +147,10 @@ public static class AddressObject
     public static bool Release(GameObject obj)
     {
         return Addressables.ReleaseInstance(obj);
+    }
+    public static void Release(ScriptableObject obj)
+    {
+        Addressables.Release<ScriptableObject>(obj);
     }
 
 

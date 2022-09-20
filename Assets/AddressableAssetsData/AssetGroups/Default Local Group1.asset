@@ -22,6 +22,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - TestEnemy_Label
+  - m_GUID: fe0fbce61b466d74795c183970980010
+    m_Address: Assets/ScriptableObject/Item/Test.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - TestItem_Label
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: a36bbc9cce32b754382bb97867bcb24f, type: 2}
   m_SchemaSet:
