@@ -19,9 +19,10 @@ public class WeaponContainer : MonoBehaviour
     [SerializeField]
     MeshRenderer containerBackRenderer;
     public UnityAction weaponAttack;
-    public UnityAction weaponDeactive;
     public bool superArmor;
     public bool isProgress;
+    public bool isoffDelay;
+    public int bufferedInput;
 
     public void WeaponSet(Weapon weapon)
     {
@@ -34,10 +35,15 @@ public class WeaponContainer : MonoBehaviour
         containerBackRenderer.material.SetFloat(desolve, 0);
         superArmor = curWeapon.superArmor;
         weaponAttack = curWeapon.WeaponAttack;
-        weaponDeactive = curWeapon.WeaponDeactive;
         animator.SetBool(curWeapon.type.ToString(), true);
     }
-    public void MaterialNoiseSet() => StartCoroutine(CoMaterialNoise());
+
+
+    private void CurWeaponAttack()
+    {
+        weaponAttack?.Invoke();
+    }
+    private void MaterialNoiseSet() => StartCoroutine(CoMaterialNoise());
     private IEnumerator CoMaterialNoise()
     {
         float baseNoise = 0;
@@ -63,6 +69,26 @@ public class WeaponContainer : MonoBehaviour
             containerBackRenderer.material.SetFloat(desolve, 0);
         }
     }
+    public void WeaponAnimationOn() => animator.SetBool("Action", true);
+    public void WeaponAnimationOff()
+    {
+        if (!isoffDelay)
+        {
+            animator.SetBool("Action", false);
+            Coroutine coroutine = StartCoroutine(CoDelay());
+        }
+    }
+    protected IEnumerator CoDelay()
+    {
+        isoffDelay = true;
+        for (int i = 0; i < bufferedInput; i++)
+        {
+            yield return null;
+        }
+        isoffDelay = false;
+    }
+
+
 
 
 

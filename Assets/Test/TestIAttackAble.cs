@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TestIAttackAble : MonoBehaviour,IAttackable
+public class TestIAttackAble : Monster, IAttackable
 {
     Character character;
  
@@ -12,11 +12,13 @@ public class TestIAttackAble : MonoBehaviour,IAttackable
         if (character == null) return;
         new AsyncState.Burn(3, character); 
     }
-    private void OnCollisionEnter(Collision collision)
-    {
-        IDamageable target = collision.transform.GetComponent<IDamageable>();
-        if(target == null) return;
-        character = target?.Hit(this, transform.position);
-    }
+    //private void OnCollisionEnter(Collision collision)
+    //{
+    //    IDamageable target = collision.transform.GetComponent<IDamageable>();
+    //    if(target == null) return;
+    //    character = target?.Hit(this, transform.position);
+    //}
+
+
 
 }

@@ -1,28 +1,47 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
-public class BasicSword : Weapon
+public class BasicSword : Weapon , IAttackable
 {
- 
-    public void Awake()
+    private Collider[] colliders = new Collider[3];
+    private Vector3 center;
+    [SerializeField]
+    LayerMask layerMask;
+
+
+    private void OnEnable()
     {
+        center = transform.up - transform.forward / 2;
         type = WeaponType.Sword;
         superArmor = false;
-        bufferedInput = 3;
     }
-
     public override void WeaponAttack()
     {
-        animator.SetBool("Action", true);
-    }
-    public override void WeaponDeactive()
-    {
-        if(!deactiveDelay)
+        Debug.Log("무기공격");
+        for(int i = 0; i < colliders.Length; i++) colliders[i] = null;
+        Physics.OverlapBoxNonAlloc(transform.position, new Vector3(0.5f, 0.5f,0.5f), colliders,Quaternion.identity,layerMask);
+        for (int i = 0; i < colliders.Length; i++)
         {
-            animator.SetBool("Action", false);
-            Coroutine coroutine = StartCoroutine(Delay());
-        }    
+            if (colliders[i]!=null)
+            {
+                Debug.Log("IDamagabel있음");
+                IDamageable target = colliders[i].GetComponent<IDamageable>();
+                target?.Hit(this, transform.position);
+            }
+        }
+    }
+
+    public void Attack(IDamageable target)
+    {
+        target.DirectHit();
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawCube(transform.position, new Vector3(1, 1, 1));
     }
 
 }

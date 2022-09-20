@@ -79,9 +79,9 @@ public class Player : Character
     public void AttackInput()
     {
         Attack = null;
-        if (!Input.GetMouseButton(0)) { weaponContainer.weaponDeactive?.Invoke(); return; }
+        if (!Input.GetMouseButton(0)) { weaponContainer.WeaponAnimationOff(); return; }
         if (weaponContainer.weaponAttack == null) {return; }
-        Attack=weaponContainer.weaponAttack;
+        Attack = weaponContainer.WeaponAnimationOn;
     }
     public void DashInput()
     {

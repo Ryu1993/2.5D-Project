@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 public class Character : MonoBehaviour, IDamageable
 {
-    public enum State { Up, Down, Horizontal, HoUp, HoDown, Move, Idle, Hit, Attack, Skill, Dash, Sturn,SuperAttack }
+    public enum State { Up, Down, Horizontal, HoUp, HoDown, Move, Idle, Hit, Attack, Skill, Dash, Sturn,SuperAttack,Trace,Ready,Die }
     [HideInInspector]
     public State curAction;
     public float moveSpeed;
