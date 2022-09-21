@@ -12,12 +12,12 @@ public class TestIAttackAble : Monster, IAttackable
         if (character == null) return;
         new AsyncState.Burn(3, character); 
     }
-    //private void OnCollisionEnter(Collision collision)
-    //{
-    //    IDamageable target = collision.transform.GetComponent<IDamageable>();
-    //    if(target == null) return;
-    //    character = target?.Hit(this, transform.position);
-    //}
+    private void OnCollisionEnter(Collision collision)
+    {
+        IDamageable target = collision.transform.GetComponent<IDamageable>();
+        if (target == null) return;
+        character = target?.Hit(this, transform.position);
+    }
 
 
 

@@ -11,10 +11,10 @@ namespace AsyncState
     { 
         protected WaitForSeconds wait = new WaitForSeconds(1);
         protected Type type;
-        public IEnumerator Progress(int duration,Character order)
+        protected int count = 0;
+        protected virtual IEnumerator Progress(int duration,Character order)
         {
             EnterEvent(order);
-            int count = 0;
             while(count < duration)
             {
                 count++;
@@ -30,23 +30,29 @@ namespace AsyncState
 
     public class Burn : StatusEffect
     {
+        StatusIconManager iconManager;
+        int startDuration = 0;
         public Burn(int duration, Character order)
         {
             type = Type.Burn;
+            startDuration = duration;
             order.StartCoroutine(Progress(duration,order));
         }
         protected override void EnterEvent(Character order)
         {
             base.EnterEvent(order);
             Debug.Log(order.name+"화상진입");
+            iconManager = StatusContainerUi.instance.StatusAdd(type, startDuration);
         }
         protected override void EffectEvent(Character order)
         {
             Debug.Log(order.name + "화상중");
+            iconManager.Count(startDuration - count);
         }
         protected override void ExitEvent(Character order)
         {
             Debug.Log(order.name + "화상끝");
+            iconManager.Return();
         }
     }
 

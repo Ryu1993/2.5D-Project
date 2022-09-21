@@ -155,6 +155,15 @@ public class NewObjectPool : Singleton<NewObjectPool>
         callObject.SetParent(active);
         return callObject;
     }
+    public Transform Call(PoolInfo poolInfo,Transform transform)
+    {
+        Queue<GameObject> pool = poolDic[poolInfo];
+        if (pool.Count == 0) Add(poolInfo);
+        Transform callObject = pool.Dequeue().transform;
+        callObject.SetParent(transform,false);
+        return callObject;
+    }
+
     public Transform Call(PoolInfo poolInfo)
     {
         Queue<GameObject> pool = poolDic[poolInfo];
