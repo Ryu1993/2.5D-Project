@@ -23,6 +23,8 @@ public class RoomManager : MonoBehaviour
     Dictionary<MapManager.GateDirection,Transform> Gate = new Dictionary<MapManager.GateDirection,Transform>();
     List<MapManager.GateDirection> connectedDirection = new List<MapManager.GateDirection>();
     List<NewObjectPool.PoolInfo> enemyPools;
+    [SerializeField]
+    List<GameObject> enemys = new List<GameObject>();
     int monsterCounter = 0;
 
     private void Awake()
@@ -94,7 +96,6 @@ public class RoomManager : MonoBehaviour
     private void EnemySpawn()
     {
         monsterCounter = SpawnPoint[Object.Enemy].Count;    
-        List<GameObject> enemys = new List<GameObject>();
         AsyncOperationHandle<IList<GameObject>> list = AddressObject.GameObjectHandlesSet(roomData.monster_pack, enemys);
         list.WaitForCompletion();
         if (monsterCounter > 0)

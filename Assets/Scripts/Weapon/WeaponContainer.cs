@@ -18,6 +18,8 @@ public class WeaponContainer : MonoBehaviour
     MeshFilter containerBackFilter;
     [SerializeField]
     MeshRenderer containerBackRenderer;
+    [SerializeField]
+    Transform weaponSlot;
     public UnityAction weaponAttack;
     public bool superArmor;
     public bool isProgress;

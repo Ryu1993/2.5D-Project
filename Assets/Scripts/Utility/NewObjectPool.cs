@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
 
 public class NewObjectPool : Singleton<NewObjectPool>
 {
@@ -67,8 +68,6 @@ public class NewObjectPool : Singleton<NewObjectPool>
             }
         }
     }
-
-
     public PoolInfo PoolInfoSet(GameObject gameObject, int start, int add)
     {
         PoolInfo poolInfo = PoolInfoSearch(gameObject);

@@ -50,7 +50,6 @@ public class RewardCardWindow : MonoBehaviour
                 managers.Add(rewardManager);
                 rewardCardSet.RewardCardSetting(randomItem, rewardManager.PlayerGetItem);
             }
-            else Debug.Log("½ÇÆÐ");
         }
     }
     public void ResetReward()

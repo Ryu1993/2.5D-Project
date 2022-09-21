@@ -1194,6 +1194,7 @@ MonoBehaviour:
       type: 3}
     start: 3
     add: 3
+  PoolInfonum: 0
 --- !u!4 &596516937
 Transform:
   m_ObjectHideFlags: 0
@@ -1504,6 +1505,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1210517838}
+  - component: {fileID: 1210517839}
   m_Layer: 0
   m_Name: Test
   m_TagString: Untagged
@@ -1526,6 +1528,21 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 17
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1210517839
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1210517836}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceba25914d1859d40885d60c4d00a17d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  label:
+    m_LabelString: TestEnemy_Label
+  testList: []
 --- !u!1 &1232158486 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 9111962883125049612, guid: 034a053a9aa6164409ba91b3dd3b7645,

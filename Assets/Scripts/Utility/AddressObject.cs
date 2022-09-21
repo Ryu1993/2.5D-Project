@@ -103,6 +103,12 @@ public static class AddressObject
         }
         return Addressables.LoadAssetsAsync<GameObject>(pickLocations, (go) => gameObjects.Add(go));
     }
+    public static AsyncOperationHandle<GameObject> RandomGaemObjectHandleSet(AssetLabelReference label)
+    {
+        var locations = Locations(label);
+        return Addressables.LoadAssetAsync<GameObject>(locations[Random.Range(0, locations.Count)]);
+    }
+
     #region Location
     public static IResourceLocation RandomLocation(AssetLabelReference label)
     {

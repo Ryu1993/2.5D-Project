@@ -22,8 +22,8 @@ public class TestAddresable : MonoBehaviour
     IEnumerator ListClear()
     {
         yield return new WaitForSeconds(3);
-        testList.Clear();
-        Addressables.Release(operationHandle);
+        Addressables.Release(operationHandle);  
+
     }
 
 }
