@@ -13,7 +13,7 @@ public class TestSlime : Monster
     IEnumerator Die()
     {
         yield return new WaitForSeconds(Random.Range(3, 6));
-        dieEvent.Invoke();
+        dieEvent?.Invoke();
     }
 
 

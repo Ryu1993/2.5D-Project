@@ -22,7 +22,7 @@ public class RoomManager : MonoBehaviour
     Dictionary<Object, List<Transform>> SpawnPoint = new Dictionary<Object, List<Transform>>();
     Dictionary<MapManager.GateDirection,Transform> Gate = new Dictionary<MapManager.GateDirection,Transform>();
     List<MapManager.GateDirection> connectedDirection = new List<MapManager.GateDirection>();
-    List<NewObjectPool.PoolInfo> enemyPools = new List<NewObjectPool.PoolInfo>();
+    List<NewObjectPool.PoolInfo> enemyPools;
     int monsterCounter = 0;
 
     private void Awake()
@@ -93,10 +93,12 @@ public class RoomManager : MonoBehaviour
     }
     private void EnemySpawn()
     {
-        monsterCounter = SpawnPoint[Object.Enemy].Count;
+        monsterCounter = SpawnPoint[Object.Enemy].Count;    
+        List<GameObject> enemys = new List<GameObject>();
+        AsyncOperationHandle<IList<GameObject>> list = AddressObject.GameObjectHandlesSet(roomData.monster_pack, enemys);
+        list.WaitForCompletion();
         if (monsterCounter > 0)
         {
-            List<GameObject> enemys = AddressObject.GameObjectsSet(roomData.monster_pack);
             enemyPools = new List<NewObjectPool.PoolInfo>();
             foreach (GameObject enemy in enemys)
             {
@@ -109,6 +111,7 @@ public class RoomManager : MonoBehaviour
                 monster.dieEvent += SubMonsterCountEvent;
             }          
         }
+        Addressables.Release(list);
     }
     public void EnemyAdd(int num)
     {

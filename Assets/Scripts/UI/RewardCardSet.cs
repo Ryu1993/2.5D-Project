@@ -32,6 +32,7 @@ public class RewardCardSet : MonoBehaviour
 
     public void RewardCardSetting(Item item,UnityAction action)
     {
+        onclick = null;
         backBg.sprite = item.backBg;
         backFrame.sprite = item.backFrame;
         element.sprite = item.element;

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
+using UnityEngine.AddressableAssets;
 
 public class NewObjectPool : Singleton<NewObjectPool>
 {
@@ -25,7 +26,8 @@ public class NewObjectPool : Singleton<NewObjectPool>
     Dictionary<PoolInfo, Queue<GameObject>> poolDic = new Dictionary<PoolInfo, Queue<GameObject>>();
     Transform active;
     Transform deactive;
-
+    [SerializeField]
+    int PoolInfonum = 0;
 
 
     protected override void Awake()
@@ -65,6 +67,8 @@ public class NewObjectPool : Singleton<NewObjectPool>
             }
         }
     }
+
+
     public PoolInfo PoolInfoSet(GameObject gameObject, int start, int add)
     {
         PoolInfo poolInfo = PoolInfoSearch(gameObject);
@@ -79,6 +83,7 @@ public class NewObjectPool : Singleton<NewObjectPool>
             go.GetComponent<IReturnable>().PoolInfoSet(poolInfo);
             poolDic[poolInfo].Enqueue(go);
         }
+        PoolInfonum++;
         return poolInfo;
     }
     private bool ReturnableCheck(GameObject gameObject)

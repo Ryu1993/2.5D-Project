@@ -27,6 +27,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - TestItem_Label
+  - m_GUID: 4ccd81eaebb73744f8c4b7f81d3426fd
+    m_Address: Assets/Prefabs/Map/Room 1.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - TestMap_Label
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: a36bbc9cce32b754382bb97867bcb24f, type: 2}
   m_SchemaSet:

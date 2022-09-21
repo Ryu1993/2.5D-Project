@@ -11,7 +11,8 @@ public static class AddressObject
     public static ScriptableObject RandomInstinateScriptable(AssetLabelReference label)
     {
         var location = RandomLocation(label);
-        return Addressables.LoadAssetAsync<ScriptableObject>(location).WaitForCompletion();
+        var scriptableObj = Addressables.LoadAssetAsync<ScriptableObject>(location).WaitForCompletion();
+        return scriptableObj;
     }
     public static ScriptableObject InstinateScriptable(AssetLabelReference label)
     {
@@ -20,9 +21,9 @@ public static class AddressObject
 
     public static List<ScriptableObject> InstinatesScriptable(AssetLabelReference label)
     {
-        var loaction = Locations(label);
+        var locations = Locations(label);
         List<ScriptableObject> scriptables = new List<ScriptableObject>();
-        Addressables.LoadAssetsAsync<ScriptableObject>(loaction, (go) => scriptables.Add(go)).WaitForCompletion();
+        Addressables.LoadAssetsAsync<ScriptableObject>(locations, (go) => scriptables.Add(go)).WaitForCompletion();
         return scriptables;
     }
 
@@ -64,7 +65,8 @@ public static class AddressObject
     public static GameObject RandomInstinate(AssetLabelReference label)
     {
         var location = RandomLocation(label);
-        return Addressables.InstantiateAsync(location).WaitForCompletion();
+        GameObject go = Addressables.InstantiateAsync(location).WaitForCompletion();
+        return go;
     } // 라벨에 있는거 랜덤하게 하나 
     public static GameObject Instinate(IResourceLocation location)
     {
@@ -79,42 +81,34 @@ public static class AddressObject
         }
         return gameObjects;
     }
-    public static GameObject GameObjectSet(AssetLabelReference label)
-    {
-        return Addressables.LoadAssetAsync<GameObject>(label).WaitForCompletion();
-    }
-    public static List<GameObject> GameObjectsSet(AssetLabelReference label)
-    {
-        var gameobjects = new List<GameObject>();
-        var locations = Locations(label);
-        Addressables.LoadAssetsAsync<GameObject>(locations, (go) => gameobjects.Add(go)).WaitForCompletion();
-        return gameobjects;
-    }
 
-  
-    public static List<GameObject> RandomGameObjectsSet(AssetLabelReference label)
+    public static AsyncOperationHandle<GameObject> GameObjectHandleSet(AssetLabelReference label)
     {
-        var gameObjects = new List<GameObject>();
+        return Addressables.LoadAssetAsync<GameObject>(label);
+    }
+    public static AsyncOperationHandle<IList<GameObject>> GameObjectHandlesSet(AssetLabelReference label,List<GameObject> gameObjects)
+    {
+        return Addressables.LoadAssetsAsync<GameObject>(label, (go) => gameObjects.Add(go));
+    }
+    public static AsyncOperationHandle<IList<GameObject>> RandomGameObjectHandlesSet(AssetLabelReference label,List<GameObject> gameObjects,int limit)
+    {
         var locations = Locations(label);
         var pickLocations = new List<IResourceLocation>();
-        while(locations.Count > 0)
+        for(int i = 0;i<limit;i++)
         {
+            if (locations.Count == 0) continue;
             var location = locations[Random.Range(0, locations.Count)];
             pickLocations.Add(location);
             locations.Remove(location);
         }
-        Addressables.LoadAssetsAsync<GameObject>(pickLocations, (go) => gameObjects.Add(go)).WaitForCompletion();
-        return gameObjects;
+        return Addressables.LoadAssetsAsync<GameObject>(pickLocations, (go) => gameObjects.Add(go));
     }
-
-
-
-
     #region Location
     public static IResourceLocation RandomLocation(AssetLabelReference label)
     {
         var locations = Locations(label);
-        return locations[Random.Range(0, locations.Count)];
+        var location = locations[Random.Range(0, locations.Count)];
+        return location;
     }
     public static List<IResourceLocation> RandomLoactions(AssetLabelReference label,int locationNum)
     {
@@ -122,7 +116,11 @@ public static class AddressObject
         var locations = Locations(label);
         for(int i = 0; i < locationNum; i++)
         {
-            resultLocations.Add(locations[Random.Range(0, locations.Count)]);
+            if(locations.Count != 0)
+            {
+                var location = locations[Random.Range(0, locations.Count)];
+                resultLocations.Add(location);
+            }
         }
         return resultLocations;
     }
@@ -142,8 +140,6 @@ public static class AddressObject
     {
         return Addressables.InstantiateAsync(label.labelString).WaitForCompletion();
     }
-
-
     public static bool Release(GameObject obj)
     {
         return Addressables.ReleaseInstance(obj);

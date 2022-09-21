@@ -55,11 +55,11 @@ public class RewardCardWindow : MonoBehaviour
     }
     public void ResetReward()
     {
-        foreach(RewardManager rewardManager in managers)
+        foreach (RewardManager rewardManager in managers)
         {
             AddressObject.Release(rewardManager.item);
         }
-        //managers.Clear();
+        managers.Clear();
     }
     public void CountReset() => count = 0;
     public void CardRevers()
