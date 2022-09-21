@@ -19,12 +19,12 @@ public class Player : Character
     public DirectionCircle directionCircle;
     #region ActionList
     public UnityAction InputCheck;
-    public UnityAction Attack;
-    public UnityAction Move;
-    public UnityAction Dash;
-    public UnityAction Skill;
-    public UnityAction SuperAttack;
-    public UnityAction Idle;
+    public UnityAction AttackBehavior;
+    public UnityAction MoveBehavior;
+    public UnityAction DashBehavior;
+    public UnityAction SkillBehavior;
+    public UnityAction SuperAttackBehavior;
+    public UnityAction IdleBehavior;
     #endregion
     [HideInInspector]
     public bool isHit;
@@ -68,20 +68,20 @@ public class Player : Character
     }
     public void MoveInput()
     {
-        Idle = null;
-        Move = null;
+        IdleBehavior = null;
+        MoveBehavior = null;
         moveX = Input.GetAxis("Horizontal");
         moveZ = Input.GetAxis("Vertical");
         moveVec = new Vector3(moveX, 0, moveZ).normalized* moveSpeed;
-        if (moveVec == Vector3.zero) Idle = PlayerIdle;
-        else Move = PlayerMove; 
+        if (moveVec == Vector3.zero) IdleBehavior = PlayerIdle;
+        else MoveBehavior = PlayerMove; 
     }
     public void AttackInput()
     {
-        Attack = null;
+        AttackBehavior = null;
         if (!Input.GetMouseButton(0)) { weaponContainer.WeaponAnimationOff(); return; }
         if (weaponContainer.weaponAttack == null) {return; }
-        Attack = weaponContainer.WeaponAnimationOn;
+        AttackBehavior = weaponContainer.WeaponAnimationOn;
     }
     public void DashInput()
     {

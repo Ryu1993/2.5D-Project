@@ -71,6 +71,12 @@ public class WeaponContainer : MonoBehaviour
             containerBackRenderer.material.SetFloat(desolve, 0);
         }
     }
+
+    public void WeaponContainerReady()
+    {
+        material?.SetFloat(desolve, 1);
+        containerBackRenderer?.material.SetFloat(desolve, 0);
+    }
     public void WeaponAnimationOn() => animator.SetBool("Action", true);
     public void WeaponAnimationOff()
     {

@@ -27,6 +27,8 @@ namespace PlayerStates
                 if (IsHitCheck(order)) break;
                 DirectionCheck(order);
                 order.InputCheck.Invoke();
+                if (IsDashCheck(order)) break;
+                if (IsSkillCheck(order)) break;
                 if (IsAttackCheck(order)) break;
                 if (IsMoveCheck(order)) break;
                 yield return null;
@@ -44,13 +46,13 @@ namespace PlayerStates
         }
         protected virtual bool IsMoveCheck(Player order)
         {
-            if (order.Move!=null&&curState!=Player.State.Move)
+            if (order.MoveBehavior != null&&curState!=Player.State.Move)
             {
                 order.curAction = Player.State.Move;
                 order.ChangeState(Player.State.Move);
                 return true;
             }
-            else if(order.Idle != null && curState != Player.State.Idle)
+            else if(order.IdleBehavior != null && curState != Player.State.Idle)
             {
                 order.curAction = Player.State.Idle;
                 order.ChangeState(Player.State.Idle);
@@ -60,7 +62,7 @@ namespace PlayerStates
         }
         protected virtual bool IsAttackCheck(Player order)
         {
-            if(order.Attack!=null)
+            if(order.AttackBehavior != null)
             {
                 if(order.weaponContainer.superArmor)
                 {
@@ -79,10 +81,22 @@ namespace PlayerStates
         }
         protected virtual bool IsSkillCheck(Player order)
         {
+            if (order.SkillBehavior != null)
+            {
+                order.curAction = Player.State.Skill;
+                order.ChangeState(Player.State.Skill);
+                return true;
+            }
             return false;
         }
         protected virtual bool IsDashCheck(Player order)
         {
+            if(order.DashBehavior!=null)
+            {
+                order.curAction = Player.State.Dash;
+                order.ChangeState(Player.State.Dash);
+                return true;
+            }
             return false;
         }
         protected virtual bool IsHitCheck(Player order)
@@ -117,7 +131,7 @@ namespace PlayerStates
         public override void Enter(Player order)
         {
             base.Enter(order);
-            order.Idle?.Invoke();
+            order.IdleBehavior?.Invoke();
         }
     }
     public class MoveState : BaseState
@@ -127,10 +141,12 @@ namespace PlayerStates
             while(true)
             {
                 DirectionCheck(order);
-                order.Move?.Invoke();
+                order.MoveBehavior?.Invoke();
                 order.InputCheck.Invoke();
                 if (IsAsyncStateCheck(order)) break;
                 if (IsHitCheck(order)) break;
+                if (IsDashCheck(order)) break;
+                if (IsSkillCheck(order)) break;
                 if (IsAttackCheck(order)) break;
                 if (IsMoveCheck(order)) break;
                 yield return null;
@@ -149,14 +165,14 @@ namespace PlayerStates
         }
         public override IEnumerator Middle(Player order)
         {
-            order.Attack?.Invoke();
+            order.AttackBehavior?.Invoke();
             yield return null;
             while (order.weaponContainer.isProgress)
             {
                 if (IsAsyncStateCheck(order)) break;
                 if (IsHitCheck(order)) break;
                 order.InputCheck?.Invoke();
-                order.Attack?.Invoke();
+                order.AttackBehavior?.Invoke();
                 if (IsDashCheck(order)) break;
                 if (IsSkillCheck(order)) break;
                 yield return null;
@@ -166,7 +182,12 @@ namespace PlayerStates
             order.curAction = Player.State.Idle;
             order.ChangeState(Player.State.Idle);
         }
- 
+        public override void Exit(Player order)
+        {
+            Debug.Log("∏ÿ√Á");
+            order.weaponContainer.animator.SetTrigger("Stop");
+        }
+
     }
 
     public class SuperAttackState : AttackState
@@ -179,6 +200,7 @@ namespace PlayerStates
         }
         public override void Exit(Player order)
         {
+            order.weaponContainer.animator.SetTrigger("HitStop");
             order.directionCircle.isStop = false;
             order.PlayerKinematic();
         }
