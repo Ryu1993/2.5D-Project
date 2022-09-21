@@ -5,12 +5,19 @@ using UnityEngine.UI;
 
 public class HpContainerUI : MonoBehaviour
 {
-    List<Image> heartList = new List<Image>();
     [SerializeField]
-    Image heart;
+    Image[] heartList;
     int curHeart = 0;
-    int maxHeart = 0;
-    [SerializeField]
+    int _maxHeart = 0;
+    int maxHeart
+    {
+        get { return _maxHeart; }
+        set 
+        {
+            if(value>12) value = 12;
+            _maxHeart = value;
+        }
+    }
     int curIndex = 0;
     [SerializeField]
     GameManager gameManager;
@@ -19,19 +26,7 @@ public class HpContainerUI : MonoBehaviour
         AddMaxHeart(gameManager.playerInfo.player_maxHp);
         AddHeart(gameManager.playerInfo.player_curHp);
     }
-    public void AddMaxHeart(int num)
-    {
-        for(int i = 0; i < num ; i++)
-        {
-            if (maxHeart % 2 == 0)
-            {
-                Image newHeart = Instantiate(heart, transform);
-                newHeart.fillAmount = 0;
-                heartList.Add(newHeart);
-            }
-            maxHeart++;
-        }
-    }
+    public void AddMaxHeart(int num) => maxHeart+=num;
     public void DamageHeart(int num)
     {
         for(int i = 0; i < num; i++)

@@ -12,6 +12,7 @@ public class Player : Character
     private StateMachine<State, Player> stateMachine;
     [SerializeField]
     private Transform spriteTransform;
+    public ParticleSystem illusionCreator;
     private float moveX;
     private float moveZ;
     public WeaponContainer weaponContainer;
@@ -28,7 +29,29 @@ public class Player : Character
     #endregion
     [HideInInspector]
     public bool isHit;
-    public float invincibilityTime;
+    [SerializeField]
+    float _invincibilityTime;
+    float invincibilityTime
+    {
+        get { return _invincibilityTime; }
+        set
+        { 
+            _invincibilityTime = value;
+            hitDelay = new WaitForSeconds(invincibilityTime);
+        }
+    }
+    [SerializeField]
+    float _dashTime;
+    float dashTime
+    {
+        get { return _dashTime; }
+        set
+        { 
+            _dashTime = value;
+            dashDelay = new WaitForSeconds(dashTime);
+        }         
+    }
+    public WaitForSeconds dashDelay;
     public WaitForSeconds hitDelay;
     private void Awake()
     {
@@ -36,6 +59,7 @@ public class Player : Character
     }
     void Setting()
     {
+        dashDelay = new WaitForSeconds(dashTime);
         hitDelay = new WaitForSeconds(invincibilityTime);
         stateMachine = new StateMachine<State, Player>(this);
         stateMachine.AddState(State.Idle, new PlayerStates.DirectionState());
@@ -85,11 +109,17 @@ public class Player : Character
     }
     public void DashInput()
     {
+        DashBehavior = null;
+        if (!Input.GetMouseButton(1)) return;
+        DashBehavior = PlayerDash;
     }
     public void SkillInput()
     {
     }
+
+    public void HitReset()=> HitInput = null;
     public void RemoveInput(UnityAction inputAction) => InputCheck -= inputAction;
+    public void PlayerDash() { }
     public void PlayerMove() => rigi.velocity = moveVec;
     public void PlayerIdle() => rigi.velocity = Vector3.zero;
     public void PlayerKinematic()=> rigi.isKinematic = !rigi.isKinematic;

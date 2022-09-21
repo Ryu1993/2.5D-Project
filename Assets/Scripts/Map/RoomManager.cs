@@ -103,7 +103,7 @@ public class RoomManager : MonoBehaviour
             enemyPools = new List<NewObjectPool.PoolInfo>();
             foreach (GameObject enemy in enemys)
             {
-                enemyPools.Add(NewObjectPool.instance.PoolInfoSet(enemy, 5, 3));
+                enemyPools.Add(NewObjectPool.instance.PoolInfoSet(enemy, 1, 3));
             }
             foreach (Transform enemyPostion in SpawnPoint[Object.Enemy])
             {

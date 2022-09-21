@@ -11,8 +11,6 @@ public class TestGhost : MonoBehaviour
     [SerializeField]
     GameObject ghost;
     [SerializeField]
-    Transform parent;
-    [SerializeField]
     Transform target;
     [Range(0.0f, 1.0f)]
     [SerializeField]
@@ -24,7 +22,6 @@ public class TestGhost : MonoBehaviour
     private void Awake()
     {
         intervalDelay = new WaitForSeconds(interval);
-
     }
 
     private void OnEnable()

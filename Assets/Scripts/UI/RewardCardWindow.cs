@@ -54,10 +54,7 @@ public class RewardCardWindow : MonoBehaviour
     }
     public void ResetReward()
     {
-        foreach (RewardManager rewardManager in managers)
-        {
-            AddressObject.Release(rewardManager.item);
-        }
+        foreach (RewardManager rewardManager in managers) AddressObject.Release(rewardManager.item);
         managers.Clear();
     }
     public void CountReset() => count = 0;
@@ -70,6 +67,11 @@ public class RewardCardWindow : MonoBehaviour
     }
     public void ScaleMax() => transform.GetComponent<RectTransform>().localScale = new Vector3(1, 1, 1);
     public void ScaleMin() => transform.GetComponent<RectTransform>().localScale = new Vector3(0, 0, 0);
+
+
+
+
+
     public void RewardTest()
     {
         transform.gameObject.SetActive(true);

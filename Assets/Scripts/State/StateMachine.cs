@@ -23,16 +23,16 @@ public class StateMachine<T1, T2> where T2 : MonoBehaviour
 
     public void ChangeState(T1 type)
     {
-        if (curCoroutine != null)
-        {
-            Order.StopCoroutine(curCoroutine);
-        }
-        if (curState != null)
-        {
-            curState.Exit(Order);
-        }
+        Order.StartCoroutine(CoChangeState(type));
+    }
+    public IEnumerator CoChangeState(T1 type)
+    {
+        if(curCoroutine!=null) while (!curState.isCompleted) yield return null;
+        if (curState != null) curState.Exit(Order);
         curState = states[type];
         curState.Enter(Order);
         curCoroutine = Order.StartCoroutine(curState.Middle(Order));
     }
+
+
 }

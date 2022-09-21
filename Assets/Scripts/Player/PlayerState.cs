@@ -15,6 +15,7 @@ namespace PlayerStates
         protected Player.State nextState;
         public override void Enter(Player order)
         {
+            isCompleted = false;
             curDirection = order.DirectionState();
             curState = order.curAction;
             order.animator.SetTrigger(order.curAction.ToString());
@@ -33,8 +34,11 @@ namespace PlayerStates
                 if (IsMoveCheck(order)) break;
                 yield return null;
             }
+            isCompleted = true;
         }
         public override void Exit(Player order) { }
+
+        #region BaseCheck
         protected virtual void DirectionCheck(Player order)
         {
             nextDirection = order.DirectionState();
@@ -119,12 +123,7 @@ namespace PlayerStates
             if (isChange) order.ChangeState(nextState);
             return isChange;
         }
-    }
-
-    public class NoneReactionHit : BaseState
-    {
-
-
+        #endregion
     }
     public class DirectionState : BaseState
     {
@@ -151,9 +150,9 @@ namespace PlayerStates
                 if (IsMoveCheck(order)) break;
                 yield return null;
             }
+            isCompleted = true;
         }
     }
-
     public class AttackState : BaseState
     {
         public override void Enter(Player order)
@@ -181,15 +180,10 @@ namespace PlayerStates
             order.rigi.velocity = Vector3.zero;
             order.curAction = Player.State.Idle;
             order.ChangeState(Player.State.Idle);
+            isCompleted = true;
         }
-        public override void Exit(Player order)
-        {
-            Debug.Log("¸ØÃç");
-            order.weaponContainer.animator.SetTrigger("Stop");
-        }
-
+        public override void Exit(Player order)=> order.weaponContainer.animator.SetTrigger("Stop");
     }
-
     public class SuperAttackState : AttackState
     {
         public override void Enter(Player order)
@@ -205,39 +199,65 @@ namespace PlayerStates
             order.PlayerKinematic();
         }
     }
-
     public class SkiilState : BaseState
     {
 
     }
-
     public class DashState : BaseState
     {
-
+        float baseSpeed = 0;
+        public override void Enter(Player order)
+        {
+            base.Enter(order);
+            baseSpeed = order.moveSpeed;
+            order.moveSpeed = order.moveSpeed * 2;
+            order.MoveInput();
+        }
+        public override IEnumerator Middle(Player order)
+        {
+            order.illusionCreator.Play();
+            if (order.MoveBehavior != null) order.PlayerMove();
+            else order.rigi.velocity = order.directionCircle.transform.forward * order.moveSpeed;
+            yield return order.dashDelay;
+            order.HitReset();
+            order.illusionCreator.Stop();
+            order.rigi.velocity = Vector3.zero;
+            order.moveSpeed = baseSpeed;
+            order.curAction = Player.State.Idle;
+            order.ChangeState(order.curAction);
+            isCompleted = true;
+        }
     }
-
     public class HitState : BaseState
     {
-        public override void Enter(Player order) => order.curAction = Player.State.Hit;
+        public override void Enter(Player order)
+        {
+            order.curAction = Player.State.Hit;
+            isCompleted = false;
+        }
         public override IEnumerator Middle(Player order)
         {
             order.HitInput?.Invoke(order);
             yield return order.hitDelay;
             order.curAction = Player.State.Idle;
             order.ChangeState(order.curAction);
+            isCompleted = true;
         }
         public override void Exit(Player order)
         {
             order.HitInput = null;
             order.rigi.velocity = Vector3.zero;
-        }
-           
+        }         
     }
     
-    public class SturnState : NoneReactionHit
+    public class SturnState : BaseState
     {
-  
-        public override void Enter(Player order)=> order.curAction = Player.State.Sturn;
+
+        public override void Enter(Player order)
+        {
+            order.curAction = Player.State.Sturn;
+            isCompleted = false;
+        }
         public override IEnumerator Middle(Player order)
         {
             while(true)
@@ -246,7 +266,9 @@ namespace PlayerStates
                 if (!IsAsyncStateCheck(order)) break;
                 yield return null;
             }
+            isCompleted = true;
         }
+        #region SturnCustomCheck
         protected bool isHitable = true;
         protected override bool IsHitCheck(Player order)
         {
@@ -274,9 +296,7 @@ namespace PlayerStates
             yield return order.hitDelay;
             isHitable = true;
         }
-
-
-
+        #endregion
     }
 
 
