@@ -1,9 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 
 public abstract class Item : ScriptableObject
 {
+    public enum ItemType { Equip,Artifact,Buff}
+    public ItemType Type { get; private set; }
     public string Name { get; }
     [Header("CardInfo")]
     public string itemCardText;
@@ -15,10 +18,8 @@ public abstract class Item : ScriptableObject
     public Sprite simpleIcon;
     public Sprite simpleRarity;
     public Sprite simpleIconFrame;
-    [Header("SecenInfo")]
-    public GameObject scenePrefab;
     [Header("WeaponInfo")]
-    public GameObject weaponPrefab;
+    AssetLabelReference weaponPrefab;
 
 
 

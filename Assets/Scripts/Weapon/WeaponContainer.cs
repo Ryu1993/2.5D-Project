@@ -8,18 +8,17 @@ public class WeaponContainer : MonoBehaviour
     public Player player;
     public Animator animator;
     public Weapon curWeapon;
-    Material material;
-    int desolve = Shader.PropertyToID("_Desolve");
+    private Material material;
+    private int desolve = Shader.PropertyToID("_Desolve");
     [HideInInspector]
     public float duration;
     [HideInInspector]
     public bool updown;
     [SerializeField]
-    MeshFilter containerBackFilter;
+    private MeshFilter containerBackFilter;
     [SerializeField]
-    MeshRenderer containerBackRenderer;
-    [SerializeField]
-    Transform weaponSlot;
+    private MeshRenderer containerBackRenderer;
+    public Transform weaponSlot;
     public UnityAction weaponAttack;
     public bool superArmor;
     public bool isProgress;

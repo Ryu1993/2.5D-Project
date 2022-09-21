@@ -211,8 +211,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a1b0a800cb5654459b9a67dc78b481f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  curWeaponImage: {fileID: 0}
-  curWeaponName: {fileID: 0}
+  curWeaponImage: {fileID: 937887958}
+  curWeaponName: {fileID: 962618581}
 --- !u!1 &152776342
 GameObject:
   m_ObjectHideFlags: 0

@@ -2,11 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SceneItem : MonoBehaviour
+[CreateAssetMenu(menuName ="Item/Buff")]
+public class BuffItem : Item
 {
-    public Item item;
-
-
-
 
 }
