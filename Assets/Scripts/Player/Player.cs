@@ -96,9 +96,9 @@ public class Player : Character
         MoveBehavior = null;
         moveX = Input.GetAxis("Horizontal");
         moveZ = Input.GetAxis("Vertical");
-        moveVec = new Vector3(moveX, 0, moveZ).normalized* moveSpeed;
+        moveVec = new Vector3(moveX, 0, moveZ);
         if (moveVec == Vector3.zero) IdleBehavior = PlayerIdle;
-        else MoveBehavior = PlayerMove; 
+        else { moveVec = new Vector3(moveX, 0, moveZ).normalized * moveSpeed; MoveBehavior = PlayerMove; }      
     }
     public void AttackInput()
     {

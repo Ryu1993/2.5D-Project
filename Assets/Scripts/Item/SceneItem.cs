@@ -5,14 +5,24 @@ using UnityEngine;
 public class SceneItem : MonoBehaviour
 {
     public Item item;
+    Player player;
+    bool isGet;
     [SerializeField]
     private SpriteRenderer spriteRenderer;
-    bool isGet;
     UnityEngine.Events.UnityAction<Player> getItemEvent;
+    [SerializeField]
+    TMPro.TextMeshProUGUI textScript;
+    [SerializeField]
+    TMPro.TextMeshProUGUI nameScript;
+    [SerializeField]
+    Cinemachine.CinemachineVirtualCamera objectCamera;
 
-    public void SceneItemSet()
+
+    public void SceneItemSet(Item item)
     {
         spriteRenderer.sprite = item.cardIcon;
+        nameScript.text = item.name;
+        textScript.text = item.simpleOptionText;
         if (item.Type == Item.ItemType.Equip) getItemEvent = getEquip;
         if(item.Type == Item.ItemType.Buff) getItemEvent = getBuff;
         if(item.Type == Item.ItemType.Artifact) getItemEvent = getArtifact;
@@ -35,9 +45,13 @@ public class SceneItem : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+        player = collision.gameObject.GetComponent<Player>();
+        if (player == null) return;
         if (isGet) return;
-        Player player = collision.gameObject.GetComponent<Player>();
-        if (player != null) getItemEvent(player);
+        Time.timeScale = 0f;
+        objectCamera.gameObject.SetActive(true);
+
+    
     }
 
 

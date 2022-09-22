@@ -6,7 +6,7 @@ AnimationClip:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: UpBase
+  m_Name: HoUpMove
   serializedVersion: 6
   m_Legacy: 0
   m_Compressed: 0
@@ -19,7 +19,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: {x: 0, y: 6.288, z: 0}
+        value: {x: 45, y: -10, z: 0}
         inSlope: {x: 0, y: 0, z: 0}
         outSlope: {x: 0, y: 0, z: 0}
         tangentMode: 0
@@ -29,14 +29,28 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: Graphics
+    path: Graphics/GameObject
   m_PositionCurves: []
   m_ScaleCurves: []
   m_FloatCurves: []
   m_PPtrCurves:
   - curve:
     - time: 0
-      value: {fileID: -869526663, guid: 56aea9ac85177f843b30c3d725c8d908, type: 3}
+      value: {fileID: -159612238, guid: 4a2b821beb7b0054cba1b181f2a27c86, type: 3}
+    - time: 0.083333336
+      value: {fileID: 1089623790, guid: 452e594dfb2e8df498944dfc4e13dc8e, type: 3}
+    - time: 0.16666667
+      value: {fileID: 919787860, guid: e097112c914cfcc4aae7831b938dfaf9, type: 3}
+    - time: 0.25
+      value: {fileID: -1852395032, guid: 56aea9ac85177f843b30c3d725c8d908, type: 3}
+    - time: 0.33333334
+      value: {fileID: 1043099531, guid: a731578bd6cdea943a6cc6c8806f31a7, type: 3}
+    - time: 0.41666666
+      value: {fileID: 616698621, guid: 643636333f2c8194cb88d130e4a4bbc3, type: 3}
+    - time: 0.5
+      value: {fileID: -105819539, guid: ec36c95f7be80ce41804287144a199cb, type: 3}
+    - time: 0.5833333
+      value: {fileID: 1333961239, guid: 28132b8dc8ef2d44c8bf190125d0c4e2, type: 3}
     attribute: m_Sprite
     path: Graphics/GameObject
     classID: 212
@@ -56,25 +70,32 @@ AnimationClip:
       customType: 23
       isPPtrCurve: 1
     - serializedVersion: 2
-      path: 968875534
+      path: 3687795060
       attribute: 4
       script: {fileID: 0}
       typeID: 4
       customType: 4
       isPPtrCurve: 0
     pptrCurveMapping:
-    - {fileID: -869526663, guid: 56aea9ac85177f843b30c3d725c8d908, type: 3}
+    - {fileID: -159612238, guid: 4a2b821beb7b0054cba1b181f2a27c86, type: 3}
+    - {fileID: 1089623790, guid: 452e594dfb2e8df498944dfc4e13dc8e, type: 3}
+    - {fileID: 919787860, guid: e097112c914cfcc4aae7831b938dfaf9, type: 3}
+    - {fileID: -1852395032, guid: 56aea9ac85177f843b30c3d725c8d908, type: 3}
+    - {fileID: 1043099531, guid: a731578bd6cdea943a6cc6c8806f31a7, type: 3}
+    - {fileID: 616698621, guid: 643636333f2c8194cb88d130e4a4bbc3, type: 3}
+    - {fileID: -105819539, guid: ec36c95f7be80ce41804287144a199cb, type: 3}
+    - {fileID: 1333961239, guid: 28132b8dc8ef2d44c8bf190125d0c4e2, type: 3}
   m_AnimationClipSettings:
     serializedVersion: 2
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 0.016666668
+    m_StopTime: 0.59999996
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
     m_HasAdditiveReferencePose: 0
-    m_LoopTime: 0
+    m_LoopTime: 1
     m_LoopBlend: 0
     m_LoopBlendOrientation: 0
     m_LoopBlendPositionY: 0
@@ -90,7 +111,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0
+        value: 45
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -101,7 +122,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.x
-    path: Graphics
+    path: Graphics/GameObject
     classID: 4
     script: {fileID: 0}
   - curve:
@@ -109,7 +130,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 6.288
+        value: -10
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -120,7 +141,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.y
-    path: Graphics
+    path: Graphics/GameObject
     classID: 4
     script: {fileID: 0}
   - curve:
@@ -139,7 +160,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.z
-    path: Graphics
+    path: Graphics/GameObject
     classID: 4
     script: {fileID: 0}
   m_EulerEditorCurves:
@@ -150,7 +171,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.x
-    path: Graphics
+    path: Graphics/GameObject
     classID: 4
     script: {fileID: 0}
   - curve:
@@ -160,7 +181,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.y
-    path: Graphics
+    path: Graphics/GameObject
     classID: 4
     script: {fileID: 0}
   - curve:
@@ -170,7 +191,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.z
-    path: Graphics
+    path: Graphics/GameObject
     classID: 4
     script: {fileID: 0}
   m_HasGenericRootTransform: 0

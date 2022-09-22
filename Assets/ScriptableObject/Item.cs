@@ -9,7 +9,10 @@ public abstract class Item : ScriptableObject
     public ItemType Type { get; private set; }
     public string Name { get; }
     [Header("CardInfo")]
+    [TextArea]
     public string itemCardText;
+    [TextArea]
+    public string simpleOptionText;
     public Sprite backBg;
     public Sprite backFrame;
     public Sprite element;
