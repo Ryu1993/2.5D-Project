@@ -29,5 +29,9 @@ public class LoadingUI : Singleton<LoadingUI>
         loadingUI.SetActive(false);
     }
 
+    
+
+
+
 
 }

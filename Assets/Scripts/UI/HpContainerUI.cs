@@ -9,7 +9,7 @@ public class HpContainerUI : MonoBehaviour
     Image[] heartList;
     int curHeart = 0;
     int _maxHeart = 0;
-    int maxHeart
+    public int maxHeart
     {
         get { return _maxHeart; }
         set 
@@ -19,13 +19,59 @@ public class HpContainerUI : MonoBehaviour
         }
     }
     int curIndex = 0;
+    bool isProgress;
     [SerializeField]
     GameManager gameManager;
     private void OnEnable()
     {
-        AddMaxHeart(gameManager.playerInfo.player_maxHp);
-        AddHeart(gameManager.playerInfo.player_curHp);
+        if (isProgress) return;
+        StartCoroutine(CoOnEnabel());
     }
+    IEnumerator CoOnEnabel()
+    {
+        isProgress = true;
+        int maximum = 300;
+        int count = 0;
+        bool isFailed = false;
+        while(true)
+        {
+            if (count > maximum)
+            {
+                Debug.Log("GameManagerLoadingFailed");
+                isFailed = true;
+                break;
+            }
+            if(GameManager.instance!=null)
+            {
+                if (GameManager.instance.isSetComplete) break;
+            }
+            count++;
+            yield return null;
+        }
+        if (isFailed)
+        {
+            isProgress=false;
+            yield break;
+        }
+        Player player = GameManager.instance.scenePlayer;
+        while(true)
+        {
+            if (player.isReady) break;
+            yield return null;
+        }
+        AddMaxHeart((int)player.maxHp);
+        AddHeart((int)player.curHp);
+        player.hpUp += HeartChange;
+        player.maxHpUp += HeartChange;
+        isProgress = false;
+    }
+
+    public void HeartChange(int num)
+    {
+        if (num >= 0) AddHeart(num);
+        else DamageHeart(num);
+    }
+
     public void AddMaxHeart(int num) => maxHeart+=num;
     public void DamageHeart(int num)
     {

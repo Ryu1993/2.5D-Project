@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(menuName ="Item/Artifact")]
-public class Artifact : Item
+public abstract class Artifact : Item
 {
- 
+    public abstract void GetArtifactEvent(Player order);
 }

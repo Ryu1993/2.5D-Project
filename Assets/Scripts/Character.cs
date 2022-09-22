@@ -11,8 +11,6 @@ public class Character : MonoBehaviour, IDamageable
     [HideInInspector]
     public State curAction;
     public float moveSpeed;
-    [HideInInspector]
-    public float curHp;
     public Animator animator;
     public Rigidbody rigi;
     [HideInInspector]
@@ -20,6 +18,12 @@ public class Character : MonoBehaviour, IDamageable
     public UnityAction<IDamageable> HitInput;
     protected Vector3 crashVec;
     protected Vector3 moveVec;
+    [HideInInspector]
+    protected float _curHp;
+    public virtual float curHp { get { return _curHp; } set { _curHp = value; } }
+    [HideInInspector]
+    protected float _maxHp;
+    public virtual float maxHp { get { return _maxHp; } set { _maxHp = value; } }
     public virtual Character Hit(IAttackable attacker, Vector3 attackPosition)
     {
         if (HitInput != null) return null;
@@ -32,6 +36,8 @@ public class Character : MonoBehaviour, IDamageable
         rigi.velocity = Vector3.zero;
         rigi.AddForce(crashVec * 30);
     }
+
+
 
 
 }

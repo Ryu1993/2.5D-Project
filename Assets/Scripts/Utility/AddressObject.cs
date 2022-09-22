@@ -146,6 +146,10 @@ public static class AddressObject
     {
         return Addressables.InstantiateAsync(label.labelString).WaitForCompletion();
     }
+    public static GameObject Instinate(AssetLabelReference label,Transform parent)
+    {
+        return Addressables.InstantiateAsync(label.labelString,parent).WaitForCompletion();
+    }
     public static bool Release(GameObject obj)
     {
         return Addressables.ReleaseInstance(obj);

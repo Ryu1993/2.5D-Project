@@ -6,7 +6,7 @@ using UnityEngine.AddressableAssets;
 public abstract class Item : ScriptableObject
 {
     public enum ItemType { Equip,Artifact,Buff}
-    public ItemType Type { get; private set; }
+    public ItemType Type;
     public string Name { get; }
     [Header("CardInfo")]
     [TextArea]
@@ -22,15 +22,6 @@ public abstract class Item : ScriptableObject
     public Sprite simpleRarity;
     public Sprite simpleIconFrame;
     [Header("WeaponInfo")]
-    AssetLabelReference weaponPrefab;
-
-
-
-
-
-
-
-
-
+    public AssetLabelReference weaponPrefab;
 
 }

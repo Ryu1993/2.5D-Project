@@ -26,7 +26,7 @@ public class StatusContainerUi : MonoBehaviour
     public void DicInfoSet() // sprite ¶û ¿©±â¼­ ¸ÅÄª
     {
         statusSprite.Add(AsyncState.Type.Burn, statusSprites[0]);
-        statusSprite.Add(AsyncState.Type.Heal, statusSprites[0]);
+        statusSprite.Add(AsyncState.Type.Heal, statusSprites[1]);
     }
     public StatusIconManager StatusAdd(AsyncState.Type type,int duration)
     {

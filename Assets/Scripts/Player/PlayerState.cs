@@ -55,7 +55,7 @@ namespace PlayerStates
                 order.ChangeState(Player.State.Move);
                 return true;
             }
-            else if(order.isIdleBehvior && curState != Player.State.Idle)
+            else if(order.isIdleBehavior && curState != Player.State.Idle)
             {
                 order.curAction = Player.State.Idle;
                 order.ChangeState(Player.State.Idle);
@@ -65,7 +65,7 @@ namespace PlayerStates
         }
         protected virtual bool IsAttackCheck(Player order)
         {
-            if(order.isAttackBehavior)
+            if (order.isAttackBehavior &&curState!=Player.State.Attack)
             {
                 if(order.weaponContainer.superArmor)
                 {
@@ -84,7 +84,7 @@ namespace PlayerStates
         }
         protected virtual bool IsSkillCheck(Player order)
         {
-            if (order.isSkillBehavior)
+            if (order.isSkillBehavior&&curState!= Player.State.Skill)
             {
                 order.curAction = Player.State.Skill;
                 order.ChangeState(Player.State.Skill);
@@ -94,7 +94,7 @@ namespace PlayerStates
         }
         protected virtual bool IsDashCheck(Player order)
         {
-            if(order.isDashBehavior)
+            if(order.isDashBehavior&& curState!=Player.State.Dash)
             {
                 order.curAction = Player.State.Dash;
                 order.ChangeState(Player.State.Dash);
@@ -122,6 +122,17 @@ namespace PlayerStates
             if (isChange) order.ChangeState(nextState);
             return isChange;
         }
+
+        protected virtual bool IsDeadCheck(Player order)
+        {
+            if(order.isDeadBehavior)
+            {
+                return true;
+            }
+            return false;
+        }
+
+
         #endregion
     }
     public class DirectionState : BaseState

@@ -2,10 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SceneItem : MonoBehaviour
+public class SceneItem : MonoBehaviour,IReturnable
 {
     public Item item;
     Player player;
+    NewObjectPool.PoolInfo home;
     bool isGet;
     [SerializeField]
     private SpriteRenderer spriteRenderer;
@@ -23,28 +24,44 @@ public class SceneItem : MonoBehaviour
 
     public void SceneItemSet(Item item)
     {
+        this.item = item;
         spriteRenderer.sprite = item.cardIcon;
         nameScript.text = item.name;
         textScript.text = item.simpleOptionText;
         if (item.Type == Item.ItemType.Equip) getItemEvent = getEquip;
-        if(item.Type == Item.ItemType.Buff) getItemEvent = getBuff;
+        if (item.Type == Item.ItemType.Buff) { getItemEvent = getBuff; }
         if(item.Type == Item.ItemType.Artifact) getItemEvent = getArtifact;
+    }
+
+    public void ResetItem()
+    {
+        item = null;
+        player = null;
+        isGet = false;
     }
 
     private void getEquip(Player player)
     {
-
+        Equip equip = item as Equip;
+        ItemManager.instance.PlayerGetWeapon(equip);
+        Cancle();
+        StartCoroutine(WaitAnimation());
     }
 
     private void getBuff(Player player)
     {
-       
-
+        BuffItem buff = item as BuffItem;
+        StatusManager.instance.StatusEffectCreate[buff.buffType].Invoke(player, buff.duration);
+        Cancle();
+        StartCoroutine(WaitAnimation());
     }
 
     private void getArtifact(Player player)
     {
-
+        Artifact artifact = item as Artifact;
+        ItemManager.instance.PlayerGetArtifact(artifact);
+        Cancle();
+        StartCoroutine(WaitAnimation());
     }
 
     public void Select() => getItemEvent?.Invoke(player);
@@ -78,5 +95,19 @@ public class SceneItem : MonoBehaviour
         isGet=false;
     }
 
+    private IEnumerator WaitAnimation()
+    {
+        while (Time.timeScale!=1)
+        {
+            yield return null;
+        }
+        ResetItem();
+        Return();
+    }
+
+
+    public void PoolInfoSet(NewObjectPool.PoolInfo pool)=> home = pool;
+  
+    public void Return() => NewObjectPool.instance.Return(this.gameObject, home);
 
 }

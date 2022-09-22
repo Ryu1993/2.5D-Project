@@ -7,17 +7,21 @@ using UnityEngine.Events;
 [RequireComponent(typeof(Rigidbody))]
 public class Player : Character
 {
-    private State[] directionsIdle = { State.Up, State.Down, State.Horizontal, State.HoUp, State.HoDown, State.Idle };
     private State curDirection;
     private StateMachine<State, Player> stateMachine;
+    [HideInInspector]
+    public bool isHit;
+    public bool isReady;
+    private float moveX;
+    private float moveZ;
+    #region playerParts
     [SerializeField]
     private Transform spriteTransform;
     public ParticleSystem illusionCreator;
-    private float moveX;
-    private float moveZ;
     public WeaponContainer weaponContainer;
     public Transform mousePointer;
     public DirectionCircle directionCircle;
+    #endregion
     #region ActionList
     public UnityAction InputCheck;
     public UnityAction AttackBehavior;
@@ -26,10 +30,10 @@ public class Player : Character
     public bool isDashBehavior;
     public bool isSkillBehavior;
     public bool isSuperAttackBehavior;
-    public bool isIdleBehvior;
+    public bool isIdleBehavior;
+    public bool isDeadBehavior;
     #endregion
-    [HideInInspector]
-    public bool isHit;
+    #region delay
     [SerializeField]
     float _invincibilityTime;
     float invincibilityTime
@@ -55,17 +59,80 @@ public class Player : Character
     public WaitForSeconds dashDelay;
     public WaitForSeconds hitDelay;
     public WaitForFixedUpdate fixedUpdateDelay = new WaitForFixedUpdate();
+    #endregion
+    #region PlayerStat
+    public UnityAction<int> hpUp;
+    public UnityAction<int> maxHpUp;
+    public override float curHp 
+    { 
+        get => base.curHp;
+        set
+        {
+            hpUp?.Invoke((int)(value - _curHp));
+            if (value > _maxHp) _curHp = _maxHp;
+            _curHp = value;
+        }
+    }
+    public override float maxHp 
+    {
+        get => base.maxHp; 
+        set
+        {
+            maxHpUp?.Invoke((int)(value - _maxHp));
+            if (value > 12) value = 12;
+            _maxHp = value;
+        }
+    }
+    #endregion
     private void Awake()
     {
-        Setting();
+        StartCoroutine(CoSetting());
     }
     private void Update()
     {
-        InputCheck();
+        InputCheck?.Invoke();
     }
 
-    void Setting()
+    IEnumerator CoSetting()
     {
+        int maximum = 300;
+        int count = 0;
+        bool isFaile = false;
+        while (true)
+        {
+            if (count > maximum)
+            {
+                isFaile = true;
+                break;
+            }
+            if(GameManager.instance != null)
+            {
+                if (GameManager.instance.isSetComplete) break;
+            }
+            count++;
+            yield return null;
+        }
+        if (isFaile)
+        {
+            Debug.Log("GameManagerLoadingFaile"); yield break;
+        }
+        _maxHp = GameManager.instance.playerInfo.player_maxHp;
+        _curHp = GameManager.instance.playerInfo.player_curHp;
+        if(GameManager.instance.playerInfo.curEquip!=null)
+        {
+            GameObject go = AddressObject.Instinate(GameManager.instance.playerInfo.curEquip.weaponPrefab, weaponContainer.weaponSlot);
+            weaponContainer.WeaponSet(go.GetComponent<Weapon>());
+            while(UIManager.instance!=null)
+            {
+                yield return null;
+            }
+            UIManager.instance.weaponUI.ChangeWeapon(GameManager.instance.playerInfo.curEquip);
+        }
+        foreach(Item item in GameManager.instance.playerInfo.inventory)
+        {
+            Artifact artifact = item as Artifact;
+            artifact?.GetArtifactEvent(this);
+        }
         dashDelay = new WaitForSeconds(dashTime);
         hitDelay = new WaitForSeconds(invincibilityTime);
         stateMachine = new StateMachine<State, Player>(this);
@@ -81,11 +148,14 @@ public class Player : Character
         InputCheck += AttackInput;
         InputCheck += SkillInput;
         InputCheck += DashInput;
+        InputCheck += DeadInput;
         #endregion
         curAction = State.Idle;
         curDirection = State.Up;
+        isReady = true;
         ChangeState(State.Idle);
     }
+
     public State DirectionState()
     {
         RightCheck();
@@ -99,12 +169,12 @@ public class Player : Character
     }
     public void MoveInput()
     {
-        isIdleBehvior = false;
+        isIdleBehavior = false;
         isMoveBehavior = false;
         moveX = Input.GetAxis("Horizontal");
         moveZ = Input.GetAxis("Vertical");
         moveVec = new Vector3(moveX, 0, moveZ);
-        if (moveVec == Vector3.zero) isIdleBehvior = true;
+        if (moveVec == Vector3.zero) isIdleBehavior = true;
         else { moveVec = new Vector3(moveX, 0, moveZ).normalized * moveSpeed;isMoveBehavior = true; }      
     }
     public void AttackInput()
@@ -124,8 +194,8 @@ public class Player : Character
     public void SkillInput()
     {
     }
-
     public void HitReset()=> HitInput = null;
+    public void DeadInput() => isDashBehavior = curHp <= 0;
     public void RemoveInput(UnityAction inputAction) => InputCheck -= inputAction;
     public void PlayerDash(float speed)=>rigi.velocity = directionCircle.transform.forward * speed;
     public void PlayerMove() => rigi.velocity = moveVec;
@@ -138,7 +208,6 @@ public class Player : Character
         if (transform.position.x < mousePointer.position.x) { spriteTransform.localScale = new Vector3(1, 1, 1); }
         else { spriteTransform.localScale = new Vector3(-1, 1, 1); }
     }
-
 
 
 

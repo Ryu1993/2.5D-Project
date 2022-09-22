@@ -11,19 +11,36 @@ public class TestAddresable : MonoBehaviour
     [SerializeField]
     List<GameObject> testList = new List<GameObject>();
     AsyncOperationHandle<IList<GameObject>> operationHandle;
+    [SerializeField]
+    SceneItem sceneItem;
+    NewObjectPool.PoolInfo poolInfo;
+ 
+    
 
 
-    private void Start()
+    public void OnClick()
     {
-        operationHandle = AddressObject.RandomGameObjectHandlesSet(label, testList,1);
-        operationHandle.WaitForCompletion();
-        StartCoroutine(ListClear());
+        StartCoroutine(CoOnClick());
     }
-    IEnumerator ListClear()
+    IEnumerator CoOnClick()
     {
-        yield return new WaitForSeconds(3);
-        Addressables.Release(operationHandle);  
-
+        if (poolInfo == null) poolInfo = NewObjectPool.instance.PoolInfoSet(sceneItem.gameObject, 3, 2);
+        var operation = Addressables.LoadAssetAsync<ScriptableObject>(AddressObject.RandomLocation(label));
+        while(!operation.IsDone)
+        {
+            yield return null;
+        }
+        Item temp = operation.Result as Item;
+        SceneItem scenetest = null;
+        if (temp != null)
+        { 
+            scenetest = NewObjectPool.instance.Call(poolInfo, new Vector3(1, 1, 1)).GetComponent<SceneItem>();
+            scenetest.SceneItemSet(temp);
+        }
+        Addressables.Release(temp);
     }
+
+
+  
 
 }
