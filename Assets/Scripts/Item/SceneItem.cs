@@ -16,6 +16,10 @@ public class SceneItem : MonoBehaviour
     TMPro.TextMeshProUGUI nameScript;
     [SerializeField]
     Cinemachine.CinemachineVirtualCamera objectCamera;
+    [SerializeField]
+    RectTransform itemInfoUI;
+    [SerializeField]
+    Animator animator;
 
 
     public void SceneItemSet(Item item)
@@ -43,18 +47,34 @@ public class SceneItem : MonoBehaviour
 
     }
 
+    public void Cancle() => animator.SetTrigger("Close");
+ 
+    public void ItemInfoUIPop()
+    { 
+        itemInfoUI.localScale = new Vector3(1, 1, 1);
+        objectCamera.gameObject.SetActive(true);
+    }
+    public void ItemInfoUIClose()
+    {
+        itemInfoUI.localScale = Vector3.zero;
+        objectCamera.gameObject.SetActive(false);
+        Time.timeScale = 1f;
+    }
     private void OnCollisionEnter(Collision collision)
     {
         player = collision.gameObject.GetComponent<Player>();
         if (player == null) return;
         if (isGet) return;
+        isGet = true;
         Time.timeScale = 0f;
-        objectCamera.gameObject.SetActive(true);
-
-    
+        animator.SetTrigger("PopUp");
     }
 
-
+    private void OnCollisionExit(Collision collision)
+    {
+        if (!isGet) return;
+        isGet=false;
+    }
 
 
 }

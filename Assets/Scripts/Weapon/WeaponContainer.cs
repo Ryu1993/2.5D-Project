@@ -95,12 +95,6 @@ public class WeaponContainer : MonoBehaviour
         isoffDelay = false;
     }
 
-
-
-
-
-
-
     private void Start()
     {
         TestSet();

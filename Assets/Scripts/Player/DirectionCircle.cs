@@ -8,10 +8,10 @@ public class DirectionCircle : MonoBehaviour
     Transform mousePointer;
     Vector3 mouseVec;
     public bool isStop;
-    private void Update()
-    {
-        TraceMousePointer();
-    }
+
+
+    private void FixedUpdate() =>TraceMousePointer();
+
     void TraceMousePointer()
     {
         if(!isStop)

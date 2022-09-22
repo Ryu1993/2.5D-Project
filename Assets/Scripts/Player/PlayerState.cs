@@ -27,12 +27,11 @@ namespace PlayerStates
                 if (IsAsyncStateCheck(order)) break;
                 if (IsHitCheck(order)) break;
                 DirectionCheck(order);
-                order.InputCheck.Invoke();
                 if (IsDashCheck(order)) break;
                 if (IsSkillCheck(order)) break;
                 if (IsAttackCheck(order)) break;
                 if (IsMoveCheck(order)) break;
-                yield return null;
+                yield return order.fixedUpdateDelay;
             }
             isCompleted = true;
         }
@@ -50,13 +49,13 @@ namespace PlayerStates
         }
         protected virtual bool IsMoveCheck(Player order)
         {
-            if (order.MoveBehavior != null&&curState!=Player.State.Move)
+            if (order.isMoveBehavior&&curState!=Player.State.Move)
             {
                 order.curAction = Player.State.Move;
                 order.ChangeState(Player.State.Move);
                 return true;
             }
-            else if(order.IdleBehavior != null && curState != Player.State.Idle)
+            else if(order.isIdleBehvior && curState != Player.State.Idle)
             {
                 order.curAction = Player.State.Idle;
                 order.ChangeState(Player.State.Idle);
@@ -66,7 +65,7 @@ namespace PlayerStates
         }
         protected virtual bool IsAttackCheck(Player order)
         {
-            if(order.AttackBehavior != null)
+            if(order.isAttackBehavior)
             {
                 if(order.weaponContainer.superArmor)
                 {
@@ -85,7 +84,7 @@ namespace PlayerStates
         }
         protected virtual bool IsSkillCheck(Player order)
         {
-            if (order.SkillBehavior != null)
+            if (order.isSkillBehavior)
             {
                 order.curAction = Player.State.Skill;
                 order.ChangeState(Player.State.Skill);
@@ -95,7 +94,7 @@ namespace PlayerStates
         }
         protected virtual bool IsDashCheck(Player order)
         {
-            if(order.DashBehavior!=null)
+            if(order.isDashBehavior)
             {
                 order.curAction = Player.State.Dash;
                 order.ChangeState(Player.State.Dash);
@@ -130,7 +129,7 @@ namespace PlayerStates
         public override void Enter(Player order)
         {
             base.Enter(order);
-            order.IdleBehavior?.Invoke();
+            order.PlayerIdle();
         }
     }
     public class MoveState : BaseState
@@ -139,16 +138,15 @@ namespace PlayerStates
         {
             while(true)
             {
+                order.PlayerMove();
                 DirectionCheck(order);
-                order.MoveBehavior?.Invoke();
-                order.InputCheck.Invoke();
                 if (IsAsyncStateCheck(order)) break;
                 if (IsHitCheck(order)) break;
                 if (IsDashCheck(order)) break;
                 if (IsSkillCheck(order)) break;
                 if (IsAttackCheck(order)) break;
                 if (IsMoveCheck(order)) break;
-                yield return null;
+                yield return order.fixedUpdateDelay;
             }
             isCompleted = true;
         }
@@ -172,11 +170,10 @@ namespace PlayerStates
             {
                 if (IsAsyncStateCheck(order)) break;
                 if (IsHitCheck(order)) break;
-                order.InputCheck?.Invoke();
                 order.AttackBehavior?.Invoke();
                 if (IsDashCheck(order)) break;
                 if (IsSkillCheck(order)) break;
-                yield return null;
+                yield return order.fixedUpdateDelay;
             }
             order.directionCircle.isStop = false;
             order.rigi.velocity = Vector3.zero;
@@ -207,28 +204,30 @@ namespace PlayerStates
     }
     public class DashState : BaseState
     {
-        float baseSpeed = 0;
+        float dashSpeed = 0;
         public override void Enter(Player order)
         {
             base.Enter(order);
-            baseSpeed = order.moveSpeed;
-            order.moveSpeed = order.moveSpeed * 2;
-            order.MoveInput();
+            dashSpeed = order.moveSpeed * 2;
         }
         public override IEnumerator Middle(Player order)
         {
             order.illusionCreator.Play();
-            if (order.MoveBehavior != null) order.PlayerMove();
-            else order.rigi.velocity = order.directionCircle.transform.forward * order.moveSpeed;
+            if (order.isMoveBehavior) order.PlayerDashMove(dashSpeed);
+            else order.PlayerDash(dashSpeed);
             yield return order.dashDelay;
-            order.HitReset();
             order.illusionCreator.Stop();
             order.rigi.velocity = Vector3.zero;
-            order.moveSpeed = baseSpeed;
             order.curAction = Player.State.Idle;
             order.ChangeState(order.curAction);
             isCompleted = true;
         }
+        public override void Exit(Player order)
+        {
+            base.Exit(order);
+            order.HitReset();
+        }
+
     }
     public class HitState : BaseState
     {
@@ -247,8 +246,8 @@ namespace PlayerStates
         }
         public override void Exit(Player order)
         {
-            order.HitInput = null;
             order.rigi.velocity = Vector3.zero;
+            order.HitReset();
         }         
     }
     
@@ -266,7 +265,7 @@ namespace PlayerStates
             {
                 IsHitCheck(order);
                 if (!IsAsyncStateCheck(order)) break;
-                yield return null;
+                yield return order.fixedUpdateDelay;
             }
             isCompleted = true;
         }

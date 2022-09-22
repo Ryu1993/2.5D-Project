@@ -21,11 +21,12 @@ public class Player : Character
     #region ActionList
     public UnityAction InputCheck;
     public UnityAction AttackBehavior;
-    public UnityAction MoveBehavior;
-    public UnityAction DashBehavior;
-    public UnityAction SkillBehavior;
-    public UnityAction SuperAttackBehavior;
-    public UnityAction IdleBehavior;
+    public bool isAttackBehavior;
+    public bool isMoveBehavior;
+    public bool isDashBehavior;
+    public bool isSkillBehavior;
+    public bool isSuperAttackBehavior;
+    public bool isIdleBehvior;
     #endregion
     [HideInInspector]
     public bool isHit;
@@ -53,10 +54,16 @@ public class Player : Character
     }
     public WaitForSeconds dashDelay;
     public WaitForSeconds hitDelay;
+    public WaitForFixedUpdate fixedUpdateDelay = new WaitForFixedUpdate();
     private void Awake()
     {
         Setting();
     }
+    private void Update()
+    {
+        InputCheck();
+    }
+
     void Setting()
     {
         dashDelay = new WaitForSeconds(dashTime);
@@ -92,26 +99,27 @@ public class Player : Character
     }
     public void MoveInput()
     {
-        IdleBehavior = null;
-        MoveBehavior = null;
+        isIdleBehvior = false;
+        isMoveBehavior = false;
         moveX = Input.GetAxis("Horizontal");
         moveZ = Input.GetAxis("Vertical");
         moveVec = new Vector3(moveX, 0, moveZ);
-        if (moveVec == Vector3.zero) IdleBehavior = PlayerIdle;
-        else { moveVec = new Vector3(moveX, 0, moveZ).normalized * moveSpeed; MoveBehavior = PlayerMove; }      
+        if (moveVec == Vector3.zero) isIdleBehvior = true;
+        else { moveVec = new Vector3(moveX, 0, moveZ).normalized * moveSpeed;isMoveBehavior = true; }      
     }
     public void AttackInput()
     {
-        AttackBehavior = null;
+        isAttackBehavior = false;
         if (!Input.GetMouseButton(0)) { weaponContainer.WeaponAnimationOff(); return; }
         if (weaponContainer.weaponAttack == null) {return; }
         AttackBehavior = weaponContainer.WeaponAnimationOn;
+        isAttackBehavior = true;
     }
     public void DashInput()
     {
-        DashBehavior = null;
+        isDashBehavior = false;
         if (!Input.GetMouseButton(1)) return;
-        DashBehavior = PlayerDash;
+        isDashBehavior = true;
     }
     public void SkillInput()
     {
@@ -119,8 +127,9 @@ public class Player : Character
 
     public void HitReset()=> HitInput = null;
     public void RemoveInput(UnityAction inputAction) => InputCheck -= inputAction;
-    public void PlayerDash() { }
+    public void PlayerDash(float speed)=>rigi.velocity = directionCircle.transform.forward * speed;
     public void PlayerMove() => rigi.velocity = moveVec;
+    public void PlayerDashMove(float speed) => rigi.velocity = moveVec * speed;
     public void PlayerIdle() => rigi.velocity = Vector3.zero;
     public void PlayerKinematic()=> rigi.isKinematic = !rigi.isKinematic;
     public void ChangeState(State state) => stateMachine.ChangeState(state);
