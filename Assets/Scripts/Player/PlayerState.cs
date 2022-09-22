@@ -165,12 +165,12 @@ namespace PlayerStates
         public override IEnumerator Middle(Player order)
         {
             order.AttackBehavior?.Invoke();
-            yield return null;
+            yield return order.fixedUpdateDelay;
             while (order.weaponContainer.isProgress)
             {
                 if (IsAsyncStateCheck(order)) break;
                 if (IsHitCheck(order)) break;
-                order.AttackBehavior?.Invoke();
+                if(order.isAttackBehavior) order.AttackBehavior?.Invoke();
                 if (IsDashCheck(order)) break;
                 if (IsSkillCheck(order)) break;
                 yield return order.fixedUpdateDelay;

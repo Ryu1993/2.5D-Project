@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace AsyncState
 {
-    public enum Type { Burn,Poison,Sturn};
+    public enum Type { Burn,Poison,Sturn,Heal};
     public class StatusEffect
     { 
         protected WaitForSeconds wait = new WaitForSeconds(1);
@@ -14,7 +14,6 @@ namespace AsyncState
         protected int count = 0;
         protected StatusIconManager iconManager;
         protected int startDuration = 0;
-
         protected IEnumerator Progress(int duration,Character order)
         {
             EnterEvent(order);
@@ -29,10 +28,10 @@ namespace AsyncState
         protected virtual void EnterEvent(Character order) 
         { 
             order.curStatusEffect.Add(type);
-            if(order as Player != null) iconManager = StatusContainerUi.instance.StatusAdd(type, startDuration);
+            if(order as Player != null) iconManager = StatusManager.instance.playerStatusUI.StatusAdd(type, startDuration);
         }
-        protected virtual void EffectEvent(Character order) { iconManager.Count(startDuration - count); }
-        protected virtual void ExitEvent(Character order) { order.curStatusEffect.Remove(type); iconManager.Return(); }
+        protected virtual void EffectEvent(Character order) { iconManager?.Count(startDuration - count); }
+        protected virtual void ExitEvent(Character order) { order.curStatusEffect.Remove(type); iconManager?.Return(); }
     }
 
     public class Burn : StatusEffect
@@ -58,5 +57,30 @@ namespace AsyncState
             Debug.Log(order.name + "È­»ó³¡");
         }
     }
+
+    public class Heal : StatusEffect
+    {
+        public Heal(int duration, Character order)
+        {
+            type = Type.Heal;
+            startDuration = duration;
+            order.StartCoroutine (Progress(duration,order));    
+        }
+        protected override void EnterEvent(Character order)
+        {
+            base.EnterEvent(order);
+            Debug.Log(order.name + "Èú");
+        }
+        protected override void ExitEvent(Character order)
+        {
+            base.ExitEvent(order);
+            Debug.Log("Èú Á¾·á");
+        }
+
+
+    }
+
+
+
 
 }

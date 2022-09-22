@@ -111,7 +111,7 @@ public class Player : Character
     {
         isAttackBehavior = false;
         if (!Input.GetMouseButton(0)) { weaponContainer.WeaponAnimationOff(); return; }
-        if (weaponContainer.weaponAttack == null) {return; }
+        if (weaponContainer.weaponAttack == null) { AttackBehavior = null; return; }
         AttackBehavior = weaponContainer.WeaponAnimationOn;
         isAttackBehavior = true;
     }

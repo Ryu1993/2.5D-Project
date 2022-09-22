@@ -10,7 +10,7 @@ public class TestIAttackAble : Monster, IAttackable
     {
         target.DirectHit();
         if (character == null) return;
-        new AsyncState.Burn(3, character); 
+        StatusManager.instance.StatusEffectCreate[AsyncState.Type.Burn]?.Invoke(character,3);
     }
     private void OnCollisionEnter(Collision collision)
     {

@@ -23,7 +23,8 @@ public class WeaponContainer : MonoBehaviour
     public bool superArmor;
     public bool isProgress;
     public bool isoffDelay;
-    public int bufferedInput;
+    public float bufferedInput;
+    WaitForFixedUpdate delay = new WaitForFixedUpdate();
 
     public void WeaponSet(Weapon weapon)
     {
@@ -75,6 +76,7 @@ public class WeaponContainer : MonoBehaviour
     {
         material?.SetFloat(desolve, 1);
         containerBackRenderer?.material.SetFloat(desolve, 0);
+        isProgress = false;
     }
     public void WeaponAnimationOn() => animator.SetBool("Action", true);
     public void WeaponAnimationOff()
@@ -88,9 +90,10 @@ public class WeaponContainer : MonoBehaviour
     protected IEnumerator CoDelay()
     {
         isoffDelay = true;
-        for (int i = 0; i < bufferedInput; i++)
+        for (float i = 0; i < bufferedInput; i+=0.02f)
         {
-            yield return null;
+            if (!isProgress) break;
+            yield return delay;
         }
         isoffDelay = false;
     }

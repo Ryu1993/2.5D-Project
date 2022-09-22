@@ -6,4 +6,6 @@ using UnityEngine;
 public class BuffItem : Item
 {
 
+    public AsyncState.Type buffType;
+    public int duration;
 }

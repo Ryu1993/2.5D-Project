@@ -21,7 +21,6 @@ public class SceneItem : MonoBehaviour
     [SerializeField]
     Animator animator;
 
-
     public void SceneItemSet(Item item)
     {
         spriteRenderer.sprite = item.cardIcon;
@@ -39,6 +38,7 @@ public class SceneItem : MonoBehaviour
 
     private void getBuff(Player player)
     {
+       
 
     }
 
@@ -46,6 +46,8 @@ public class SceneItem : MonoBehaviour
     {
 
     }
+
+    public void Select() => getItemEvent?.Invoke(player);
 
     public void Cancle() => animator.SetTrigger("Close");
  
