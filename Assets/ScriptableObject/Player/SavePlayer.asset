@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: SavePlayer
   m_EditorClassIdentifier: 
   player_name: SaveTEst
-  curEquip: {fileID: 0}
+  curEquip: {fileID: 11400000, guid: 913437a10d386904ca8c437bb52b3757, type: 2}
   inventory: []
   player_maxHp: 4
   player_curHp: 3

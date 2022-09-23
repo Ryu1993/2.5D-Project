@@ -122,17 +122,20 @@ public class Player : Character
         {
             GameObject go = AddressObject.Instinate(GameManager.instance.playerInfo.curEquip.weaponPrefab, weaponContainer.weaponSlot);
             weaponContainer.WeaponSet(go.GetComponent<Weapon>());
-            while(UIManager.instance!=null)
+            while(UIManager.instance==null)
             {
                 yield return null;
             }
             UIManager.instance.weaponUI.ChangeWeapon(GameManager.instance.playerInfo.curEquip);
+            Debug.Log("무기완료");
         }
         foreach(Item item in GameManager.instance.playerInfo.inventory)
         {
             Artifact artifact = item as Artifact;
             artifact?.GetArtifactEvent(this);
+            
         }
+        Debug.Log("아티팩트완료");
         dashDelay = new WaitForSeconds(dashTime);
         hitDelay = new WaitForSeconds(invincibilityTime);
         stateMachine = new StateMachine<State, Player>(this);
@@ -188,14 +191,17 @@ public class Player : Character
     public void DashInput()
     {
         isDashBehavior = false;
-        if (!Input.GetMouseButton(1)) return;
-        isDashBehavior = true;
+        if(Input.GetMouseButton(1))
+        {
+            Debug.Log("키 받음");
+            isDashBehavior = true;
+        }
     }
     public void SkillInput()
     {
     }
     public void HitReset()=> HitInput = null;
-    public void DeadInput() => isDashBehavior = curHp <= 0;
+    public void DeadInput() => isDeadBehavior = curHp <= 0;
     public void RemoveInput(UnityAction inputAction) => InputCheck -= inputAction;
     public void PlayerDash(float speed)=>rigi.velocity = directionCircle.transform.forward * speed;
     public void PlayerMove() => rigi.velocity = moveVec;
