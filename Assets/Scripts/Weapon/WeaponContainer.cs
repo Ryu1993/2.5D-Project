@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
+
 public class WeaponContainer : MonoBehaviour
 {
     public Player player;
@@ -26,9 +27,10 @@ public class WeaponContainer : MonoBehaviour
     public float bufferedInput;
     WaitForFixedUpdate delay = new WaitForFixedUpdate();
 
-    public void WeaponSet(Weapon weapon)
+    public void WeaponSet(UnityEngine.AddressableAssets.AssetLabelReference weaponLabel)
     {
-        curWeapon = weapon;
+        if (curWeapon != null) AddressObject.Release(curWeapon.gameObject);
+        curWeapon = AddressObject.Instinate(weaponLabel,weaponSlot).GetComponent<Weapon>();
         curWeapon.animator = animator;
         curWeapon.player = player;
         material = curWeapon.transform.GetComponent<MeshRenderer>().material;
@@ -39,8 +41,6 @@ public class WeaponContainer : MonoBehaviour
         weaponAttack = curWeapon.WeaponAttack;
         animator.SetBool(curWeapon.type.ToString(), true);
     }
-
-
     private void CurWeaponAttack()
     {
         weaponAttack?.Invoke();
@@ -96,20 +96,6 @@ public class WeaponContainer : MonoBehaviour
             yield return delay;
         }
         isoffDelay = false;
-    }
-
-    private void Start()
-    {
-        TestSet();
-    }
-
-    void TestSet()
-    {
-        if(curWeapon!=null)
-        {
-            WeaponSet(curWeapon);
-        }
-
     }
 
 

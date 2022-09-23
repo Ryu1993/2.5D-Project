@@ -68,8 +68,8 @@ public class Player : Character
         get => base.curHp;
         set
         {
+            if (value > _maxHp) value = _maxHp;
             hpUp?.Invoke((int)(value - _curHp));
-            if (value > _maxHp) _curHp = _maxHp;
             _curHp = value;
         }
     }
@@ -78,8 +78,8 @@ public class Player : Character
         get => base.maxHp; 
         set
         {
-            maxHpUp?.Invoke((int)(value - _maxHp));
             if (value > 12) value = 12;
+            maxHpUp?.Invoke((int)(value - _maxHp));
             _maxHp = value;
         }
     }
@@ -90,20 +90,21 @@ public class Player : Character
     }
     private void Update()
     {
+        RemoveInput();
         InputCheck?.Invoke();
+        GameManager.instance.PlayerPosition = transform.position;
     }
 
     IEnumerator CoSetting()
     {
         int maximum = 300;
         int count = 0;
-        bool isFaile = false;
         while (true)
         {
             if (count > maximum)
             {
-                isFaile = true;
-                break;
+                Debug.Log("세팅실패"); 
+                yield break;
             }
             if(GameManager.instance != null)
             {
@@ -112,28 +113,16 @@ public class Player : Character
             count++;
             yield return null;
         }
-        if (isFaile)
-        {
-            Debug.Log("GameManagerLoadingFaile"); yield break;
-        }
         _maxHp = GameManager.instance.playerInfo.player_maxHp;
         _curHp = GameManager.instance.playerInfo.player_curHp;
-        if(GameManager.instance.playerInfo.curEquip!=null)
+        if(GameManager.instance.playerInfo.curEquip!=null) ItemManager.instance.PlayerGetWeapon(GameManager.instance.playerInfo.curEquip);
+        if(GameManager.instance.playerInfo.inventory.Count!=0)
         {
-            GameObject go = AddressObject.Instinate(GameManager.instance.playerInfo.curEquip.weaponPrefab, weaponContainer.weaponSlot);
-            weaponContainer.WeaponSet(go.GetComponent<Weapon>());
-            while(UIManager.instance==null)
+            foreach (Item item in GameManager.instance.playerInfo.inventory)
             {
-                yield return null;
+                Artifact artifact = item as Artifact;
+                if(artifact!=null) ItemManager.instance.PlayerGetArtifact(artifact);
             }
-            UIManager.instance.weaponUI.ChangeWeapon(GameManager.instance.playerInfo.curEquip);
-            Debug.Log("무기완료");
-        }
-        foreach(Item item in GameManager.instance.playerInfo.inventory)
-        {
-            Artifact artifact = item as Artifact;
-            artifact?.GetArtifactEvent(this);
-            
         }
         Debug.Log("아티팩트완료");
         dashDelay = new WaitForSeconds(dashTime);
@@ -172,8 +161,6 @@ public class Player : Character
     }
     public void MoveInput()
     {
-        isIdleBehavior = false;
-        isMoveBehavior = false;
         moveX = Input.GetAxis("Horizontal");
         moveZ = Input.GetAxis("Vertical");
         moveVec = new Vector3(moveX, 0, moveZ);
@@ -182,27 +169,42 @@ public class Player : Character
     }
     public void AttackInput()
     {
-        isAttackBehavior = false;
         if (!Input.GetMouseButton(0)) { weaponContainer.WeaponAnimationOff(); return; }
         if (weaponContainer.weaponAttack == null) { AttackBehavior = null; return; }
         AttackBehavior = weaponContainer.WeaponAnimationOn;
         isAttackBehavior = true;
     }
+    public void AttackStop()
+    {
+        weaponContainer.WeaponAnimationOff();
+        AttackBehavior = null;
+    }
+
     public void DashInput()
     {
-        isDashBehavior = false;
+
         if(Input.GetMouseButton(1))
         {
-            Debug.Log("키 받음");
             isDashBehavior = true;
+
         }
     }
+
+
     public void SkillInput()
     {
     }
     public void HitReset()=> HitInput = null;
     public void DeadInput() => isDeadBehavior = curHp <= 0;
-    public void RemoveInput(UnityAction inputAction) => InputCheck -= inputAction;
+    public void RemoveInput()
+    {
+        isMoveBehavior = false;
+        isAttackBehavior = false;
+        isIdleBehavior = false;
+        isDashBehavior=false;
+        isSuperAttackBehavior = false;
+        isSkillBehavior = false;
+    }
     public void PlayerDash(float speed)=>rigi.velocity = directionCircle.transform.forward * speed;
     public void PlayerMove() => rigi.velocity = moveVec;
     public void PlayerDashMove(float speed) => rigi.velocity = moveVec * speed;

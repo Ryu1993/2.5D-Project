@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(menuName ="Item/Artifact")]
-public abstract class Artifact : Item
+public class Artifact : Item
 {
-    public abstract void GetArtifactEvent(Player order);
+    public enum ArtifactType {AttackSpeed,MaxHp,MoveSpeed}
+    public ArtifactType artifactType;
+    public float strength;
+
 }

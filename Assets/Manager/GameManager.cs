@@ -10,6 +10,7 @@ public class GameManager : Singleton<GameManager>
     public PlayerInfo playerInfo;
     public Player scenePlayer;
     public bool isSetComplete;
+    public Vector3 PlayerPosition;
  
 
     protected override void Awake()
@@ -17,6 +18,7 @@ public class GameManager : Singleton<GameManager>
         base.Awake();
         DontDestroyOnLoad(gameObject);
         PlayerInfoSet();
+        StartCoroutine(SingletonCheck());
     }
 
     private void PlayerInfoSet()
@@ -25,11 +27,11 @@ public class GameManager : Singleton<GameManager>
         playerInfo.player_maxHp = savePlayerInfo.player_maxHp;
         playerInfo.player_curHp = savePlayerInfo.player_curHp;
         playerInfo.curEquip = savePlayerInfo.curEquip;
+        playerInfo.inventory.Clear();
         foreach(Item item in savePlayerInfo.inventory)
         {
             playerInfo.inventory.Add(item);
         }
-        isSetComplete = true;
     }
     public void PlayerInfoSave()
     {
@@ -41,6 +43,16 @@ public class GameManager : Singleton<GameManager>
         {
             savePlayerInfo.inventory.Add(item);
         }
+    }
+
+    IEnumerator SingletonCheck()
+    {
+        while(true)
+        {
+            yield return null;
+            if (UIManager.instance != null && ItemManager.instance != null && StatusManager.instance != null) break;
+        }
+        isSetComplete = true;
     }
 
 

@@ -14,6 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player_name: SaveTEst
   curEquip: {fileID: 11400000, guid: 913437a10d386904ca8c437bb52b3757, type: 2}
-  inventory: []
-  player_maxHp: 4
-  player_curHp: 3
+  inventory:
+  - {fileID: 11400000, guid: d25262fba0d674640b6a80322ba34a96, type: 2}
+  - {fileID: 11400000, guid: d25262fba0d674640b6a80322ba34a96, type: 2}
+  player_maxHp: 12
+  player_curHp: 6

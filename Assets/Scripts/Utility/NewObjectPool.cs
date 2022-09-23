@@ -55,6 +55,8 @@ public class NewObjectPool : Singleton<NewObjectPool>
                     if (ReturnableCheck(poolInfo.poolObject)) continue;
                     if (PoolInfoSearch(poolInfo.poolObject)==null)
                     {
+                        PoolInfonum++;
+                        Debug.Log(poolInfo.poolObject.name);
                         poolInfoDic.Add(poolInfo.poolObject.name, poolInfo);
                         poolDic.Add(poolInfo, new Queue<GameObject>());
                         for (int i = 0; i < poolInfo.start; i++)
@@ -62,6 +64,7 @@ public class NewObjectPool : Singleton<NewObjectPool>
                             GameObject go = Instantiate(poolInfo.poolObject, deactive);
                             go.GetComponent<IReturnable>().PoolInfoSet(poolInfo);
                             poolDic[poolInfo].Enqueue(go);
+
                         }
                     }
                 }
@@ -96,6 +99,12 @@ public class NewObjectPool : Singleton<NewObjectPool>
         if(poolInfoDic.ContainsKey(gameObject.name)) return poolInfoDic[gameObject.name];
         return null;
     }
+    public PoolInfo PoolInfoSearch(string goName)
+    {
+        if (poolInfoDic.ContainsKey(goName)) return poolInfoDic[gameObject.name];
+        return null;
+    }
+
     private void Add(PoolInfo poolInfo)
     {
         Queue<GameObject> queue = poolDic[poolInfo];

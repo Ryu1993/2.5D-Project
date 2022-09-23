@@ -7,14 +7,17 @@ namespace MonsterState
 {
     public class BaseState : State<Monster>
     {
-        public override void Enter(Monster order) { }
+        
+        public override void Enter(Monster order) { isCompleted = false; }
         public override IEnumerator Middle(Monster order) 
         {
             while(true)
             {
                 if(IsHitCheck(order))break;
+                if(IsTargetCheck(order))break;
                 yield return null;
             }
+            isCompleted = true;
         }
         public override void Exit(Monster order) { }
 
@@ -29,13 +32,32 @@ namespace MonsterState
             }
             return false;
         }
+        protected virtual bool IsTargetCheck(Monster order)
+        {
+            if(order.isTargetOn)
+            {
+                order.curAction = Character.State.Trace;
+                order.ChangeState(Character.State.Trace);
+                return true;
+            }
+            return false;
+
+        }
+
     }
 
     public class IdleState : BaseState
     {
-        public override void Enter(Monster order)
+        public override IEnumerator Middle(Monster order)
         {
-            Debug.Log("몬스터아이들");
+            while (true)
+            {
+                order.ScanTarget();
+                if (IsHitCheck(order)) break;
+                if (IsTargetCheck(order)) break;
+                yield return null;
+            }
+            isCompleted = true;
         }
 
     }
@@ -53,6 +75,17 @@ namespace MonsterState
 
     public class TrasceState : BaseState
     {
+        public override IEnumerator Middle(Monster order)
+        {
+            isCompleted = false;
+            while (true)
+            {
+                order.MonsterMove();
+                if (IsHitCheck(order)) break;
+                yield return null;     
+            }
+            isCompleted = true;
+        }
 
     }
 

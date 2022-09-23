@@ -7,7 +7,7 @@ public class UIManager : Singleton<UIManager>
     public HpContainerUI hpContainer;
     public WeaponUI weaponUI;
     public MapUI mapUI;
-
+    public ArtifactUI artifactUI;
 
     protected override void Awake()
     {

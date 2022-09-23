@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68772259fe93aa84b91e394341dd07e5, type: 3}
   m_Name: Test
   m_EditorClassIdentifier: 
+  Type: 0
   itemCardText: "\uD14C\uC2A4\uD2B8\uC6A9 \uC544\uC774\uD15C\n\uD14D\uC2A4\uD2B8
     \uC5D0\uC5B4\uB9AC\uC5B4 \uD14C\uC2A4\uD2B8"
   simpleOptionText: "\uC18C\uAC80\n\uACF5\uACA9\uB825 : 10"
@@ -23,3 +24,5 @@ MonoBehaviour:
   simpleIcon: {fileID: 1629502028, guid: b2713bbf286ea3b4d8cf4478d348ee16, type: 3}
   simpleRarity: {fileID: -1797174535, guid: b2713bbf286ea3b4d8cf4478d348ee16, type: 3}
   simpleIconFrame: {fileID: -1306072882, guid: b2713bbf286ea3b4d8cf4478d348ee16, type: 3}
+  weaponPrefab:
+    m_LabelString: 
