@@ -3303,7 +3303,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 1149523216, guid: ac93b31360a00ea47b665149a93388e6,
+      objectReference: {fileID: 884005211, guid: 3d4b9ac5c4849634f8be69c21157008e,
         type: 3}
     - target: {fileID: 5527693462222730152, guid: 1e87290fd8db7f14186ce67341a2ca63,
         type: 3}
@@ -3322,6 +3322,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5527693462222730152, guid: 1e87290fd8db7f14186ce67341a2ca63,
         type: 3}
+      propertyPath: m_SpriteSortPoint
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5527693462222730152, guid: 1e87290fd8db7f14186ce67341a2ca63,
+        type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 73b183e9d55515e44804ecb494734d1a, type: 2}
@@ -3334,6 +3339,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.y
       value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5527693462222730159, guid: 1e87290fd8db7f14186ce67341a2ca63,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.16
       objectReference: {fileID: 0}
     - target: {fileID: 5527693462222730159, guid: 1e87290fd8db7f14186ce67341a2ca63,
         type: 3}
