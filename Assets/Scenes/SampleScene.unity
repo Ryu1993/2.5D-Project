@@ -2689,6 +2689,16 @@ PrefabInstance:
       value: 
       objectReference: {fileID: -636165809141856982, guid: 236587ec711348a4792e0060efb1bf73,
         type: 3}
+    - target: {fileID: 2316912265833440614, guid: 9355ceea9660ea34fb73701424c44786,
+        type: 3}
+      propertyPath: m_ChildControlWidth
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2316912265833440614, guid: 9355ceea9660ea34fb73701424c44786,
+        type: 3}
+      propertyPath: m_ChildControlHeight
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2524950393628457033, guid: 9355ceea9660ea34fb73701424c44786,
         type: 3}
       propertyPath: m_Name
@@ -3846,6 +3856,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5527693462435759682, guid: 1e87290fd8db7f14186ce67341a2ca63,
         type: 3}
+      propertyPath: dashCoolTime
+      value: 2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5527693462435759682, guid: 1e87290fd8db7f14186ce67341a2ca63,
+        type: 3}
       propertyPath: mousePointer
       value: 
       objectReference: {fileID: 1253433005}
@@ -3856,8 +3871,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5527693462435759682, guid: 1e87290fd8db7f14186ce67341a2ca63,
         type: 3}
+      propertyPath: invincibleTime
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5527693462435759682, guid: 1e87290fd8db7f14186ce67341a2ca63,
+        type: 3}
       propertyPath: _invincibilityTime
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5527693462435759682, guid: 1e87290fd8db7f14186ce67341a2ca63,
+        type: 3}
+      propertyPath: dashInvincibleTime
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5527693462435759708, guid: 1e87290fd8db7f14186ce67341a2ca63,
         type: 3}

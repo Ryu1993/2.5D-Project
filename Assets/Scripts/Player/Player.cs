@@ -8,68 +8,62 @@ using UnityEngine.Events;
 public class Player : Character
 {
     private State curDirection;
-    private StateMachine<State, Player> stateMachine;
     [HideInInspector]
     public bool isHit;
     public bool isReady;
+    public bool isInvicible;
+    [SerializeField]
+    private bool isDashInvincible;
     private float moveX;
     private float moveZ;
     #region playerParts
     [SerializeField]
     private Transform spriteTransform;
-    public ParticleSystem illusionCreator;
+    [SerializeField]
+    private Transform mousePointer;
+    [SerializeField]
+    private ParticleSystem illusionCreator;
+    [SerializeField]
+    private DirectionCircle directionCircle;
     public WeaponContainer weaponContainer;
-    public Transform mousePointer;
-    public DirectionCircle directionCircle;
     #endregion
     #region ActionList
-    public UnityAction InputCheck;
-    public UnityAction AttackBehavior;
-    public UnityAction CooltimeCounter;
-    public UnityAction BehaviorExecute;
-    public bool isAttackBehavior;
-    public bool isMoveBehavior;
-    public bool isDashBehavior;
-    public bool isSkillBehavior;
-    public bool isSuperAttackBehavior;
-    public bool isIdleBehavior;
-    public bool isDeadBehavior;
-
+    private UnityAction InputCheck;
+    private UnityAction AttackBehavior;
+    private UnityAction CooltimeCounter;
+    private UnityAction BehaviorExecute;
+    [SerializeField]
+    private bool isBehaviorExecuted;
+    [SerializeField]
+    private bool isAttackBehavior;
+    [SerializeField]
+    private bool isMoveBehavior;
+    [SerializeField]
+    private bool isDashBehavior;
+    [SerializeField]
+    private bool isSkillBehavior;
+    [SerializeField]
+    private bool isSuperAttackBehavior;
+    private bool isDeadBehavior;
     #endregion
-    #region delay
+    #region Delay&Cooltime
     [SerializeField]
-    private int dashCoolFrame;
-    private int dashCoolCount = 0;
-
+    private float dashCoolTime;
     [SerializeField]
-    float _invincibilityTime;
-    float invincibilityTime
-    {
-        get { return _invincibilityTime; }
-        set
-        { 
-            _invincibilityTime = value;
-            hitDelay = new WaitForSeconds(invincibilityTime);
-        }
-    }
+    private float dashCoolCount = 0;
     [SerializeField]
-    float _dashTime;
-    float dashTime
-    {
-        get { return _dashTime; }
-        set
-        { 
-            _dashTime = value;
-            dashDelay = new WaitForSeconds(dashTime);
-        }         
-    }
-    public WaitForSeconds dashDelay;
-    public WaitForSeconds hitDelay;
+    private float dashInvincibleTime;
+    [SerializeField]
+    private float dashInvincibleCount = 0;
+    [SerializeField]
+    private float invincibleTime;
+    [SerializeField]
+    private float invincibleCount = 0;
     public WaitForFixedUpdate fixedUpdateDelay = new WaitForFixedUpdate();
     #endregion
     #region PlayerStat
     public UnityAction<int> hpUp;
-    public UnityAction<int> maxHpUp;
+    public UnityAction<int> maxHpUp; 
     public override float curHp 
     { 
         get => base.curHp;
@@ -90,20 +84,29 @@ public class Player : Character
             _maxHp = value;
         }
     }
+    public Coroutine coUpdate;
     #endregion
-    private void Awake()
-    {
-        StartCoroutine(CoSetting());
-    }
-    private void FixedUpdate()
-    {
-        CooltimeCounter?.Invoke();
-        RemoveInput();
-        HitCheck();
-        InputCheck?.Invoke();
-        BehaviorExecute?.Invoke();
-    }
 
+
+    private void Awake() => StartCoroutine(CoSetting());
+    private void Start() => coUpdate = StartCoroutine(CoUpdate());
+
+    #region Setting
+    IEnumerator CoUpdate()
+    {
+        while(true)
+        {
+            CooltimeCounter?.Invoke();
+            ReSetInput();
+            HitCheck();
+            if (!isHit)
+            {
+                InputCheck?.Invoke();
+                BehaviorExecute?.Invoke();
+            }
+            yield return fixedUpdateDelay;
+        }
+    }
 
     IEnumerator CoSetting()
     {
@@ -135,29 +138,30 @@ public class Player : Character
             }
         }
         Debug.Log("아티팩트완료");
-        dashDelay = new WaitForSeconds(dashTime);
-        hitDelay = new WaitForSeconds(invincibilityTime);
-        stateMachine = new StateMachine<State, Player>(this);
-        //stateMachine.AddState(State.Idle, new PlayerStates.DirectionState());
-        //stateMachine.AddState(State.Move, new PlayerStates.MoveState());
-        //stateMachine.AddState(State.Attack, new PlayerStates.AttackState());
-        //stateMachine.AddState(State.SuperAttack, new PlayerStates.SuperAttackState());
-        //stateMachine.AddState(State.Skill, new PlayerStates.SkiilState());
-        //stateMachine.AddState(State.Dash, new PlayerStates.DashState());
-        //stateMachine.AddState(State.Hit, new PlayerStates.HitState());
-        #region ActionControllerTemplate
+        InputCheckSet();
+        BehaviorExcuteSet();
+        curDirection = State.Up;
+        isReady = true;
+    }
+
+    private void BehaviorExcuteSet()
+    {
+        BehaviorExecute += PlayerDash;
+        BehaviorExecute += PlayerSkill;
+        BehaviorExecute += PlayerAttack;
+        BehaviorExecute += PlayerMove;
+    }
+    private void InputCheckSet()
+    {
         InputCheck += MoveInput;
         InputCheck += AttackInput;
         InputCheck += SkillInput;
         InputCheck += DashInput;
         InputCheck += DeadInput;
-        #endregion
-        curAction = State.Idle;
-        curDirection = State.Up;
-        isReady = true;
-        ChangeState(State.Idle);
     }
-    public State DirectionState()
+    #endregion
+    #region BehaviorCheck
+    private void DirectionState()
     {
         RightCheck();
         float dot = Vector3.Dot(transform.forward, (mousePointer.position - transform.position).normalized);
@@ -165,75 +169,150 @@ public class Player : Character
         else if (dot > 0.5) curDirection = State.HoUp;
         else if (dot > -0.5) curDirection = State.Horizontal;
         else if (dot > -0.866) curDirection = State.HoDown;
-        else if(dot>-1)curDirection = State.Down;
-        return curDirection;
+        else if (dot > -1) curDirection = State.Down;
     }
-    public void MoveInput()
+    private void MoveInput()
     {
         moveX = Input.GetAxis("Horizontal");
         moveZ = Input.GetAxis("Vertical");
         moveVec = new Vector3(moveX, 0, moveZ);
-        if (moveVec == Vector3.zero) isIdleBehavior = true;
-        else { moveVec = new Vector3(moveX, 0, moveZ).normalized;isMoveBehavior = true; }      
+        if (moveVec != Vector3.zero) moveVec = new Vector3(moveX, 0, moveZ).normalized;
+        isMoveBehavior = true;
     }
-    public void AttackInput()
+    private void AttackInput()
     {
         if (!Input.GetMouseButton(0)) { weaponContainer.WeaponAnimationOff(); return; }
         if (weaponContainer.weaponAttack == null) { AttackBehavior = null; return; }
+        if (weaponContainer.superArmor) isSuperAttackBehavior = true;
         AttackBehavior = weaponContainer.WeaponAnimationOn;
         isAttackBehavior = true;
     }
-    public void AttackStop()
-    {
-        weaponContainer.WeaponAnimationOff();
-        AttackBehavior = null;
-    }
-    public void DashInput()
+    private void DashInput()
     {
         if(Input.GetMouseButton(1))
         {
             isDashBehavior = true;
         }
     }
-    public void SkillInput()
+    private void SkillInput()
     {
     }
-    public void HitReset()=> HitInput = null;
-    public void DeadInput() => isDeadBehavior = curHp <= 0;
-    public void RemoveInput()
+    private void DeadInput() => isDeadBehavior = curHp <= 0;
+    private void ReSetInput()
     {
         isMoveBehavior = false;
         isAttackBehavior = false;
-        isIdleBehavior = false;
         isDashBehavior=false;
         isSuperAttackBehavior = false;
         isSkillBehavior = false;
+        isBehaviorExecuted = false;
     }
-    public void HitCheck()
+    private void HitCheck()
     {
-        
-
+        if (isInvicible) return;
+        if (isDashInvincible) return;
+        if (HitInput == null) return;
+        if(isSkillBehavior||isSuperAttackBehavior)
+        {
+            weaponContainer.WeaponAnimationOff();
+            animator.SetTrigger("MotionStop");
+        }
+        HitInput?.Invoke(this);
+        isHit = true;
+        isInvicible = true;
+        InputCheck -= MoveInput;
+        InputCheck -= AttackInput;
+        InputCheck -= SkillInput;
+        CooltimeCounter += InvincibleCount;
     }
-    public void PlayerMove() => rigi.velocity = moveVec * moveSpeed;
-    public void PlayerDashMove() => rigi.velocity = moveVec.normalized * moveSpeed * 2;
-    public void PlayerDash() => rigi.velocity = directionCircle.transform.forward * moveSpeed * 2;
-    public void PlayerIdle() => rigi.velocity = Vector3.zero;
-    public void PlayerKinematic()=> rigi.isKinematic = !rigi.isKinematic;
-    public void ChangeState(State state) => stateMachine.ChangeState(state);
-    public void DashCoolCount()
+    #endregion
+    #region Behavior
+    private void PlayerMove()
     {
+        if (isBehaviorExecuted) return;
+        if (!isMoveBehavior) return;
+        DirectionState();
+        if (moveVec == Vector3.zero) animator.SetTrigger("Idle");
+        else animator.SetTrigger("Move");
+        rigi.velocity = moveVec * moveSpeed;
+        isBehaviorExecuted = true;
+    }
+    private void PlayerDash()
+    {
+        if (isBehaviorExecuted) return; // 필요없음
+        if (!isDashBehavior) return;
+        AttackComboCancle();
+        InputCheck -= MoveInput;
+        InputCheck -= AttackInput;
+        InputCheck -= SkillInput;
         InputCheck -= DashInput;
-        dashCoolCount++;
-        if (dashCoolCount >= dashCoolFrame)
+        rigi.velocity = directionCircle.transform.forward * moveSpeed * 2;
+        isDashInvincible = true;
+        CooltimeCounter += DashCoolCount;
+        CooltimeCounter += DashInvincibleCount;
+        isBehaviorExecuted = true;
+    }
+    private void PlayerAttack()
+    {
+        if (isBehaviorExecuted) return;
+        if (!isAttackBehavior&&!isSuperAttackBehavior) return;
+        AttackBehavior?.Invoke();
+        isBehaviorExecuted = true;
+    }
+    private void PlayerSkill()
+    {
+        if (isBehaviorExecuted) return;
+        if (!isSkillBehavior) return;
+        isBehaviorExecuted = true;
+    }
+    #endregion
+    #region CooltimeCounter
+    private void DashCoolCount()
+    {
+        dashCoolCount += 0.02f;
+        if (dashCoolCount >= dashCoolTime)
         {
             InputCheck += DashInput;
             CooltimeCounter -= DashCoolCount;
             dashCoolCount = 0;
         }
     }
-    public void InvincibleCount()
+    private void InvincibleCount()
     {
+        invincibleCount += 0.02f;
+        if(invincibleCount >= invincibleTime)
+        {
+            isHit = false;
+            isInvicible = false;
+            InputCheck += MoveInput;
+            InputCheck += AttackInput;
+            InputCheck += SkillInput;
+            CooltimeCounter -= InvincibleCount;
+            invincibleCount = 0;
+            HitInput = null;
+        }
+    }
+    private void DashInvincibleCount()
+    {
+        dashInvincibleCount += 0.02f;
+        if (dashInvincibleCount >= dashInvincibleTime)
+        {
+            isDashInvincible = false;
+            InputCheck += MoveInput;
+            InputCheck += AttackInput;
+            InputCheck += SkillInput;
+            CooltimeCounter -= DashInvincibleCount;
+            dashInvincibleCount = 0;
+            HitInput = null;
+        }
+    }
+    #endregion
 
+    public void PlayerKinematic() => rigi.isKinematic = !rigi.isKinematic;
+    private void AttackComboCancle()
+    {
+        if (!weaponContainer.isProgress) return;
+        weaponContainer.WeaponAnimationOff();
     }
     private void RightCheck()
     {

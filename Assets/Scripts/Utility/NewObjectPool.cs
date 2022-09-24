@@ -185,7 +185,7 @@ public class NewObjectPool : Singleton<NewObjectPool>
     public void Return(GameObject gameObject, PoolInfo poolInfo)
     {
         poolDic[poolInfo].Enqueue(gameObject);
-        gameObject.transform.SetParent(deactive);
+        gameObject.transform.SetParent(deactive,false);
     }
 
 }
