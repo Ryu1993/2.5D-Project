@@ -8,11 +8,9 @@ using UnityEngine.Events;
 public class Player : Character
 {
     private State curDirection;
-    [HideInInspector]
-    public bool isHit;
     public bool isReady;
-    public bool isInvicible;
-    [SerializeField]
+    private bool isHit;
+    private bool isInvicible;
     private bool isDashInvincible;
     private float moveX;
     private float moveZ;
