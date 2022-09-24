@@ -25,6 +25,8 @@ public class Player : Character
     #region ActionList
     public UnityAction InputCheck;
     public UnityAction AttackBehavior;
+    public UnityAction CooltimeCounter;
+    public UnityAction BehaviorExecute;
     public bool isAttackBehavior;
     public bool isMoveBehavior;
     public bool isDashBehavior;
@@ -32,8 +34,13 @@ public class Player : Character
     public bool isSuperAttackBehavior;
     public bool isIdleBehavior;
     public bool isDeadBehavior;
+
     #endregion
     #region delay
+    [SerializeField]
+    private int dashCoolFrame;
+    private int dashCoolCount = 0;
+
     [SerializeField]
     float _invincibilityTime;
     float invincibilityTime
@@ -88,12 +95,15 @@ public class Player : Character
     {
         StartCoroutine(CoSetting());
     }
-    private void Update()
+    private void FixedUpdate()
     {
+        CooltimeCounter?.Invoke();
         RemoveInput();
+        HitCheck();
         InputCheck?.Invoke();
-        GameManager.instance.PlayerPosition = transform.position;
+        BehaviorExecute?.Invoke();
     }
+
 
     IEnumerator CoSetting()
     {
@@ -128,13 +138,13 @@ public class Player : Character
         dashDelay = new WaitForSeconds(dashTime);
         hitDelay = new WaitForSeconds(invincibilityTime);
         stateMachine = new StateMachine<State, Player>(this);
-        stateMachine.AddState(State.Idle, new PlayerStates.DirectionState());
-        stateMachine.AddState(State.Move, new PlayerStates.MoveState());
-        stateMachine.AddState(State.Attack, new PlayerStates.AttackState());
-        stateMachine.AddState(State.SuperAttack, new PlayerStates.SuperAttackState());
-        stateMachine.AddState(State.Skill, new PlayerStates.SkiilState());
-        stateMachine.AddState(State.Dash, new PlayerStates.DashState());
-        stateMachine.AddState(State.Hit, new PlayerStates.HitState());
+        //stateMachine.AddState(State.Idle, new PlayerStates.DirectionState());
+        //stateMachine.AddState(State.Move, new PlayerStates.MoveState());
+        //stateMachine.AddState(State.Attack, new PlayerStates.AttackState());
+        //stateMachine.AddState(State.SuperAttack, new PlayerStates.SuperAttackState());
+        //stateMachine.AddState(State.Skill, new PlayerStates.SkiilState());
+        //stateMachine.AddState(State.Dash, new PlayerStates.DashState());
+        //stateMachine.AddState(State.Hit, new PlayerStates.HitState());
         #region ActionControllerTemplate
         InputCheck += MoveInput;
         InputCheck += AttackInput;
@@ -147,7 +157,6 @@ public class Player : Character
         isReady = true;
         ChangeState(State.Idle);
     }
-
     public State DirectionState()
     {
         RightCheck();
@@ -165,7 +174,7 @@ public class Player : Character
         moveZ = Input.GetAxis("Vertical");
         moveVec = new Vector3(moveX, 0, moveZ);
         if (moveVec == Vector3.zero) isIdleBehavior = true;
-        else { moveVec = new Vector3(moveX, 0, moveZ).normalized * moveSpeed;isMoveBehavior = true; }      
+        else { moveVec = new Vector3(moveX, 0, moveZ).normalized;isMoveBehavior = true; }      
     }
     public void AttackInput()
     {
@@ -179,18 +188,13 @@ public class Player : Character
         weaponContainer.WeaponAnimationOff();
         AttackBehavior = null;
     }
-
     public void DashInput()
     {
-
         if(Input.GetMouseButton(1))
         {
             isDashBehavior = true;
-
         }
     }
-
-
     public void SkillInput()
     {
     }
@@ -205,18 +209,38 @@ public class Player : Character
         isSuperAttackBehavior = false;
         isSkillBehavior = false;
     }
-    public void PlayerDash(float speed)=>rigi.velocity = directionCircle.transform.forward * speed;
-    public void PlayerMove() => rigi.velocity = moveVec;
-    public void PlayerDashMove(float speed) => rigi.velocity = moveVec * speed;
+    public void HitCheck()
+    {
+        
+
+    }
+    public void PlayerMove() => rigi.velocity = moveVec * moveSpeed;
+    public void PlayerDashMove() => rigi.velocity = moveVec.normalized * moveSpeed * 2;
+    public void PlayerDash() => rigi.velocity = directionCircle.transform.forward * moveSpeed * 2;
     public void PlayerIdle() => rigi.velocity = Vector3.zero;
     public void PlayerKinematic()=> rigi.isKinematic = !rigi.isKinematic;
     public void ChangeState(State state) => stateMachine.ChangeState(state);
+    public void DashCoolCount()
+    {
+        InputCheck -= DashInput;
+        dashCoolCount++;
+        if (dashCoolCount >= dashCoolFrame)
+        {
+            InputCheck += DashInput;
+            CooltimeCounter -= DashCoolCount;
+            dashCoolCount = 0;
+        }
+    }
+    public void InvincibleCount()
+    {
+
+    }
     private void RightCheck()
     {
         if (transform.position.x < mousePointer.position.x) { spriteTransform.localScale = new Vector3(1, 1, 1); }
         else { spriteTransform.localScale = new Vector3(-1, 1, 1); }
     }
-
+    
 
 
 

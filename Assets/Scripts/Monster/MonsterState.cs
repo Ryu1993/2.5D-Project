@@ -82,10 +82,24 @@ namespace MonsterState
             {
                 order.MonsterMove();
                 if (IsHitCheck(order)) break;
+                if(IsTargetCheck(order)) break;
                 yield return null;     
             }
             isCompleted = true;
         }
+
+        protected override bool IsTargetCheck(Monster order)
+        {
+            if (!order.isTargetOn)
+            {
+                order.curAction = Character.State.Idle;
+                order.ChangeState(Character.State.Idle);
+                return true;
+            }
+            return false;
+
+        }
+
 
     }
 
