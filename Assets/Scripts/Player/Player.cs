@@ -148,6 +148,7 @@ public class Player : Character
         BehaviorExecute += PlayerSkill;
         BehaviorExecute += PlayerAttack;
         BehaviorExecute += PlayerMove;
+        BehaviorExecute += PlayerIdle;
     }
     private void InputCheckSet()
     {
@@ -155,7 +156,7 @@ public class Player : Character
         InputCheck += AttackInput;
         InputCheck += SkillInput;
         InputCheck += DashInput;
-        InputCheck += DeadInput;
+        InputCheck += DeadInput;     
     }
     #endregion
     #region BehaviorCheck
@@ -174,8 +175,12 @@ public class Player : Character
         moveX = Input.GetAxis("Horizontal");
         moveZ = Input.GetAxis("Vertical");
         moveVec = new Vector3(moveX, 0, moveZ);
-        if (moveVec != Vector3.zero) moveVec = new Vector3(moveX, 0, moveZ).normalized;
-        isMoveBehavior = true;
+        if (moveVec != Vector3.zero)
+        {
+            moveVec = new Vector3(moveX, 0, moveZ).normalized;
+            isMoveBehavior = true;
+        }
+
     }
     private void AttackInput()
     {
@@ -230,11 +235,20 @@ public class Player : Character
         if (isBehaviorExecuted) return;
         if (!isMoveBehavior) return;
         DirectionState();
-        if (moveVec == Vector3.zero) animator.SetTrigger("Idle");
-        else animator.SetTrigger("Move");
+        animator.SetTrigger("Move");
         rigi.velocity = moveVec * moveSpeed;
         isBehaviorExecuted = true;
     }
+
+    private void PlayerIdle()
+    {
+        if (isBehaviorExecuted) return;
+        DirectionState();
+        rigi.velocity = Vector3.zero;
+        if(!animator.GetCurrentAnimatorStateInfo(0).IsName("Idle")) animator.SetTrigger("MotionStop");
+        isBehaviorExecuted = true;
+    }
+
     private void PlayerDash()
     {
         if (isBehaviorExecuted) return; // 필요없음
