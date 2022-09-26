@@ -17,11 +17,6 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: 1aa193ed48253b64a8ce84cbd185a666
   m_SerializeEntries:
-  - m_GUID: 3f2ad4ee19aaecc46b1d05159f9762d5
-    m_Address: Assets/Prefabs/Monster/TestSlime.prefab
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - TestEnemy_Label
   - m_GUID: fe0fbce61b466d74795c183970980010
     m_Address: Assets/ScriptableObject/Item/Test.asset
     m_ReadOnly: 0

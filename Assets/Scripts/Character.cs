@@ -18,10 +18,10 @@ public class Character : MonoBehaviour, IDamageable
     public UnityAction<IDamageable> HitInput;
     protected Vector3 crashVec;
     protected Vector3 moveVec;
-    [HideInInspector]
+    [SerializeField]
     protected float _curHp;
     public virtual float curHp { get { return _curHp; } set { _curHp = value; } }
-    [HideInInspector]
+    [SerializeField]
     protected float _maxHp;
     public virtual float maxHp { get { return _maxHp; } set { _maxHp = value; } }
     public virtual Character Hit(IAttackable attacker, Vector3 attackPosition)
@@ -36,6 +36,8 @@ public class Character : MonoBehaviour, IDamageable
         rigi.velocity = Vector3.zero;
         rigi.AddForce(crashVec * 30);
     }
+
+    public virtual bool DeadCheck() => _curHp <= 0;
 
 
 

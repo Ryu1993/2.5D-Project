@@ -6,37 +6,94 @@ using UnityEngine.AI;
 
 public class Monster : Character,IReturnable
 {
-    protected StateMachine<State, Monster> stateMachine;
+    public enum MonState { Idle,Chase,Ready,Attack,Hit,Dead}
+    protected StateMachine<MonState, Monster> stateMachine;
     [SerializeField]
-    NavMeshAgent navMeshAgent;
+    protected NavMeshAgent navMeshAgent;
     [SerializeField]
-    LayerMask mask;
-    Collider[] colliders = new Collider[1];
-    public bool isTargetOn;
-
-    public UnityAction dieEvent;
+    protected LayerMask mask;
+    [SerializeField]
+    protected float scanRange;
+    [SerializeField]
+    protected float attackRange;
+    [SerializeField]
+    protected float attackDelay;
+    [SerializeField]
+    protected float attackDelayCount = 0;
+    public bool isAnimation;
+    private Collider[] attackBox = new Collider[1];
+    #region Returnable
+    public UnityAction deadEvent;
     protected NewObjectPool.PoolInfo poolInfo;
     public void PoolInfoSet(NewObjectPool.PoolInfo pool)
     {
         poolInfo = pool;
-        dieEvent += Return;
+        deadEvent += Return;
     }
     public void Return()
     {
         NewObjectPool.instance.Return(this.gameObject, poolInfo);
+        _curHp = _maxHp;
+        HitInput = null;
+    }
+    #endregion
+
+    private void Awake()
+    {
+        StateSet();
     }
 
-    public void ScanTarget()
+    private void OnEnable()
     {
-        isTargetOn = false;
-        colliders[0] = null;
-        Physics.OverlapSphereNonAlloc(transform.position, 2f, colliders, mask);
-        if (colliders[0] != null)
+        ChangeState(MonState.Idle);
+    }
+
+    public void StateSet()
+    {
+        stateMachine = new StateMachine<MonState, Monster>(this);
+        stateMachine.AddState(MonState.Idle, new MonsterState.Idle());
+        stateMachine.AddState(MonState.Ready, new MonsterState.Ready());
+        stateMachine.AddState(MonState.Chase,new MonsterState.Chase());
+        stateMachine.AddState(MonState.Attack,new MonsterState.Attack());
+        stateMachine.AddState(MonState.Hit,new MonsterState.Hit());
+        stateMachine.AddState(MonState.Dead,new MonsterState.Dead());
+        _curHp = _maxHp;
+    }
+    public bool ScanTarget()
+    {
+        if ((transform.position - MonsterBehaviourManager.instance.playerPosition).magnitude <= scanRange) return true;
+        return false;
+    }
+    public virtual bool AttackableCheck()
+    {
+        AttackRangeCheck();
+        if(attackBox[0]!=null) return true;
+        return false;
+    }
+    protected virtual void AttackRangeCheck()
+    {
+        attackBox[0] = null;
+        Physics.OverlapBoxNonAlloc(transform.position, new Vector3(attackRange, attackRange, attackRange), attackBox, Quaternion.identity, mask);
+        if(attackBox[0]!=null)
         {
-            if((transform.position - colliders[0].transform.position).magnitude > 1) isTargetOn = true;
+            float temp = Vector3.Dot(transform.forward,(attackBox[0].transform.position-transform.forward).normalized);
+            if (temp < 0) attackBox[0] = null;
         }
     }
+    public bool AttackDelayCount()
+    {
+        attackDelayCount += 0.02f;
+        if(attackDelayCount>=attackDelay) return true;
+        return false;
+    }
+    public bool MonsterHitCheck() => HitInput != null;
+    public void AttackDelayCountReset() => attackDelayCount = 0;
+    public void MonsterMove() => navMeshAgent.SetDestination(MonsterBehaviourManager.instance.playerPosition);
+    public void MonsterMoveSwitch() => navMeshAgent.enabled = !navMeshAgent.enabled;
+    public void MonsterKinematicSwitch() => rigi.isKinematic = !rigi.isKinematic;
+    public void MonsterAnimationkStateSwitch() => isAnimation = !isAnimation;
+    public void ChangeState(MonState state) => stateMachine.ChangeState(state);
 
-    public void MonsterMove() => navMeshAgent.destination = GameManager.instance.PlayerPosition;
+
 
 }

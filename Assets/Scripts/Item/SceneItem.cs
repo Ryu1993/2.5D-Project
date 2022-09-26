@@ -22,6 +22,8 @@ public class SceneItem : MonoBehaviour,IReturnable
     [SerializeField]
     Animator animator;
 
+
+
     public void SceneItemSet(Item item)
     {
         this.item = item;
@@ -97,14 +99,10 @@ public class SceneItem : MonoBehaviour,IReturnable
 
     private IEnumerator WaitAnimation()
     {
-        while (Time.timeScale!=1)
-        {
-            yield return null;
-        }
+        yield return WaitList.isPlay;
         ResetItem();
         Return();
     }
-
 
     public void PoolInfoSet(NewObjectPool.PoolInfo pool)=> home = pool;
   

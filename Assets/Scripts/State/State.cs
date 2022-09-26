@@ -5,10 +5,11 @@ using UnityEngine;
 
 public abstract class State<T> where T :MonoBehaviour
 {
-    public bool isCompleted;
+    protected T order;
     public abstract void Enter(T order);
-    public abstract IEnumerator Middle(T order);
-    public abstract void Exit(T order);
+    public abstract void Exit();
+    public abstract void Progress();
+
 
 
 }

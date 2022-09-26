@@ -13,14 +13,6 @@ public class TestIAttackAble : Monster, IAttackable
         if (player == null) return;
         StatusManager.instance.StatusEffectCreate[AsyncState.Type.Burn]?.Invoke(player,3);
     }
-    private void OnCollisionEnter(Collision collision)
-    {
-        IDamageable target = collision.transform.GetComponent<IDamageable>();
-        if (target == null) return;
-        player = target?.Hit(this, transform.position) as Player;
-    }
-
-    
 
 
 

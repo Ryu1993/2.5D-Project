@@ -9,47 +9,126 @@ namespace MonsterState
     {
         public override void Enter(Monster order)
         {
+            if(this.order==null) this.order = order;
+            MonsterBehaviourManager.instance.monsterBehaviour += Progress;
+        }
+        public override void Exit() => MonsterBehaviourManager.instance.monsterBehaviour -= Progress;
+        public override void Progress() { }
+   
+    }
 
+    public class Idle : BaseState
+    {
+        public override void Progress()
+        {
+            Debug.Log("대기");
+            if (order.DeadCheck()) order.ChangeState(Monster.MonState.Dead);
+            else if(order.MonsterHitCheck()) order.ChangeState(Monster.MonState.Hit);
+            else if(order.ScanTarget()) order.ChangeState(Monster.MonState.Chase);
+        }
+    }
+
+    public class Hit : BaseState
+    {
+        public override void Enter(Monster order)
+        {
+            base.Enter(order);
+            order.MonsterKinematicSwitch();
+        }
+        public override void Progress()
+        {
+            Debug.Log("Hit");
+            order.HitInput?.Invoke(order);
+            if(order.HitInput!= null) order.animator.SetTrigger("Hit");
+            order.HitInput = null;
+            if (order.DeadCheck()) order.ChangeState(Monster.MonState.Dead);
+            else if (!order.animator.GetCurrentAnimatorStateInfo(0).IsName("Hit")) order.ChangeState(Monster.MonState.Idle);
+        }
+        public override void Exit()
+        {
+            base.Exit();
+            order.MonsterKinematicSwitch();
+        }
+    }
+
+    public class Chase : BaseState
+    {
+        public override void Enter(Monster order)
+        {
+            base.Enter(order);
+            order.MonsterMoveSwitch();
+        }
+        public override void Progress()
+        {
+            Debug.Log("추적");
+            order.MonsterMove();
+            if (order.DeadCheck()) order.ChangeState(Monster.MonState.Dead);
+            else if (order.MonsterHitCheck()) order.ChangeState(Monster.MonState.Hit);
+            else if (order.AttackableCheck()) order.ChangeState(Monster.MonState.Ready);
+        }
+        public override void Exit()
+        {
+            base.Exit();
+            order.MonsterMoveSwitch();
         }
 
-        public override void Exit(Monster order)
-        {
-            throw new System.NotImplementedException();        }
+    }
 
-        public override IEnumerator Middle(Monster order)
+    public class Ready : BaseState
+    {
+        public override void Enter(Monster order)
         {
-            yield return null;
+            base.Enter(order);
+            order.animator.SetTrigger("Ready");
+            Debug.Log("준비");
+        }
+        public override void Progress()
+        {
+
+            if (order.DeadCheck()) order.ChangeState(Monster.MonState.Dead);
+            else if (order.MonsterHitCheck()) order.ChangeState(Monster.MonState.Hit);
+            else if (order.AttackDelayCount()) order.ChangeState(Monster.MonState.Attack);
+        }
+        public override void Exit()
+        {
+            base.Exit();
+            order.AttackDelayCountReset();
+        }
+
+    }
+    public class Attack : BaseState
+    {
+        public override void Enter(Monster order)
+        {
+            base.Enter(order);
+            order.animator.SetTrigger("Attack");
+            Debug.Log("공격");
+        }
+        public override void Progress()
+        {
+ 
+            order.HitInput?.Invoke(order);
+            order.HitInput = null;
+            if (order.DeadCheck()) order.ChangeState(Monster.MonState.Dead);
+            else if (!order.isAnimation) order.ChangeState(Monster.MonState.Idle);
         }
     }
-
-    public class IdleState : BaseState
+    public class Dead : BaseState
     {
-  
-
-    }
-
-    public class HitState : BaseState
-    {
-
-    }
-
-    public class TrasceState : BaseState
-    {
-
-
-    }
-
-    public class ReadyState : BaseState
-    {
-
-    }
-    public class AttackState : BaseState
-    {
-
-    }
-    public class DieState : BaseState
-    {
-
+        public override void Enter(Monster order)
+        {
+            base.Enter(order);
+            order.animator.SetTrigger("Dead");
+        }
+        public override void Progress()
+        {
+            if (!order.isAnimation) Exit();
+        }
+        public override void Exit()
+        {
+            base.Exit();
+            order.Return();
+        }
     }
 
 

@@ -8,7 +8,7 @@ using UnityEngine.Events;
 public class Player : Character
 {
     private State curDirection;
-    public bool isReady;
+    public bool isReady { private set; get; }
     private bool isHit;
     private bool isInvicible;
     private bool isDashInvincible;
@@ -47,17 +47,13 @@ public class Player : Character
     #region Delay&Cooltime
     [SerializeField]
     private float dashCoolTime;
-    [SerializeField]
     private float dashCoolCount = 0;
     [SerializeField]
     private float dashInvincibleTime;
-    [SerializeField]
     private float dashInvincibleCount = 0;
     [SerializeField]
     private float invincibleTime;
-    [SerializeField]
     private float invincibleCount = 0;
-    public WaitForFixedUpdate fixedUpdateDelay = new WaitForFixedUpdate();
     #endregion
     #region PlayerStat
     public UnityAction<int> hpUp;
@@ -102,28 +98,14 @@ public class Player : Character
                 InputCheck?.Invoke();
                 BehaviorExecute?.Invoke();
             }
-            yield return fixedUpdateDelay;
+            yield return WaitList.fixedUpdate;
         }
     }
 
     IEnumerator CoSetting()
     {
-        int maximum = 300;
-        int count = 0;
-        while (true)
-        {
-            if (count > maximum)
-            {
-                Debug.Log("세팅실패"); 
-                yield break;
-            }
-            if(GameManager.instance != null)
-            {
-                if (GameManager.instance.isSetComplete) break;
-            }
-            count++;
-            yield return null;
-        }
+        yield return WaitList.isGameManagerSet;
+        yield return WaitList.isSingletonSet;
         _maxHp = GameManager.instance.playerInfo.player_maxHp;
         _curHp = GameManager.instance.playerInfo.player_curHp;
         if(GameManager.instance.playerInfo.curEquip!=null) ItemManager.instance.PlayerGetWeapon(GameManager.instance.playerInfo.curEquip);
@@ -135,7 +117,6 @@ public class Player : Character
                 if(artifact!=null) ItemManager.instance.PlayerGetArtifact(artifact);
             }
         }
-        Debug.Log("아티팩트완료");
         InputCheckSet();
         BehaviorExcuteSet();
         curDirection = State.Up;
@@ -319,7 +300,6 @@ public class Player : Character
         }
     }
     #endregion
-
     public void PlayerKinematic() => rigi.isKinematic = !rigi.isKinematic;
     private void AttackComboCancle()
     {

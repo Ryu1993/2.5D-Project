@@ -10,9 +10,6 @@ public class ItemManager : Singleton<ItemManager>
     [SerializeField]
     GameObject sceneItem;
     NewObjectPool.PoolInfo sceneItemkey;
-
-
-
     Player _player;
     Player player
     {
@@ -47,8 +44,6 @@ public class ItemManager : Singleton<ItemManager>
         SceneItem createdItem =  NewObjectPool.instance.Call(sceneItemkey, position).GetComponent<SceneItem>();
         createdItem.SceneItemSet(item);
     }
-
-    
     public void ArtifactEffectAdd()
     {
 

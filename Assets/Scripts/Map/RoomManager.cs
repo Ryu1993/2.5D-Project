@@ -109,7 +109,7 @@ public class RoomManager : MonoBehaviour
             {
                 var pool = enemyPools[Random.Range(0, enemyPools.Count)];
                 var monster = NewObjectPool.instance.Call(pool,enemyPostion.position).GetComponent<Monster>();
-                monster.dieEvent += SubMonsterCountEvent;
+                monster.deadEvent += SubMonsterCountEvent;
             }          
         }
         Addressables.Release(list);
@@ -124,7 +124,7 @@ public class RoomManager : MonoBehaviour
             {
                 var pool = enemyPools[Random.Range(0, enemyPools.Count)];
                 var monster = NewObjectPool.instance.Call(pool).GetComponent<Monster>();
-                monster.dieEvent += SubMonsterCountEvent;
+                monster.deadEvent += SubMonsterCountEvent;
                 monster.PoolInfoSet(pool);
             }
         }
