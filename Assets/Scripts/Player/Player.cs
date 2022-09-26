@@ -7,7 +7,7 @@ using UnityEngine.Events;
 [RequireComponent(typeof(Rigidbody))]
 public class Player : Character
 {
-    private State curDirection;
+    //private State curDirection;
     public bool isReady { private set; get; }
     private bool isHit;
     private bool isInvicible;
@@ -15,8 +15,8 @@ public class Player : Character
     private float moveX;
     private float moveZ;
     #region playerParts
-    [SerializeField]
-    private Transform spriteTransform;
+    //[SerializeField]
+    //private Transform spriteTransform;
     [SerializeField]
     private Transform mousePointer;
     [SerializeField]
@@ -119,7 +119,7 @@ public class Player : Character
         }
         InputCheckSet();
         BehaviorExcuteSet();
-        curDirection = State.Up;
+        //curDirection = State.Up;
         isReady = true;
     }
 
@@ -141,16 +141,16 @@ public class Player : Character
     }
     #endregion
     #region BehaviorCheck
-    private void DirectionState()
-    {
-        RightCheck();
-        float dot = Vector3.Dot(transform.forward, (mousePointer.position - transform.position).normalized);
-        if (dot > 0.866) curDirection = State.Up;
-        else if (dot > 0.5) curDirection = State.HoUp;
-        else if (dot > -0.5) curDirection = State.Horizontal;
-        else if (dot > -0.866) curDirection = State.HoDown;
-        else if (dot > -1) curDirection = State.Down;
-    }
+    //private void DirectionState()
+    //{
+    //    RightCheck();
+    //    float dot = Vector3.Dot(transform.forward, (mousePointer.position - transform.position).normalized);
+    //    if (dot > 0.866) curDirection = State.Up;
+    //    else if (dot > 0.5) curDirection = State.HoUp;
+    //    else if (dot > -0.5) curDirection = State.Horizontal;
+    //    else if (dot > -0.866) curDirection = State.HoDown;
+    //    else if (dot > -1) curDirection = State.Down;
+    //}
     private void MoveInput()
     {
         moveX = Input.GetAxis("Horizontal");
@@ -215,7 +215,6 @@ public class Player : Character
     {
         if (isBehaviorExecuted) return;
         if (!isMoveBehavior) return;
-        DirectionState();
         animator.SetTrigger("Move");
         rigi.velocity = moveVec * moveSpeed;
         isBehaviorExecuted = true;
@@ -224,7 +223,6 @@ public class Player : Character
     private void PlayerIdle()
     {
         if (isBehaviorExecuted) return;
-        DirectionState();
         rigi.velocity = Vector3.zero;
         if(!animator.GetCurrentAnimatorStateInfo(0).IsName("Idle")) animator.SetTrigger("MotionStop");
         isBehaviorExecuted = true;
@@ -306,11 +304,11 @@ public class Player : Character
         if (!weaponContainer.isProgress) return;
         weaponContainer.WeaponAnimationOff();
     }
-    private void RightCheck()
-    {
-        if (transform.position.x < mousePointer.position.x) { spriteTransform.localScale = new Vector3(1, 1, 1); }
-        else { spriteTransform.localScale = new Vector3(-1, 1, 1); }
-    }
+    //private void RightCheck()
+    //{
+    //    if (transform.position.x < mousePointer.position.x) { spriteTransform.localScale = new Vector3(1, 1, 1); }
+    //    else { spriteTransform.localScale = new Vector3(-1, 1, 1); }
+    //}
     
 
 
