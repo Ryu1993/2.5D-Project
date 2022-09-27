@@ -17,7 +17,6 @@ public class MapManager : Singleton<MapManager>
         public Dictionary<GateDirection, RoomConnectInfo> gate = new Dictionary<GateDirection, RoomConnectInfo>();
         public Vector2 rectPosition;
         public bool isClear = false;
-        public RoomConnectInfo(RoomData _room)=> room = _room;
         public List<GateDirection> NullGateCheck()
         {
             var result = new List<GateDirection>();
@@ -30,6 +29,9 @@ public class MapManager : Singleton<MapManager>
             foreach (var gateDirection in MapManager.instance.gateDirections) if (gate.ContainsKey(gateDirection)) result.Add(gateDirection);
             return result;
         }
+        public void RoomDataSet(RoomData _room) => room = _room;
+
+
     }
     List<RoomConnectInfo> checkList;
     List<RoomConnectInfo> outputList;
@@ -63,22 +65,31 @@ public class MapManager : Singleton<MapManager>
             if(!connectedList.Contains(matchRoom)) connectedList.Add(matchRoom);
             if(!allRoomList.Contains(matchRoom)) allRoomList.Add(matchRoom);
         }
+        if(!allRoomList.Contains(startInfo))allRoomList.Add(startInfo);
+        allRoomList.Remove(startInfo);
+        allRoomList.Remove(endInfo);
+        for (int i = 0; i < allRoomList.Count; i++) allRoomList[i].RoomDataSet(mapInfo.progressRooms[i]);
+        startInfo.RoomDataSet(mapInfo.startRoom);
+        endInfo.RoomDataSet(mapInfo.endRoom);
         allRoomList.Add(startInfo);
-        while (true)
-        {
-            RoomConnectInfo endConnetRoom = connectedList[Random.Range(0, connectedList.Count)];
-            var endConnectRoomDirections = endConnetRoom.NullGateCheck();
-            if (endConnectRoomDirections.Count == 0) { connectedList.Remove(endConnetRoom); continue; }
-            var endConnectRoomDirection = endConnectRoomDirections[Random.Range(0, endConnectRoomDirections.Count)];
-            var endRoomDirection = MatchDirection(endConnectRoomDirection);
-            Vector2 endRoomPosition = RectPositionFromDirection(endRoomDirection, endConnetRoom);
-            if (!CheckRectPosition(endRoomPosition)) continue;
-            endConnetRoom.gate.Add(endConnectRoomDirection, endInfo);
-            endInfo.gate.Add(endRoomDirection, endConnetRoom);
-            endInfo.rectPosition = endRoomPosition;
-            allRoomList.Add(endInfo);
-            break;
-        }
+        allRoomList.Add(endInfo);
+
+        //allRoomList.Add(startInfo);
+        //while (true)
+        //{
+        //    RoomConnectInfo endConnetRoom = connectedList[Random.Range(0, connectedList.Count)];
+        //    var endConnectRoomDirections = endConnetRoom.NullGateCheck();
+        //    if (endConnectRoomDirections.Count == 0) { connectedList.Remove(endConnetRoom); continue; }
+        //    var endConnectRoomDirection = endConnectRoomDirections[Random.Range(0, endConnectRoomDirections.Count)];
+        //    var endRoomDirection = MatchDirection(endConnectRoomDirection);
+        //    Vector2 endRoomPosition = RectPositionFromDirection(endRoomDirection, endConnetRoom);
+        //    if (!CheckRectPosition(endRoomPosition)) continue;
+        //    endConnetRoom.gate.Add(endConnectRoomDirection, endInfo);
+        //    endInfo.gate.Add(endRoomDirection, endConnetRoom);
+        //    endInfo.rectPosition = endRoomPosition;
+        //    allRoomList.Add(endInfo);
+        //    break;
+        //}
     }
     private void RemoveList(RoomConnectInfo curRoom)
     {
@@ -105,12 +116,14 @@ public class MapManager : Singleton<MapManager>
         outputList = new List<RoomConnectInfo>();
         connectedList = new List<RoomConnectInfo>();
         allRoomList = new List<RoomConnectInfo>();
-        startInfo = new RoomConnectInfo(mapInfo.startRoom);
-        endInfo = new RoomConnectInfo(mapInfo.endRoom);
-        foreach (RoomData progressRoom in mapInfo.progressRooms) checkList.Add(new RoomConnectInfo(progressRoom));
+        startInfo = new RoomConnectInfo();
+        endInfo = new RoomConnectInfo();
+        foreach (RoomData progressRoom in mapInfo.progressRooms) checkList.Add(new RoomConnectInfo());
         foreach (RoomConnectInfo roomConnectInfo in checkList) outputList.Add(roomConnectInfo);
         startInfo.rectPosition = new Vector2(0, 0);
         connectedList.Add(startInfo);
+        checkList.Add(endInfo);
+        outputList.Add(endInfo);
     }
     private GateDirection MatchDirection(GateDirection direction)
     {

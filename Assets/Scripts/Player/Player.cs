@@ -89,7 +89,7 @@ public class Player : Character
     IEnumerator CoUpdate()
     {
         while(true)
-        {
+        {        
             CooltimeCounter?.Invoke();
             ReSetInput();
             HitCheck();
@@ -224,7 +224,7 @@ public class Player : Character
     {
         if (isBehaviorExecuted) return;
         rigi.velocity = Vector3.zero;
-        if(!animator.GetCurrentAnimatorStateInfo(0).IsName("Idle")) animator.SetTrigger("MotionStop");
+        if(!animator.GetCurrentAnimatorStateInfo(0).IsName("Idle")&&!weaponContainer.isProgress) animator.SetTrigger("MotionStop");
         isBehaviorExecuted = true;
     }
 
@@ -247,7 +247,9 @@ public class Player : Character
     {
         if (isBehaviorExecuted) return;
         if (!isAttackBehavior&&!isSuperAttackBehavior) return;
+        rigi.velocity = Vector3.zero;
         AttackBehavior?.Invoke();
+        animator.SetTrigger("Attack");
         isBehaviorExecuted = true;
     }
     private void PlayerSkill()
@@ -303,6 +305,7 @@ public class Player : Character
     {
         if (!weaponContainer.isProgress) return;
         weaponContainer.WeaponAnimationOff();
+        animator.SetTrigger("MotionStop");
     }
     //private void RightCheck()
     //{
