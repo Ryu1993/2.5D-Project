@@ -237,6 +237,7 @@ public class Player : Character
         InputCheck -= AttackInput;
         InputCheck -= SkillInput;
         InputCheck -= DashInput;
+        animator.SetBool("Dash", true);
         rigi.velocity = directionCircle.transform.forward * moveSpeed * 2;
         isDashInvincible = true;
         CooltimeCounter += DashCoolCount;
@@ -296,6 +297,7 @@ public class Player : Character
             InputCheck += SkillInput;
             CooltimeCounter -= DashInvincibleCount;
             dashInvincibleCount = 0;
+            animator.SetBool("Dash", false);
             HitInput = null;
         }
     }

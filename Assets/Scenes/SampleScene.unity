@@ -16366,9 +16366,19 @@ PrefabInstance:
       objectReference: {fileID: 1553019377}
     - target: {fileID: 6549884312048641777, guid: 1b2dd955f6244c34abcac62ddb9db64e,
         type: 3}
+      propertyPath: dashCoolTime
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6549884312048641777, guid: 1b2dd955f6244c34abcac62ddb9db64e,
+        type: 3}
       propertyPath: mousePointer
       value: 
       objectReference: {fileID: 1253433005}
+    - target: {fileID: 6549884312048641777, guid: 1b2dd955f6244c34abcac62ddb9db64e,
+        type: 3}
+      propertyPath: dashInvincibleTime
+      value: 0.7
+      objectReference: {fileID: 0}
     - target: {fileID: 6549884312269897116, guid: 1b2dd955f6244c34abcac62ddb9db64e,
         type: 3}
       propertyPath: m_RootOrder
