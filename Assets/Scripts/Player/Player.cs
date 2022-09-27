@@ -20,7 +20,7 @@ public class Player : Character
     [SerializeField]
     private Transform mousePointer;
     [SerializeField]
-    private ParticleSystem illusionCreator;
+    private GhostCreator ghostCreator;
     [SerializeField]
     private DirectionCircle directionCircle;
     public WeaponContainer weaponContainer;
@@ -30,18 +30,14 @@ public class Player : Character
     private UnityAction AttackBehavior;
     private UnityAction CooltimeCounter;
     private UnityAction BehaviorExecute;
-    [SerializeField]
     private bool isBehaviorExecuted;
-    [SerializeField]
     private bool isAttackBehavior;
-    [SerializeField]
+    private bool isComboBehaviour;
     private bool isMoveBehavior;
-    [SerializeField]
     private bool isDashBehavior;
-    [SerializeField]
     private bool isSkillBehavior;
-    [SerializeField]
     private bool isSuperAttackBehavior;
+    private bool isIdleBehaviour;
     private bool isDeadBehavior;
     #endregion
     #region Delay&Cooltime
@@ -50,10 +46,13 @@ public class Player : Character
     private float dashCoolCount = 0;
     [SerializeField]
     private float dashInvincibleTime;
+    [SerializeField]
     private float dashInvincibleCount = 0;
     [SerializeField]
     private float invincibleTime;
     private float invincibleCount = 0;
+    private float comboTime = 0.4f;
+    private float comboCount = 0f;
     #endregion
     #region PlayerStat
     public UnityAction<int> hpUp;
@@ -119,7 +118,6 @@ public class Player : Character
         }
         InputCheckSet();
         BehaviorExcuteSet();
-        //curDirection = State.Up;
         isReady = true;
     }
 
@@ -141,16 +139,6 @@ public class Player : Character
     }
     #endregion
     #region BehaviorCheck
-    //private void DirectionState()
-    //{
-    //    RightCheck();
-    //    float dot = Vector3.Dot(transform.forward, (mousePointer.position - transform.position).normalized);
-    //    if (dot > 0.866) curDirection = State.Up;
-    //    else if (dot > 0.5) curDirection = State.HoUp;
-    //    else if (dot > -0.5) curDirection = State.Horizontal;
-    //    else if (dot > -0.866) curDirection = State.HoDown;
-    //    else if (dot > -1) curDirection = State.Down;
-    //}
     private void MoveInput()
     {
         moveX = Input.GetAxis("Horizontal");
@@ -161,7 +149,7 @@ public class Player : Character
             moveVec = new Vector3(moveX, 0, moveZ).normalized;
             isMoveBehavior = true;
         }
-
+        else isIdleBehaviour = true;
     }
     private void AttackInput()
     {
@@ -173,10 +161,7 @@ public class Player : Character
     }
     private void DashInput()
     {
-        if(Input.GetMouseButton(1))
-        {
-            isDashBehavior = true;
-        }
+        if(Input.GetMouseButton(1)) isDashBehavior = true;
     }
     private void SkillInput()
     {
@@ -190,23 +175,18 @@ public class Player : Character
         isSuperAttackBehavior = false;
         isSkillBehavior = false;
         isBehaviorExecuted = false;
+        isIdleBehaviour = false;
     }
     private void HitCheck()
     {
         if (isInvicible) return;
         if (isDashInvincible) return;
         if (HitInput == null) return;
-        if(isSkillBehavior||isSuperAttackBehavior)
-        {
-            weaponContainer.WeaponAnimationOff();
-            animator.SetTrigger("MotionStop");
-        }
+        weaponContainer.WeaponAnimationOff();
+        animator.SetTrigger("MotionStop");
         HitInput?.Invoke(this);
         isHit = true;
         isInvicible = true;
-        InputCheck -= MoveInput;
-        InputCheck -= AttackInput;
-        InputCheck -= SkillInput;
         CooltimeCounter += InvincibleCount;
     }
     #endregion
@@ -215,7 +195,7 @@ public class Player : Character
     {
         if (isBehaviorExecuted) return;
         if (!isMoveBehavior) return;
-        animator.SetTrigger("Move");
+        animator.SetBool("Move",true);
         rigi.velocity = moveVec * moveSpeed;
         isBehaviorExecuted = true;
     }
@@ -223,8 +203,9 @@ public class Player : Character
     private void PlayerIdle()
     {
         if (isBehaviorExecuted) return;
+        if (!isIdleBehaviour) return;
         rigi.velocity = Vector3.zero;
-        if(!animator.GetCurrentAnimatorStateInfo(0).IsName("Idle")&&!weaponContainer.isProgress) animator.SetTrigger("MotionStop");
+        animator.SetBool("Move", false);
         isBehaviorExecuted = true;
     }
 
@@ -233,24 +214,34 @@ public class Player : Character
         if (isBehaviorExecuted) return; // 필요없음
         if (!isDashBehavior) return;
         AttackComboCancle();
+        rigi.velocity = (mousePointer.position-transform.position).normalized * moveSpeed * 2;
         InputCheck -= MoveInput;
         InputCheck -= AttackInput;
         InputCheck -= SkillInput;
         InputCheck -= DashInput;
-        animator.SetBool("Dash", true);
-        rigi.velocity = directionCircle.transform.forward * moveSpeed * 2;
+        directionCircle.isStop = true;
         isDashInvincible = true;
+        isBehaviorExecuted = true;
+        animator.SetBool("Dash", true);
+        ghostCreator.Swith();
         CooltimeCounter += DashCoolCount;
         CooltimeCounter += DashInvincibleCount;
-        isBehaviorExecuted = true;
     }
     private void PlayerAttack()
     {
         if (isBehaviorExecuted) return;
         if (!isAttackBehavior&&!isSuperAttackBehavior) return;
+        Debug.Log("공격중");
         rigi.velocity = Vector3.zero;
+        if (!weaponContainer.isProgress)
+        {
+            animator.SetBool("Attack", true);
+            InputCheck -= MoveInput;
+            isComboBehaviour = true;
+            CooltimeCounter += ComboCount;
+        }
+        else comboCount = 0;
         AttackBehavior?.Invoke();
-        animator.SetTrigger("Attack");
         isBehaviorExecuted = true;
     }
     private void PlayerSkill()
@@ -278,9 +269,6 @@ public class Player : Character
         {
             isHit = false;
             isInvicible = false;
-            InputCheck += MoveInput;
-            InputCheck += AttackInput;
-            InputCheck += SkillInput;
             CooltimeCounter -= InvincibleCount;
             invincibleCount = 0;
             HitInput = null;
@@ -296,18 +284,41 @@ public class Player : Character
             InputCheck += AttackInput;
             InputCheck += SkillInput;
             CooltimeCounter -= DashInvincibleCount;
-            dashInvincibleCount = 0;
+            ghostCreator.Swith();
             animator.SetBool("Dash", false);
+            directionCircle.isStop = false;
             HitInput = null;
+            dashInvincibleCount = 0;
         }
     }
+    private void ComboCount()
+    {
+        comboCount += 0.02f;
+        if(comboCount>=comboTime||!weaponContainer.isProgress)
+        {       
+            weaponContainer.WeaponAnimationOff();
+            ComboEnd();
+        }
+    }
+    private void ComboEnd()
+    {
+        animator.SetBool("Attack", false);
+        animator.Update(0f);
+        isComboBehaviour = false;
+        CooltimeCounter -= ComboCount;
+        InputCheck += MoveInput;
+        comboCount = 0;
+    }
+
+
     #endregion
     public void PlayerKinematic() => rigi.isKinematic = !rigi.isKinematic;
     private void AttackComboCancle()
     {
         if (!weaponContainer.isProgress) return;
-        weaponContainer.WeaponAnimationOff();
-        animator.SetTrigger("MotionStop");
+        weaponContainer.WeaponAnimationOffUpdate();
+        if (!isComboBehaviour) return;
+        ComboEnd();
     }
     //private void RightCheck()
     //{

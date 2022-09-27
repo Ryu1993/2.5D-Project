@@ -18,6 +18,7 @@ public class MousePointer : MonoBehaviour
     void TraceMouse()
     {
         ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        Debug.DrawRay(ray.origin, ray.direction * 1000, Color.red);
         if (Physics.Raycast(ray, out hit, Mathf.Infinity, mask))
         {
             transform.position = hit.point;

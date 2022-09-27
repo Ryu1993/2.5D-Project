@@ -87,6 +87,13 @@ public class WeaponContainer : MonoBehaviour
             Coroutine coroutine = StartCoroutine(CoDelay());
         }
     }
+    public void WeaponAnimationOffUpdate()
+    {
+        animator.SetBool("Action", false);
+        animator.SetTrigger("Stop");
+        animator.Update(0f);
+    }
+
     protected IEnumerator CoDelay()
     {
         isoffDelay = true;

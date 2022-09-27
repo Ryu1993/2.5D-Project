@@ -17,8 +17,8 @@ public class DirectionCircle : MonoBehaviour
     {
         if(!isStop)
         {
-            mouseVec = new Vector3(mousePointer.position.x, 0f, mousePointer.position.z);
-            transform.LookAt(mouseVec);
+            //mouseVec = new Vector3(mousePointer.position.x, 0f, mousePointer.position.z);
+            transform.LookAt(mousePointer.transform);
         }
     }
     
