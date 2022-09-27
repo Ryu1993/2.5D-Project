@@ -48,6 +48,7 @@ public class MapManager : Singleton<MapManager>
     public void RoomCreate(MapInfo mapInfo)
     {
         RoomListCreate(mapInfo);
+
         while(checkList.Count > 0)
         {
             RoomConnectInfo curRoom = connectedList[Random.Range(0, connectedList.Count)];
@@ -73,23 +74,6 @@ public class MapManager : Singleton<MapManager>
         endInfo.RoomDataSet(mapInfo.endRoom);
         allRoomList.Add(startInfo);
         allRoomList.Add(endInfo);
-
-        //allRoomList.Add(startInfo);
-        //while (true)
-        //{
-        //    RoomConnectInfo endConnetRoom = connectedList[Random.Range(0, connectedList.Count)];
-        //    var endConnectRoomDirections = endConnetRoom.NullGateCheck();
-        //    if (endConnectRoomDirections.Count == 0) { connectedList.Remove(endConnetRoom); continue; }
-        //    var endConnectRoomDirection = endConnectRoomDirections[Random.Range(0, endConnectRoomDirections.Count)];
-        //    var endRoomDirection = MatchDirection(endConnectRoomDirection);
-        //    Vector2 endRoomPosition = RectPositionFromDirection(endRoomDirection, endConnetRoom);
-        //    if (!CheckRectPosition(endRoomPosition)) continue;
-        //    endConnetRoom.gate.Add(endConnectRoomDirection, endInfo);
-        //    endInfo.gate.Add(endRoomDirection, endConnetRoom);
-        //    endInfo.rectPosition = endRoomPosition;
-        //    allRoomList.Add(endInfo);
-        //    break;
-        //}
     }
     private void RemoveList(RoomConnectInfo curRoom)
     {
@@ -104,8 +88,16 @@ public class MapManager : Singleton<MapManager>
         {
             if (!matchingRoom.gate.ContainsKey(direction))
             {
-                if(connectedList.Contains(matchingRoom)) if (matchingRoom.rectPosition != RectPositionFromDirection(direction, curRoom)) continue;
-                matchRooms.Add(matchingRoom);
+                if (connectedList.Contains(matchingRoom))
+                {
+                    if(matchingRoom.rectPosition != RectPositionFromDirection(direction, curRoom)) continue;
+                    matchRooms.Add(matchingRoom);
+                }
+                else
+                {
+                    if(!SearchInfofromRectPosition(RectPositionFromDirection(direction, curRoom))) continue;
+                    matchRooms.Add(matchingRoom);
+                }
             }
         }
         return matchRooms;
@@ -130,7 +122,8 @@ public class MapManager : Singleton<MapManager>
         if (direction == GateDirection.Up) return GateDirection.Down;
         else if (direction == GateDirection.Down) return GateDirection.Up;
         else if (direction == GateDirection.Left) return GateDirection.Right;
-        else return GateDirection.Left;
+        else if (direction == GateDirection.Right) return GateDirection.Left;
+        else return GateDirection.Start;
     }
     private Vector2 RectPositionFromDirection(GateDirection direction,RoomConnectInfo curRoomInfo)
     {
@@ -141,11 +134,17 @@ public class MapManager : Singleton<MapManager>
         else if (direction == GateDirection.Left) return new Vector2(x + 1, y);
         else return new Vector2(x - 1, y);
     }
-    private bool CheckRectPosition(Vector2 vec)
+
+    private bool SearchInfofromRectPosition(Vector2 target)
     {
-        foreach(RoomConnectInfo room in allRoomList) if (room.rectPosition == vec) return false;
+        foreach(var info in connectedList)
+        {
+            if (info.rectPosition == target) return false;
+        }
         return true;
     }
+
+
     #endregion
 
 

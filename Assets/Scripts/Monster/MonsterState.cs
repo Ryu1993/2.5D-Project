@@ -122,12 +122,12 @@ namespace MonsterState
         }
         public override void Progress()
         {
-            if (!order.isAnimation) Exit();
+            if (!order.isAnimation)Exit();
         }
         public override void Exit()
         {
             base.Exit();
-            order.Return();
+            order.deadEvent?.Invoke();
         }
     }
 

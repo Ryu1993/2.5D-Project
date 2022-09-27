@@ -22,8 +22,7 @@ public class RoomManager : MonoBehaviour
     Dictionary<Object, List<Transform>> SpawnPoint = new Dictionary<Object, List<Transform>>();
     Dictionary<MapManager.GateDirection,Transform> Gate = new Dictionary<MapManager.GateDirection,Transform>();
     List<MapManager.GateDirection> connectedDirection = new List<MapManager.GateDirection>();
-    List<NewObjectPool.PoolInfo> enemyPools;
-    [SerializeField]
+    List<NewObjectPool.PoolInfo> enemyPools = new List<NewObjectPool.PoolInfo>();
     List<GameObject> enemys = new List<GameObject>();
     int monsterCounter = 0;
 
@@ -48,50 +47,27 @@ public class RoomManager : MonoBehaviour
         Gate.Add(MapManager.GateDirection.Right, rightGate);
         foreach(MapManager.GateDirection direction in MapManager.instance.gateDirections)
         {
-            Gate[direction].GetComponent<Gate>().DirectionSet(direction);
-            Gate[direction].gameObject.SetActive(false);
+            Gate temp = Gate[direction].GetComponent<Gate>();
+            temp.DirectionSet(direction);
         }
     }
     public void ActivateGate()
     {
-        foreach (MapManager.GateDirection direction in connectedDirection)
-        {
-            Gate[direction].gameObject.SetActive(true);
-        }
+        foreach (MapManager.GateDirection direction in connectedDirection) Gate[direction].GetComponent<Gate>().GateOpen();
     }
 
-    public void ConnectedSet(List<MapManager.GateDirection> directions)
-    {
-        connectedDirection = directions;
-    }
+    public void ConnectedSet(List<MapManager.GateDirection> directions) => connectedDirection = directions;
     public void RoomSetting()
     {
-        if (roomData.curRoomType == RoomData.RoomType.Event)
-        {
-            NPCSpawn();
-        }
-        if(roomData.curRoomType == RoomData.RoomType.Battle)
-        {
-            EnemySpawn();
-        }
-        if(roomData.curRoomType == RoomData.RoomType.Boss)
-        {
-            EnemySpawn();
-        }
-        if(roomData.curRoomType == RoomData.RoomType.Reward)
-        {
-            RewardSpawn();
-        }
+        if (roomData.curRoomType == RoomData.RoomType.Event) NPCSpawn();
+        if (roomData.curRoomType == RoomData.RoomType.Battle) EnemySpawn();
+        if (roomData.curRoomType == RoomData.RoomType.Boss) EnemySpawn();
+        if (roomData.curRoomType == RoomData.RoomType.Reward) RewardSpawn();
     }
     public void PlayerSpawn(Transform player,MapManager.GateDirection direction)
     {
-        if(direction == MapManager.GateDirection.Start)
-        {
-            player.position = center.position;
-            return;
-        }
-        player.position = center.position;
-        //player.position = Gate[direction].position;
+        if(direction == MapManager.GateDirection.Start) player.position = center.position;
+        else player.position = Gate[direction].transform.GetChild(0).position;
     }
     private void EnemySpawn()
     {
@@ -100,15 +76,13 @@ public class RoomManager : MonoBehaviour
         list.WaitForCompletion();
         if (monsterCounter > 0)
         {
-            enemyPools = new List<NewObjectPool.PoolInfo>();
-            foreach (GameObject enemy in enemys)
-            {
-                enemyPools.Add(NewObjectPool.instance.PoolInfoSet(enemy, 1, 3));
-            }
+            enemyPools.Clear();
+            foreach (GameObject enemy in enemys) enemyPools.Add(NewObjectPool.instance.PoolInfoSet(enemy, 6, 3));
+            Debug.Log(enemyPools.Count);
             foreach (Transform enemyPostion in SpawnPoint[Object.Enemy])
             {
-                var pool = enemyPools[Random.Range(0, enemyPools.Count)];
-                var monster = NewObjectPool.instance.Call(pool,enemyPostion.position).GetComponent<Monster>();
+                var monster = NewObjectPool.instance.Call(enemyPools[Random.Range(0, enemyPools.Count)], enemyPostion.position).GetComponent<Monster>();
+                monster.deadEvent -= SubMonsterCountEvent;
                 monster.deadEvent += SubMonsterCountEvent;
             }          
         }
@@ -131,46 +105,45 @@ public class RoomManager : MonoBehaviour
 
      }
 
-        private void SubMonsterCountEvent()
+    private void SubMonsterCountEvent()
+    {
+        monsterCounter--;
+        if (monsterCounter == 0) RewardSpawn();
+    }
+    private void NPCSpawn()
+    {
+        int count = SpawnPoint[Object.Npc].Count;
+        if (count > 0)
         {
-            monsterCounter--;
-            if (monsterCounter == 0)
+            List<GameObject> npc = AddressObject.LimitInstinates(roomData.npc_pack, count);
+            for (int i = 0; i < npc.Count; i++)
             {
-                RewardSpawn();
+                npc[i].transform.position = SpawnPoint[Object.Npc][i].position;
             }
         }
-        private void NPCSpawn()
-        {
-            int count = SpawnPoint[Object.Npc].Count;
-            if (count > 0)
-            {
-                List<GameObject> npc = AddressObject.LimitInstinates(roomData.npc_pack, count);
-                for (int i = 0; i < npc.Count; i++)
-                {
-                    npc[i].transform.position = SpawnPoint[Object.Npc][i].position;
-                }
-            }
-            ActivateGate();
-        }
-        private void RewardSpawn()
-        {
-            //List<GameObject> rewards = AddressObject.LimitRandomInstinates(roomData.reward_pack, SpawnPoint[Object.Reward].Count);
-            //for(int i = 0; i < rewards.Count; i++)
-            //{
-            //    rewards[i].transform.position = SpawnPoint[Object.Reward][i].position;
-            //}
-            ActivateGate();
-        }
+        ActivateGate();
+    }
+    private void RewardSpawn()
+    {
 
-        private List<Transform> CreateChildList(Transform transform)
+        //List<GameObject> rewards = AddressObject.LimitRandomInstinates(roomData.reward_pack, SpawnPoint[Object.Reward].Count);
+        //for(int i = 0; i < rewards.Count; i++)
+        //{
+        //    rewards[i].transform.position = SpawnPoint[Object.Reward][i].position;
+        //}
+        ActivateGate();
+    }
+
+    private List<Transform> CreateChildList(Transform transform)
+    {
+        List<Transform> childList = new List<Transform>();
+        for (int i = 0; i < transform.childCount; i++)
         {
-            List<Transform> childList = new List<Transform>();
-            for (int i = 0; i < transform.childCount; i++)
-            {
-                childList.Add(transform.GetChild(i));
-            }
-            return childList;
+            childList.Add(transform.GetChild(i));
         }
+        return childList;
+    }
+
 
 
 }

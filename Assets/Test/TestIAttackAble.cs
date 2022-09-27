@@ -14,6 +14,12 @@ public class TestIAttackAble : Monster, IAttackable
         StatusManager.instance.StatusEffectCreate[AsyncState.Type.Burn]?.Invoke(player,3);
     }
 
+    public void OnEnable()
+    {
+        ChangeState(MonState.Idle);
+        Invoke("MonsterTestDead", 4f);
+    }
 
+    public void MonsterTestDead() => curHp = 0;
 
 }

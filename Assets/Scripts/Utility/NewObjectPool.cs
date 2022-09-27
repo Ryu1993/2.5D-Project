@@ -25,24 +25,13 @@ public class NewObjectPool : Singleton<NewObjectPool>
     PoolInfo[] poolInfos;
     Dictionary<string, PoolInfo> poolInfoDic = new Dictionary<string, PoolInfo>();
     Dictionary<PoolInfo, Queue<GameObject>> poolDic = new Dictionary<PoolInfo, Queue<GameObject>>();
-    Transform active;
-    Transform deactive;
-    [SerializeField]
-    int PoolInfonum = 0;
+
 
 
     protected override void Awake()
     {
         base.Awake();
-        ActiveNoneActiveSet();
         AwakePoolInfoSet();
-    }
-    private void ActiveNoneActiveSet()
-    {
-        active = new GameObject("activePool").transform;
-        deactive = new GameObject("deactivePool").transform;
-        active.gameObject.SetActive(true);
-        deactive.gameObject.SetActive(false);
     }
     private void AwakePoolInfoSet()
     {
@@ -55,13 +44,12 @@ public class NewObjectPool : Singleton<NewObjectPool>
                     if (ReturnableCheck(poolInfo.poolObject)) continue;
                     if (PoolInfoSearch(poolInfo.poolObject)==null)
                     {
-                        PoolInfonum++;
                         Debug.Log(poolInfo.poolObject.name);
                         poolInfoDic.Add(poolInfo.poolObject.name, poolInfo);
                         poolDic.Add(poolInfo, new Queue<GameObject>());
                         for (int i = 0; i < poolInfo.start; i++)
                         {
-                            GameObject go = Instantiate(poolInfo.poolObject, deactive);
+                            GameObject go = Instantiate(poolInfo.poolObject, transform);
                             go.GetComponent<IReturnable>().PoolInfoSet(poolInfo);
                             poolDic[poolInfo].Enqueue(go);
 
@@ -81,11 +69,10 @@ public class NewObjectPool : Singleton<NewObjectPool>
         poolDic.Add(poolInfo, new Queue<GameObject>());
         for (int i = 0; i < poolInfo.start; i++)
         {
-            GameObject go = Instantiate(poolInfo.poolObject, deactive);
+            GameObject go = Instantiate(poolInfo.poolObject, transform);
             go.GetComponent<IReturnable>().PoolInfoSet(poolInfo);
             poolDic[poolInfo].Enqueue(go);
         }
-        PoolInfonum++;
         return poolInfo;
     }
     private bool ReturnableCheck(GameObject gameObject)
@@ -110,82 +97,34 @@ public class NewObjectPool : Singleton<NewObjectPool>
         Queue<GameObject> queue = poolDic[poolInfo];
         for(int i = 0; i < poolInfo.add; i++)
         {
-            GameObject go = Instantiate(poolInfo.poolObject, deactive);
+            GameObject go = Instantiate(poolInfo.poolObject, transform);
             go.GetComponent<IReturnable>().PoolInfoSet(poolInfo);
             queue.Enqueue(go);
         }
     }
     #region CallMethod
-    public Transform Call(PoolInfo poolInfo,Transform parent,Vector3 position)
-    {
-        Queue<GameObject> pool = poolDic[poolInfo];
-        if (pool.Count == 0) Add(poolInfo);
-        Transform callObject = pool.Dequeue().transform;
-        callObject.position = position;
-        callObject.SetParent(parent);
-        return callObject;
-    }
+    public Transform Call(PoolInfo poolInfo,Transform parent,Vector3 position) { return Call(poolInfo, parent, position, Quaternion.identity); }
+    public Transform Call(PoolInfo poolInfo, Transform parent, Quaternion rotate) { return Call(poolInfo, parent, Vector3.zero, rotate); }
+    public Transform Call(PoolInfo poolInfo, Vector3 positon, Quaternion rotate) { return Call(poolInfo, null, positon, rotate); }
+    public Transform Call(PoolInfo poolInfo, Transform transform) { return Call(poolInfo, transform, Vector3.zero, Quaternion.identity); }
+    public Transform Call(PoolInfo poolInfo, Vector3 positon) { return Call(poolInfo, null, positon, Quaternion.identity); }
+    public Transform Call(PoolInfo poolInfo) { return Call(poolInfo, null, Vector3.zero, Quaternion.identity); }
     public Transform Call(PoolInfo poolInfo,Transform parent,Vector3 position,Quaternion rotate)
     {
         Queue<GameObject> pool = poolDic[poolInfo];
         if (pool.Count == 0) Add(poolInfo);
         Transform callObject = pool.Dequeue().transform;
-        callObject.position = position;
+        if(position != Vector3.zero) callObject.position = position;
         callObject.rotation = rotate;
-        callObject.SetParent(parent);
-        return callObject;
-    }
-    public Transform Call(PoolInfo poolInfo,Transform parent,Quaternion rotate)
-    {
-        Queue<GameObject> pool = poolDic[poolInfo];
-        if (pool.Count == 0) Add(poolInfo);
-        Transform callObject = pool.Dequeue().transform;
-        callObject.position = parent.position;
-        callObject.rotation = rotate;
-        callObject.SetParent(parent);
-        return callObject;
-    }
-    public Transform Call(PoolInfo poolInfo,Vector3 positon,Quaternion rotate)
-    {
-        Queue<GameObject> pool = poolDic[poolInfo];
-        if(pool.Count == 0) Add(poolInfo);
-        Transform callObject = pool.Dequeue().transform;
-        callObject.position = positon;
-        callObject.rotation = rotate;
-        callObject.SetParent(active);
-        return callObject;
-    }
-    public Transform Call(PoolInfo poolInfo,Vector3 positon)
-    {
-        Queue<GameObject> pool = poolDic[poolInfo];
-        if (pool.Count == 0) Add(poolInfo);
-        Transform callObject = pool.Dequeue().transform;
-        callObject.position = positon;
-        callObject.SetParent(active);
-        return callObject;
-    }
-    public Transform Call(PoolInfo poolInfo,Transform transform)
-    {
-        Queue<GameObject> pool = poolDic[poolInfo];
-        if (pool.Count == 0) Add(poolInfo);
-        Transform callObject = pool.Dequeue().transform;
-        callObject.SetParent(transform,false);
+        callObject.gameObject.SetActive(true);
         return callObject;
     }
 
-    public Transform Call(PoolInfo poolInfo)
-    {
-        Queue<GameObject> pool = poolDic[poolInfo];
-        if (pool.Count == 0) Add(poolInfo);
-        Transform callObject = pool.Dequeue().transform;
-        callObject.SetParent(active);
-        return callObject;
-    }
     #endregion
     public void Return(GameObject gameObject, PoolInfo poolInfo)
     {
         poolDic[poolInfo].Enqueue(gameObject);
-        gameObject.transform.SetParent(deactive,false);
+        gameObject.SetActive(false);
     }
 
 }

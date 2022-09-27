@@ -32,21 +32,16 @@ public class Monster : Character,IReturnable
     }
     public void Return()
     {
-        NewObjectPool.instance.Return(this.gameObject, poolInfo);
         _curHp = _maxHp;
         HitInput = null;
+        stateMachine.ResetState();
+        NewObjectPool.instance.Return(this.gameObject, poolInfo);
     }
     #endregion
 
-    private void Awake()
-    {
-        StateSet();
-    }
+    private void Awake() => StateSet();
+    private void OnEnable() => ChangeState(MonState.Idle);
 
-    private void OnEnable()
-    {
-        ChangeState(MonState.Idle);
-    }
 
     public void StateSet()
     {
@@ -88,7 +83,7 @@ public class Monster : Character,IReturnable
     }
     public bool MonsterHitCheck() => HitInput != null;
     public void AttackDelayCountReset() => attackDelayCount = 0;
-    public void MonsterMove() => navMeshAgent.SetDestination(MonsterBehaviourManager.instance.playerPosition);
+    public void MonsterMove() { if (navMeshAgent.isOnNavMesh) navMeshAgent.SetDestination(MonsterBehaviourManager.instance.playerPosition); }
     public void MonsterMoveSwitch() => navMeshAgent.enabled = !navMeshAgent.enabled;
     public void MonsterKinematicSwitch() => rigi.isKinematic = !rigi.isKinematic;
     public void MonsterAnimationkStateSwitch() => isAnimation = !isAnimation;

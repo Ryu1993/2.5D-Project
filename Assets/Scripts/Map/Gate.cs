@@ -5,15 +5,26 @@ using UnityEngine;
 public class Gate : MonoBehaviour
 {
     MapManager.GateDirection curDirection;
+    bool isOpen;
+    [SerializeField]
+    Transform gateParticle;
 
     public void DirectionSet(MapManager.GateDirection direction)
     {
+        gateParticle.gameObject.SetActive(false);
         curDirection = direction;
     }
-    private void OnCollisionEnter(Collision collision)
+    public void GateOpen()
     {
-        MapManager.instance.MapEnter(curDirection);
+        gateParticle.gameObject.SetActive(true);
+        isOpen = true;
     }
+    private void OnTriggerEnter(Collider other)
+    {
+        if (!isOpen) return;
+        MapManager.instance.MapEnter(curDirection);
 
+    }
+    
 
 }

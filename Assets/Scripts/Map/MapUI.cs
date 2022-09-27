@@ -13,7 +13,9 @@ public class MapUI : MonoBehaviour
     float roomIconLength;
     [SerializeField]
     Vector2 mapMove;
-    bool isMoving;
+    Coroutine curCoroutine;
+    Vector3 targetVec;
+
     public void CreateRoomIcon(List<MapManager.RoomConnectInfo> allRoomList)
     {
         foreach(MapManager.RoomConnectInfo roomInfo in allRoomList)
@@ -26,48 +28,27 @@ public class MapUI : MonoBehaviour
     public void MapMove(MapManager.GateDirection direction)
     {
         Vector3 temp = new Vector3();
-        if(direction==MapManager.GateDirection.Up)
+        if(direction==MapManager.GateDirection.Up) temp = mapMove * new Vector2(0, -1);
+        if (direction==MapManager.GateDirection.Down) temp = mapMove * new Vector2(0, 1);
+        if (direction==MapManager.GateDirection.Right) temp = mapMove * new Vector2(-1, 0);
+        if (direction==MapManager.GateDirection.Left) temp = mapMove * new Vector2(1, 0);
+        if(curCoroutine!=null)
         {
-            temp = mapMove * new Vector2(0, -1);           
+            StopCoroutine(curCoroutine);
+            mapUIRect.localPosition = targetVec;
         }
-        if(direction==MapManager.GateDirection.Down)
-        {
-            temp = mapMove * new Vector2(0, 1);
-        }
-        if(direction==MapManager.GateDirection.Right)
-        {
-            temp = mapMove * new Vector2(-1,0);
-        }
-        if(direction==MapManager.GateDirection.Left)
-        {
-            temp = mapMove * new Vector2(1, 0);
-        }
-        if(isMoving)
-        {
-            isMoving = false;
-        }
-        StartCoroutine(CoMapMove(temp));
+        curCoroutine = StartCoroutine(CoMapMove(temp));
     }
 
     IEnumerator CoMapMove(Vector3 temp)
     {
-        isMoving = true;
-        bool xpos = false;
-        bool ypos = false;
-        Vector3 targetVec = mapUIRect.localPosition + temp;
-        while(!xpos||!ypos)
+        targetVec = mapUIRect.localPosition + temp;
+        while(!(mapUIRect.localPosition.x < targetVec.x + 3 && mapUIRect.localPosition.x > targetVec.x - 3) ||!(mapUIRect.localPosition.y < targetVec.y + 3 && mapUIRect.localPosition.y > targetVec.y - 3))
         {
-            if(!isMoving)
-            {
-                break;
-            }
-            xpos = mapUIRect.localPosition.x < targetVec.x + 3 && mapUIRect.localPosition.x > targetVec.x - 3;
-            ypos = mapUIRect.localPosition.y < targetVec.y + 3 && mapUIRect.localPosition.y > targetVec.y - 3;
             mapUIRect.localPosition = Vector3.Lerp(mapUIRect.localPosition, targetVec, Time.deltaTime);
             yield return null;
         }
         mapUIRect.localPosition = targetVec;
-        isMoving = false;
     }
 
 

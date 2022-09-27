@@ -25,8 +25,7 @@ MonoBehaviour:
   - m_GUID: 4ccd81eaebb73744f8c4b7f81d3426fd
     m_Address: Assets/Prefabs/Map/Room 1.prefab
     m_ReadOnly: 0
-    m_SerializedLabels:
-    - TestMap_Label
+    m_SerializedLabels: []
   - m_GUID: 00365a8be4c912a479147c6651ab7f42
     m_Address: Assets/Prefabs/Item/SceneItem.prefab
     m_ReadOnly: 0
@@ -42,6 +41,16 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - TestWeapon_Label
+  - m_GUID: 60d5061a992cc774a8e79b29abfe1a48
+    m_Address: Assets/Prefabs/Map/CaveRoom.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - TestMap_Label
+  - m_GUID: 3087254b52fc5534bb0108615ea9ae7e
+    m_Address: Assets/Prefabs/Monster/Slime_02.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - TestEnemy_Label
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: a36bbc9cce32b754382bb97867bcb24f, type: 2}
   m_SchemaSet:

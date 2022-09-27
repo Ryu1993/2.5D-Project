@@ -7,7 +7,6 @@ public class StateMachine<T1, T2> where T2 : MonoBehaviour
     private T2 Order;
     private State<T2> curState;
     private Dictionary<T1, State<T2>> states;
-    private Coroutine curCoroutine;
 
     public StateMachine(T2 Owner)
     {
@@ -27,6 +26,6 @@ public class StateMachine<T1, T2> where T2 : MonoBehaviour
         curState = states[type];
         curState.Enter(Order);
     }
-
+    public void ResetState() => curState = null;
 
 }
