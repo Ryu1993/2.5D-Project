@@ -231,7 +231,6 @@ public class Player : Character
     {
         if (isBehaviorExecuted) return;
         if (!isAttackBehavior&&!isSuperAttackBehavior) return;
-        Debug.Log("°ø°ÝÁß");
         rigi.velocity = Vector3.zero;
         if (!weaponContainer.isProgress)
         {
