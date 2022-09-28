@@ -1,35 +1,47 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
-using Cysharp.Threading.Tasks;
+using UnityEngine.UI;
 
 public class LoadingUI : Singleton<LoadingUI>
 {
     [SerializeField]
     GameObject loadingUI;
+    [SerializeField]
+    Image loadingImage;
 
     protected override void Awake()
     {
         base.Awake();
-        DontDestroyOnLoad(this);
+        DontDestroyOnLoad(this.gameObject);
+        this.gameObject.SetActive(false);
     }
+    public Coroutine CallLoading(AsyncOperation operation) => StartCoroutine(CoCallLoading(operation));
 
-    public async UniTask CallLoading(List<UniTask> actions)
+    IEnumerator CoCallLoading(AsyncOperation operation)
     {
         loadingUI.SetActive(true);
+        loadingImage.fillAmount = 0f;
         float count = 0;
-        float complete = actions.Count;
-        foreach (var action in actions)
+        while(true)
         {
-            count++;
-            Debug.Log(count / complete * 100);
-            await action;
+            if (!operation.isDone)
+            {
+                count += Time.deltaTime;
+                loadingImage.fillAmount = count / 10f;
+            }
+            else break;
+            yield return null;
         }
+        loadingImage.fillAmount = 1f;
+        yield return WaitList.oneSecond;
         loadingUI.SetActive(false);
     }
 
-    
+   
+
+
 
 
 

@@ -13,7 +13,7 @@ public class PlayerInfo : ScriptableObject
     public int player_maxHp;
     [Range(0f, 12f)]
     public int player_curHp;
-
+    public int curStage;
 
 
 

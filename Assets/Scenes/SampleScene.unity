@@ -6306,11 +6306,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 779457539}
-  - component: {fileID: 779457538}
   - component: {fileID: 779457540}
   - component: {fileID: 779457541}
   - component: {fileID: 779457542}
   - component: {fileID: 779457543}
+  - component: {fileID: 779457538}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -16438,5 +16438,15 @@ PrefabInstance:
       propertyPath: mousePointer
       value: 
       objectReference: {fileID: 1253433005}
+    - target: {fileID: 8333478161054491091, guid: 1b2dd955f6244c34abcac62ddb9db64e,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.33
+      objectReference: {fileID: 0}
+    - target: {fileID: 8333478161054491091, guid: 1b2dd955f6244c34abcac62ddb9db64e,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.45
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1b2dd955f6244c34abcac62ddb9db64e, type: 3}

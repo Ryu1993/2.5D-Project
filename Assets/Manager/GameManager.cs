@@ -6,7 +6,7 @@ using UnityEngine.Events;
 public class GameManager : Singleton<GameManager>
 {
     [SerializeField]
-    private PlayerInfo savePlayerInfo;
+    public PlayerInfo savePlayerInfo;
     public PlayerInfo playerInfo;
     public Player scenePlayer;
     public bool isSetComplete;
