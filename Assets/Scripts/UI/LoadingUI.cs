@@ -17,21 +17,19 @@ public class LoadingUI : Singleton<LoadingUI>
         DontDestroyOnLoad(this.gameObject);
         this.gameObject.SetActive(false);
     }
-    public Coroutine CallLoading(AsyncOperation operation) => StartCoroutine(CoCallLoading(operation));
-
-    IEnumerator CoCallLoading(AsyncOperation operation)
+    public Coroutine CallLoading(AsyncOperation operation)
     {
         loadingUI.SetActive(true);
+        return StartCoroutine(CoCallLoading(operation));
+    }
+
+    IEnumerator CoCallLoading(AsyncOperation operation)
+    { 
         loadingImage.fillAmount = 0f;
-        float count = 0;
-        while(true)
+        while (!operation.isDone)
         {
-            if (!operation.isDone)
-            {
-                count += Time.deltaTime;
-                loadingImage.fillAmount = count / 10f;
-            }
-            else break;
+            loadingImage.fillAmount = operation.progress;
+            if (operation.progress > 0.8f) operation.allowSceneActivation = true;
             yield return null;
         }
         loadingImage.fillAmount = 1f;

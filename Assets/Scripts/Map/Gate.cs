@@ -8,22 +8,22 @@ public class Gate : MonoBehaviour
     bool isOpen;
     [SerializeField]
     Transform gateParticle;
+    [SerializeField]
+    BoxCollider colli;
 
     public void DirectionSet(MapManager.GateDirection direction)
     {
-        gateParticle.gameObject.SetActive(false);
+        gateParticle.gameObject.SetActive(true);
         curDirection = direction;
     }
     public void GateOpen()
     {
-        gateParticle.gameObject.SetActive(true);
-        isOpen = true;
+        gateParticle.gameObject.SetActive(false);
+        colli.isTrigger = true;
     }
     private void OnTriggerEnter(Collider other)
     {
-        if (!isOpen) return;
         MapManager.instance.MapEnter(curDirection);
-
     }
     
 

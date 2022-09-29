@@ -51,6 +51,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - TestEnemy_Label
+  - m_GUID: 290fbc44314b8594c8315ed636065b2d
+    m_Address: Assets/Prefabs/Map/PixelMapSample.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - TestMap_Label
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: a36bbc9cce32b754382bb97867bcb24f, type: 2}
   m_SchemaSet:

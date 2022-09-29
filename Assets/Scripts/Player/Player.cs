@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(Rigidbody))]
 public class Player : Character
 {
     //private State curDirection;
     public bool isReady { private set; get; }
+    public float dashSpeed;
     private bool isHit;
     private bool isInvicible;
     private bool isDashInvincible;
@@ -104,19 +106,28 @@ public class Player : Character
     IEnumerator CoSetting()
     {
         yield return WaitList.isGameManagerSet;
-        yield return WaitList.isSingletonSet;
-        _maxHp = GameManager.instance.playerInfo.player_maxHp;
-        _curHp = GameManager.instance.playerInfo.player_curHp;
-        if(GameManager.instance.playerInfo.curEquip!=null) ItemManager.instance.PlayerGetWeapon(GameManager.instance.playerInfo.curEquip);
-        if(GameManager.instance.playerInfo.inventory.Count!=0)
+        if(SceneManager.GetActiveScene().name== "GameScene")
         {
-            foreach (Item item in GameManager.instance.playerInfo.inventory)
+            yield return WaitList.isSingletonSet;
+            _maxHp = GameManager.instance.playerInfo.player_maxHp;
+            _curHp = GameManager.instance.playerInfo.player_curHp;
+            if (GameManager.instance.playerInfo.curEquip != null) ItemManager.instance.PlayerGetWeapon(GameManager.instance.playerInfo.curEquip);
+            if (GameManager.instance.playerInfo.inventory.Count != 0)
             {
-                Artifact artifact = item as Artifact;
-                if(artifact!=null) ItemManager.instance.PlayerGetArtifact(artifact);
+                foreach (Item item in GameManager.instance.playerInfo.inventory)
+                {
+                    Artifact artifact = item as Artifact;
+                    if (artifact != null) ItemManager.instance.PlayerGetArtifact(artifact);
+                }
             }
+            InputCheckSet();
         }
-        InputCheckSet();
+        else
+        {
+            InputCheck += MoveInput;
+            InputCheck += AttackInput;
+            InputCheck += DashInput;
+        }
         BehaviorExcuteSet();
         isReady = true;
     }
@@ -214,7 +225,7 @@ public class Player : Character
         if (isBehaviorExecuted) return; // 필요없음
         if (!isDashBehavior) return;
         AttackComboCancle();
-        rigi.velocity = (mousePointer.position-transform.position).normalized * moveSpeed * 2;
+        rigi.velocity = (mousePointer.position - transform.position).normalized * dashSpeed;
         InputCheck -= MoveInput;
         InputCheck -= AttackInput;
         InputCheck -= SkillInput;

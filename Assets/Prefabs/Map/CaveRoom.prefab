@@ -423,10 +423,7 @@ MonoBehaviour:
   enemyPointer: {fileID: 5199282312472344677}
   npcPointer: {fileID: 6139777307603559619}
   rewardPointer: {fileID: 8410367298064533424}
-  upGate: {fileID: 7296939169604059865}
-  downGate: {fileID: 314486068974878840}
-  leftGate: {fileID: 1211426518571145559}
-  rightGate: {fileID: 8774200509032411536}
+  gate: {fileID: 5199282312214288185}
   center: {fileID: 5199282311427169149}
 --- !u!1 &5199282311948538414
 GameObject:

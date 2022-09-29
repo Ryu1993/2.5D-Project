@@ -14,10 +14,7 @@ public class RoomManager : MonoBehaviour
     [SerializeField] Transform enemyPointer;
     [SerializeField] Transform npcPointer;
     [SerializeField] Transform rewardPointer;
-    [SerializeField] Transform upGate;
-    [SerializeField] Transform downGate;
-    [SerializeField] Transform leftGate;
-    [SerializeField] Transform rightGate;
+    [SerializeField] Transform gate;
     [SerializeField] Transform center;
     Dictionary<Object, List<Transform>> SpawnPoint = new Dictionary<Object, List<Transform>>();
     Dictionary<MapManager.GateDirection,Transform> Gate = new Dictionary<MapManager.GateDirection,Transform>();
@@ -41,10 +38,10 @@ public class RoomManager : MonoBehaviour
     private void CreateGate()
     {
         Gate.Clear();
-        Gate.Add(MapManager.GateDirection.Up, upGate);
-        Gate.Add(MapManager.GateDirection.Down, downGate);
-        Gate.Add(MapManager.GateDirection.Left, leftGate);
-        Gate.Add(MapManager.GateDirection.Right, rightGate);
+        Gate.Add(MapManager.GateDirection.Up, gate.Find("Up"));
+        Gate.Add(MapManager.GateDirection.Down, gate.Find("Down"));
+        Gate.Add(MapManager.GateDirection.Left, gate.Find("Left"));
+        Gate.Add(MapManager.GateDirection.Right, gate.Find("Right"));
         foreach(MapManager.GateDirection direction in MapManager.instance.gateDirections)
         {
             Gate temp = Gate[direction].GetComponent<Gate>();
