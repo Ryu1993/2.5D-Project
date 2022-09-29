@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
-
+using UnityEngine.VFX;
 
 public class WeaponContainer : MonoBehaviour
 {
@@ -19,6 +19,7 @@ public class WeaponContainer : MonoBehaviour
     private MeshFilter containerBackFilter;
     [SerializeField]
     private MeshRenderer containerBackRenderer;
+    public VisualEffect visualEffect;
     public Transform weaponSlot;
     public UnityAction weaponAttack;
     public bool superArmor;
@@ -41,10 +42,8 @@ public class WeaponContainer : MonoBehaviour
         weaponAttack = curWeapon.WeaponAttack;
         animator.SetBool(curWeapon.type.ToString(), true);
     }
-    private void CurWeaponAttack()
-    {
-        weaponAttack?.Invoke();
-    }
+    private void CurWeaponAttack()=> weaponAttack?.Invoke();
+
     private void MaterialNoiseSet() => StartCoroutine(CoMaterialNoise());
     private IEnumerator CoMaterialNoise()
     {
@@ -103,6 +102,12 @@ public class WeaponContainer : MonoBehaviour
             yield return delay;
         }
         isoffDelay = false;
+    }
+
+
+    public void TestTemp()
+    {
+        visualEffect.Play();
     }
 
 

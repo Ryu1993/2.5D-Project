@@ -106,7 +106,7 @@ public class Player : Character
     IEnumerator CoSetting()
     {
         yield return WaitList.isGameManagerSet;
-        if(SceneManager.GetActiveScene().name== "GameScene")
+        if(/*SceneManager.GetActiveScene().name== "GameScene"*/true)
         {
             yield return WaitList.isSingletonSet;
             _maxHp = GameManager.instance.playerInfo.player_maxHp;
@@ -167,7 +167,8 @@ public class Player : Character
         if (!Input.GetMouseButton(0)) { weaponContainer.WeaponAnimationOff(); return; }
         if (weaponContainer.weaponAttack == null) { AttackBehavior = null; return; }
         if (weaponContainer.superArmor) isSuperAttackBehavior = true;
-        AttackBehavior = weaponContainer.WeaponAnimationOn;
+        //AttackBehavior = weaponContainer.WeaponAnimationOn;
+        AttackBehavior = weaponContainer.TestTemp;
         isAttackBehavior = true;
     }
     private void DashInput()
@@ -251,7 +252,7 @@ public class Player : Character
             CooltimeCounter += ComboCount;
         }
         else comboCount = 0;
-        AttackBehavior?.Invoke();
+        if(weaponContainer.visualEffect.aliveParticleCount!=0) AttackBehavior?.Invoke();
         isBehaviorExecuted = true;
     }
     private void PlayerSkill()
