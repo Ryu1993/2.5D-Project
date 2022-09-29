@@ -684,7 +684,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   curAction: 0
-  moveSpeed: 1
+  moveSpeed: 3
   animator: {fileID: 2947975029313614330}
   rigi: {fileID: 5921074382065471998}
   curStatusEffect: 
