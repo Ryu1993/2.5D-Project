@@ -53,7 +53,7 @@ public class Player : Character
     [SerializeField]
     private float invincibleTime;
     private float invincibleCount = 0;
-    private float comboTime = 0.4f;
+    public float comboTime = 0.5f;
     private float comboCount = 0f;
     #endregion
     #region PlayerStat
@@ -164,11 +164,10 @@ public class Player : Character
     }
     private void AttackInput()
     {
-        if (!Input.GetMouseButton(0)) { weaponContainer.WeaponAnimationOff(); return; }
+        if (!Input.GetMouseButton(0)) return;
         if (weaponContainer.weaponAttack == null) { AttackBehavior = null; return; }
         if (weaponContainer.superArmor) isSuperAttackBehavior = true;
-        //AttackBehavior = weaponContainer.WeaponAnimationOn;
-        AttackBehavior = weaponContainer.TestTemp;
+        AttackBehavior = weaponContainer.WeaponAnimationOn;
         isAttackBehavior = true;
     }
     private void DashInput()
@@ -194,7 +193,7 @@ public class Player : Character
         if (isInvicible) return;
         if (isDashInvincible) return;
         if (HitInput == null) return;
-        weaponContainer.WeaponAnimationOff();
+        ComboCancle();
         animator.SetTrigger("MotionStop");
         HitInput?.Invoke(this);
         isHit = true;
@@ -225,7 +224,7 @@ public class Player : Character
     {
         if (isBehaviorExecuted) return; // 필요없음
         if (!isDashBehavior) return;
-        AttackComboCancle();
+        ComboCancle();
         rigi.velocity = (mousePointer.position - transform.position).normalized * dashSpeed;
         InputCheck -= MoveInput;
         InputCheck -= AttackInput;
@@ -243,16 +242,18 @@ public class Player : Character
     {
         if (isBehaviorExecuted) return;
         if (!isAttackBehavior&&!isSuperAttackBehavior) return;
+        if (weaponContainer.isComboCooltime) return;
         rigi.velocity = Vector3.zero;
-        if (!weaponContainer.isProgress)
+        if (!isComboBehaviour)
         {
             animator.SetBool("Attack", true);
+            weaponContainer.StartCoroutine(weaponContainer.CoMaterialNoise(true));
             InputCheck -= MoveInput;
-            isComboBehaviour = true;
             CooltimeCounter += ComboCount;
+            isComboBehaviour = true;
         }
         else comboCount = 0;
-        if(weaponContainer.visualEffect.aliveParticleCount!=0) AttackBehavior?.Invoke();
+        AttackBehavior?.Invoke();
         isBehaviorExecuted = true;
     }
     private void PlayerSkill()
@@ -305,38 +306,49 @@ public class Player : Character
     private void ComboCount()
     {
         comboCount += 0.02f;
-        if(comboCount>=comboTime||!weaponContainer.isProgress)
-        {       
-            weaponContainer.WeaponAnimationOff();
-            ComboEnd();
-        }
+        if(comboCount>=comboTime||weaponContainer.comboCount>=3) ComboEnd();
     }
     private void ComboEnd()
     {
         animator.SetBool("Attack", false);
         animator.Update(0f);
-        isComboBehaviour = false;
+        StartCoroutine(weaponContainer.CoMaterialNoise(false));
+        CooltimeCounter += ComboCooltime;
         CooltimeCounter -= ComboCount;
         InputCheck += MoveInput;
+        weaponContainer.isComboCooltime = true;
+        isComboBehaviour = false;
+        weaponContainer.comboCount = 0;
         comboCount = 0;
     }
+    private void ComboCancle()
+    {
+        if (!weaponContainer.weaponVFX.gameObject.activeSelf) return;
+        weaponContainer.WeaponAnimationCancle();
+        if (!isComboBehaviour) return;
+        ComboEnd();
+    }
+
+    public void ComboCooltime()
+    {
+        weaponContainer.comboCoolCount += 0.02f;
+        if (weaponContainer.comboCoolCount >= weaponContainer.comboDelay)
+        {
+            CooltimeCounter -= ComboCooltime;
+            weaponContainer.isComboCooltime = false;
+            weaponContainer.comboCoolCount = 0f;
+        }
+
+    }
+
+
 
 
     #endregion
     public void PlayerKinematic() => rigi.isKinematic = !rigi.isKinematic;
-    private void AttackComboCancle()
-    {
-        if (!weaponContainer.isProgress) return;
-        weaponContainer.WeaponAnimationOffUpdate();
-        if (!isComboBehaviour) return;
-        ComboEnd();
-    }
-    //private void RightCheck()
-    //{
-    //    if (transform.position.x < mousePointer.position.x) { spriteTransform.localScale = new Vector3(1, 1, 1); }
-    //    else { spriteTransform.localScale = new Vector3(-1, 1, 1); }
-    //}
-    
+    public void CoolTimeCountAdd(UnityAction action) => CooltimeCounter += action;
+
+    public void CoolTimeCountSub(UnityAction action) => CooltimeCounter -= action;
 
 
 

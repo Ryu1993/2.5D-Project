@@ -80,7 +80,6 @@ namespace MonsterState
         {
             base.Enter(order);
             order.animator.SetTrigger("Ready");
-            Debug.Log("준비");
         }
         public override void Progress()
         {
@@ -102,15 +101,14 @@ namespace MonsterState
         {
             base.Enter(order);
             order.animator.SetTrigger("Attack");
-            Debug.Log("공격");
+            order.animator.Update(0);
         }
         public override void Progress()
         {
- 
             order.HitInput?.Invoke(order);
             order.HitInput = null;
             if (order.DeadCheck()) order.ChangeState(Monster.MonState.Dead);
-            else if (!order.isAnimation) order.ChangeState(Monster.MonState.Idle);
+            else if (!order.animator.GetCurrentAnimatorStateInfo(0).IsName("Attack")) order.ChangeState(Monster.MonState.Idle);
         }
     }
     public class Dead : BaseState

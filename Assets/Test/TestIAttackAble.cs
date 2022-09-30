@@ -17,7 +17,7 @@ public class TestIAttackAble : Monster, IAttackable
     public void OnEnable()
     {
         ChangeState(MonState.Idle);
-        Invoke("MonsterTestDead", 4f);
+        //Invoke("MonsterTestDead", 4f);
     }
 
     public void MonsterTestDead() => curHp = 0;

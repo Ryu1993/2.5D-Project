@@ -20,8 +20,11 @@ public class Monster : Character,IReturnable
     protected float attackDelay;
     [SerializeField]
     protected float attackDelayCount = 0;
+    public int isAttack { get; private set; }
     public bool isAnimation;
     private Collider[] attackBox = new Collider[1];
+
+
     #region Returnable
     public UnityAction deadEvent;
     protected NewObjectPool.PoolInfo poolInfo;
@@ -45,6 +48,7 @@ public class Monster : Character,IReturnable
 
     public void StateSet()
     {
+        isAttack = Animator.StringToHash("isAttack");
         stateMachine = new StateMachine<MonState, Monster>(this);
         stateMachine.AddState(MonState.Idle, new MonsterState.Idle());
         stateMachine.AddState(MonState.Ready, new MonsterState.Ready());
