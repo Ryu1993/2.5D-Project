@@ -46,10 +46,16 @@ public class ItemManager : Singleton<ItemManager>
     }
     public void ArtifactEffectAdd()
     {
+        ArtifactEffet.Add(Artifact.ArtifactType.MaxHp, MaxHpUp);
 
     }
 
+    private void MaxHpUp(float strength)
+    {
+        player.maxHp += strength;
+        player.curHp += strength;
 
+    }
 
 
 

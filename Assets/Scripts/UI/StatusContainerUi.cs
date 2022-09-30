@@ -18,11 +18,11 @@ public class StatusContainerUi : MonoBehaviour
     {
         DicInfoSet();
     }
-    private void Start()
+    private IEnumerator Start()
     {
-        statusIconKey = NewObjectPool.instance.PoolInfoSet(statusIcon,6,3);
-    }
-
+        yield return new WaitUntil(() => NewObjectPool.instance != null);
+        statusIconKey = NewObjectPool.instance.PoolInfoSet(statusIcon, 6, 3);
+    } 
     public void DicInfoSet() // sprite ¶û ¿©±â¼­ ¸ÅÄª
     {
         statusSprite.Add(AsyncState.Type.Burn, statusSprites[0]);

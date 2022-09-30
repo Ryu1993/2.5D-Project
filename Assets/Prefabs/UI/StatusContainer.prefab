@@ -78,5 +78,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   statusSprites:
   - {fileID: 8591371974239785519, guid: 236587ec711348a4792e0060efb1bf73, type: 3}
+  - {fileID: 9013237672872523571, guid: 236587ec711348a4792e0060efb1bf73, type: 3}
   statusIcon: {fileID: 2632588244103002326, guid: d2ae6b5808491e64c8c5e3b0f59c4a37,
     type: 3}

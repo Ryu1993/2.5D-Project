@@ -6,6 +6,6 @@ using UnityEngine.Events;
 public interface IDamageable
 {
     public Character Hit(IAttackable attacker, Vector3 attackPosition);
-    public void DirectHit();
+    public void DirectHit(float damage);
 
 }

@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68772259fe93aa84b91e394341dd07e5, type: 3}
+  m_Name: BasicSword
+  m_EditorClassIdentifier: 
+  Type: 0
+  itemCardText: "\uAE30\uBCF8 \uAC80"
+  simpleOptionText: "\uACF5\uACA9\uB825 : 1"
+  backBg: {fileID: 0}
+  backFrame: {fileID: 0}
+  element: {fileID: 0}
+  rarity: {fileID: 0}
+  cardIcon: {fileID: 1082946510, guid: f443545130963e441a211979f438c973, type: 3}
+  simpleIcon: {fileID: 0}
+  simpleRarity: {fileID: 0}
+  simpleIconFrame: {fileID: 0}
+  weaponPrefab:
+    m_LabelString: Tutorial_Weapon

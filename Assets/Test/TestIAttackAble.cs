@@ -3,20 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class TestIAttackAble : Monster, IAttackable
+public class TestIAttackAble : Monster
 {
     Player player;
 
-    public void Attack(IDamageable target)
+    public override void Attack(IDamageable target)
     {
-        target.DirectHit();
+        target.DirectHit(0);
         if (player == null) return;
         StatusManager.instance.StatusEffectCreate[AsyncState.Type.Burn]?.Invoke(player,3);
     }
 
-    public void OnEnable()
+    protected override void OnEnable()
     {
-        ChangeState(MonState.Idle);
+        base.OnEnable();
         //Invoke("MonsterTestDead", 4f);
     }
 

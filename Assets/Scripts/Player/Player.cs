@@ -82,13 +82,12 @@ public class Player : Character
     public Coroutine coUpdate;
     #endregion
 
-
-    private void Awake() => StartCoroutine(CoSetting());
     private void Start() => coUpdate = StartCoroutine(CoUpdate());
 
     #region Setting
     IEnumerator CoUpdate()
     {
+        yield return new WaitUntil(() => isReady);
         while(true)
         {        
             CooltimeCounter?.Invoke();
@@ -103,34 +102,26 @@ public class Player : Character
         }
     }
 
-    IEnumerator CoSetting()
+    public void  PlayerSetting()
     {
-        yield return WaitList.isGameManagerSet;
-        if(/*SceneManager.GetActiveScene().name== "GameScene"*/true)
+        _maxHp = GameManager.instance.playerInfo.player_maxHp;
+        _curHp = GameManager.instance.playerInfo.player_curHp;
+        if (GameManager.instance.playerInfo.curEquip != null) ItemManager.instance.PlayerGetWeapon(GameManager.instance.playerInfo.curEquip);
+        if (GameManager.instance.playerInfo.inventory.Count != 0)
         {
-            yield return WaitList.isSingletonSet;
-            _maxHp = GameManager.instance.playerInfo.player_maxHp;
-            _curHp = GameManager.instance.playerInfo.player_curHp;
-            if (GameManager.instance.playerInfo.curEquip != null) ItemManager.instance.PlayerGetWeapon(GameManager.instance.playerInfo.curEquip);
-            if (GameManager.instance.playerInfo.inventory.Count != 0)
+            foreach (Item item in GameManager.instance.playerInfo.inventory)
             {
-                foreach (Item item in GameManager.instance.playerInfo.inventory)
-                {
-                    Artifact artifact = item as Artifact;
-                    if (artifact != null) ItemManager.instance.PlayerGetArtifact(artifact);
-                }
+                Artifact artifact = item as Artifact;
+                if (artifact != null) ItemManager.instance.PlayerGetArtifact(artifact);
             }
-            InputCheckSet();
         }
-        else
-        {
-            InputCheck += MoveInput;
-            InputCheck += AttackInput;
-            InputCheck += DashInput;
-        }
+        InputCheckSet();
         BehaviorExcuteSet();
         isReady = true;
     }
+
+
+
 
     private void BehaviorExcuteSet()
     {
@@ -264,6 +255,13 @@ public class Player : Character
     }
     #endregion
     #region CooltimeCounter
+
+    public override void DirectHit(float damage)
+    {
+        rigi.velocity = Vector3.zero;
+        rigi.AddForce(crashVec * 30);
+        curHp -= damage;
+    }
     private void DashCoolCount()
     {
         dashCoolCount += 0.02f;
@@ -346,9 +344,6 @@ public class Player : Character
 
     #endregion
     public void PlayerKinematic() => rigi.isKinematic = !rigi.isKinematic;
-    public void CoolTimeCountAdd(UnityAction action) => CooltimeCounter += action;
-
-    public void CoolTimeCountSub(UnityAction action) => CooltimeCounter -= action;
 
 
 

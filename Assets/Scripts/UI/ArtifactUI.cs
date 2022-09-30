@@ -5,7 +5,6 @@ using UnityEngine.UI;
 
 public class ArtifactUI : MonoBehaviour
 {
-    PlayerInfo playerInfo;
     [SerializeField]
     GameObject subContainer;
     List<List<Transform>> artifactSlotsList = new List<List<Transform>>();

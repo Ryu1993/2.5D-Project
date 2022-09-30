@@ -3,11 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.AI;
+using System;
+using MonsterState;
 
-public class Monster : Character,IReturnable
+public class Monster : Character,IReturnable,IAttackable
 {
     public enum MonState { Idle,Chase,Ready,Attack,Hit,Dead}
     protected StateMachine<MonState, Monster> stateMachine;
+    [SerializeField]
+    Transform direction;
+    [SerializeField]
+    Transform realDirection;
+    [SerializeField]
+    Transform graphic;
     [SerializeField]
     protected NavMeshAgent navMeshAgent;
     [SerializeField]
@@ -22,7 +30,8 @@ public class Monster : Character,IReturnable
     protected float attackDelayCount = 0;
     public int isAttack { get; private set; }
     public bool isAnimation;
-    private Collider[] attackBox = new Collider[1];
+    public float damage;
+    protected Collider[] attackBox = new Collider[1];
 
 
     #region Returnable
@@ -43,7 +52,7 @@ public class Monster : Character,IReturnable
     #endregion
 
     private void Awake() => StateSet();
-    private void OnEnable() => ChangeState(MonState.Idle);
+    protected virtual void OnEnable() => StartCoroutine(CoChangeState());
 
 
     public void StateSet()
@@ -52,12 +61,24 @@ public class Monster : Character,IReturnable
         stateMachine = new StateMachine<MonState, Monster>(this);
         stateMachine.AddState(MonState.Idle, new MonsterState.Idle());
         stateMachine.AddState(MonState.Ready, new MonsterState.Ready());
-        stateMachine.AddState(MonState.Chase,new MonsterState.Chase());
-        stateMachine.AddState(MonState.Attack,new MonsterState.Attack());
-        stateMachine.AddState(MonState.Hit,new MonsterState.Hit());
-        stateMachine.AddState(MonState.Dead,new MonsterState.Dead());
+        stateMachine.AddState(MonState.Chase, new MonsterState.Chase());
+        stateMachine.AddState(MonState.Attack, new MonsterState.Attack());
+        stateMachine.AddState(MonState.Hit, new MonsterState.Hit());
+        stateMachine.AddState(MonState.Dead, new MonsterState.Dead());
         _curHp = _maxHp;
     }
+    public IEnumerator CoChangeState()
+    {
+        yield return WaitList.isMonsterManagerSet;
+        ChangeState(MonState.Idle);
+    }
+
+    public override void DirectHit(float damage)
+    {
+        curHp -= damage;
+    }
+
+
     public bool ScanTarget()
     {
         if ((transform.position - MonsterBehaviourManager.instance.playerPosition).magnitude <= scanRange) return true;
@@ -75,7 +96,7 @@ public class Monster : Character,IReturnable
         Physics.OverlapBoxNonAlloc(transform.position, new Vector3(attackRange, attackRange, attackRange), attackBox, Quaternion.identity, mask);
         if(attackBox[0]!=null)
         {
-            float temp = Vector3.Dot(transform.forward,(attackBox[0].transform.position-transform.forward).normalized);
+            float temp = Vector3.Dot(graphic.forward,(attackBox[0].transform.position-graphic.forward).normalized);
             if (temp < 0) attackBox[0] = null;
         }
     }
@@ -85,14 +106,31 @@ public class Monster : Character,IReturnable
         if(attackDelayCount>=attackDelay) return true;
         return false;
     }
+
+    public virtual void MonsterAttack()
+    {
+
+
+
+    }
+
     public bool MonsterHitCheck() => HitInput != null;
     public void AttackDelayCountReset() => attackDelayCount = 0;
-    public void MonsterMove() { if (navMeshAgent.isOnNavMesh) navMeshAgent.SetDestination(MonsterBehaviourManager.instance.playerPosition); }
+    public void MonsterMove()
+    {
+        if (navMeshAgent.isOnNavMesh)
+        { 
+            navMeshAgent.SetDestination(MonsterBehaviourManager.instance.playerPosition);
+            direction.LookAt(MonsterBehaviourManager.instance.playerPosition);
+            realDirection.localRotation = direction.localRotation;
+            graphic.transform.rotation = realDirection.rotation;
+        }
+    }
     public void MonsterMoveSwitch() => navMeshAgent.enabled = !navMeshAgent.enabled;
     public void MonsterKinematicSwitch() => rigi.isKinematic = !rigi.isKinematic;
     public void MonsterAnimationkStateSwitch() => isAnimation = !isAnimation;
     public void ChangeState(MonState state) => stateMachine.ChangeState(state);
 
-
+    public virtual void Attack(IDamageable target) { }
 
 }

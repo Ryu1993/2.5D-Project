@@ -13,13 +13,13 @@ MonoBehaviour:
   m_Name: TestWeapon
   m_EditorClassIdentifier: 
   Type: 0
-  itemCardText: TestWeapon
-  simpleOptionText: TestWeapon
+  itemCardText: "\uD754\uD55C \uAC80"
+  simpleOptionText: "\uC18C\uAC80(\uBCF4\uD1B5)\n\uACF5\uACA9\uB825 : 1"
   backBg: {fileID: 0}
   backFrame: {fileID: 0}
   element: {fileID: 0}
   rarity: {fileID: 0}
-  cardIcon: {fileID: 657164003, guid: f443545130963e441a211979f438c973, type: 3}
+  cardIcon: {fileID: 1082946510, guid: f443545130963e441a211979f438c973, type: 3}
   simpleIcon: {fileID: 0}
   simpleRarity: {fileID: 0}
   simpleIconFrame: {fileID: 0}

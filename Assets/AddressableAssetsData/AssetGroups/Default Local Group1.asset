@@ -56,6 +56,16 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - TestMap_Label
+  - m_GUID: 983abba3ad6cea047ab16d8ab0f4cf9b
+    m_Address: Assets/Prefabs/Item/BasicSword.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Tutorial_Weapon
+  - m_GUID: 1f21dc3b024c9b94c9dad32f6ba73c28
+    m_Address: Assets/ScriptableObject/Item/TutoriaArtifact.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Tutorial_Artifact
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: a36bbc9cce32b754382bb97867bcb24f, type: 2}
   m_SchemaSet:

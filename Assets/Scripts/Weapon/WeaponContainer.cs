@@ -6,51 +6,48 @@ using UnityEngine.VFX;
 
 public class WeaponContainer : MonoBehaviour
 {
+    private readonly int desolve = Shader.PropertyToID("_Desolve");
     public Player player;
     public Weapon curWeapon;
-    private int desolve = Shader.PropertyToID("_Desolve");
-    public float duration;
     [SerializeField]
-    private MeshFilter containerBackFilter;
-    [SerializeField]
-    private MeshRenderer containerBackRenderer;
+    private SpriteRenderer containerBackRenderer;
+    public Transform attackPoint;
     public Transform weaponVFX;
     public Transform weaponSlot;
     public UnityAction weaponAttack;
-    public bool superArmor;
-    public int comboCount = 0;
+    public float duration;
     public float comboDelay = 0;
-    [SerializeField]
     public float comboCoolCount = 0;
     public bool isComboCooltime;
-    Coroutine weaponDesolve;
+    public bool superArmor;
+    public int comboCount = 0;
+
 
     public void WeaponSet(UnityEngine.AddressableAssets.AssetLabelReference weaponLabel)
     {
         if (curWeapon != null) AddressObject.Release(curWeapon.gameObject);
         curWeapon = AddressObject.Instinate(weaponLabel,weaponSlot).GetComponent<Weapon>();
-        curWeapon.transform.GetComponent<MeshRenderer>().material.SetFloat(desolve, 1);
-        containerBackRenderer.material = new Material(curWeapon.transform.GetComponent<MeshRenderer>().sharedMaterial);
-        containerBackFilter.mesh = curWeapon.transform.GetComponent<MeshFilter>().sharedMesh;
-        containerBackRenderer.material.SetFloat(desolve, 0);
+        curWeapon.transform.localScale = Vector3.zero;
+        containerBackRenderer.sprite = curWeapon.sprite;
         curWeapon.player = player;
+        curWeapon.attackPoint = attackPoint;
         superArmor = curWeapon.superArmor;
         weaponAttack = curWeapon.WeaponAttack;
     }
 
     public IEnumerator CoMaterialNoise(bool isDisable)
     {
-        float backBaseNoise = 1;
+        float backBaseNoise = 0;
         float addNoise = 1f / duration;
-        if(isDisable) {addNoise = -1*addNoise; backBaseNoise = 0;  }
+        if(isDisable) {addNoise = -1*addNoise; backBaseNoise = 2;  }
         for (int i = 0; i < duration; i++)
         {
             backBaseNoise -= addNoise;
-            containerBackRenderer.material.SetFloat(desolve, backBaseNoise);
+            containerBackRenderer.transform.localScale = new Vector3(backBaseNoise, backBaseNoise, 1);
             yield return null;
         }
-        if (isDisable) containerBackRenderer.material.SetFloat(desolve, 1);
-        else containerBackRenderer.material.SetFloat(desolve, 0);
+        if (isDisable) containerBackRenderer.transform.localScale = Vector3.zero;
+        else containerBackRenderer.transform.localScale = new Vector3(2, 2, 1);
     }
 
  
@@ -66,8 +63,8 @@ public class WeaponContainer : MonoBehaviour
         if (!weaponVFX.gameObject.activeSelf)
         {
             if (comboCount > 2) comboCount = 0;
-            weaponVFX.localPosition = new Vector3(-0.3f, 0.5f, (float)comboCount*0.6f);
-            weaponVFX.localRotation = Quaternion.Euler(new Vector3(0, 0, -15+comboCount*15));
+            weaponVFX.localPosition = new Vector3(-0.3f, 0.5f, (float)comboCount*1f);
+            weaponVFX.localRotation = Quaternion.Euler(new Vector3(0, 0, -30+comboCount*30));
             weaponVFX.gameObject.SetActive(true);
             weaponAttack?.Invoke();
             comboCount++;

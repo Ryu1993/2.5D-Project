@@ -10,12 +10,33 @@ public class RewardCardWindow : MonoBehaviour
     [System.Serializable]
     public class RewardManager
     {
+        RewardCardWindow window;
         public Item item;
         public bool isPick;
-        public RewardManager(Item _item)=> item = _item;
+        public RewardManager(Item _item, RewardCardWindow _window)
+        {
+            window = _window;
+            item = _item;
+        }
+     
         public void PlayerGetItem()
         {
-            Debug.Log("리워드클릭테스트");
+            if(item.Type ==Item.ItemType.Buff)
+            {
+                BuffItem buff = item as BuffItem;
+                StatusManager.instance.StatusEffectCreate[buff.buffType].Invoke(GameManager.instance.scenePlayer, buff.duration);
+            }
+            if(item.Type == Item.ItemType.Artifact)
+            {
+                Artifact artifact = item as Artifact;
+                ItemManager.instance.PlayerGetArtifact(artifact);
+            }
+            if(item.Type == Item.ItemType.Equip)
+            {
+                Equip equip = item as Equip;
+                ItemManager.instance.PlayerGetWeapon(equip);
+            }
+            window.WindowClose();
         }
     }
     Player player;
@@ -46,7 +67,7 @@ public class RewardCardWindow : MonoBehaviour
             Item randomItem = AddressObject.RandomInstinateScriptable(label) as Item;
             if (randomItem != null)
             {
-                RewardManager rewardManager = new RewardManager(randomItem);
+                RewardManager rewardManager = new RewardManager(randomItem,this);
                 managers.Add(rewardManager);
                 rewardCardSet.RewardCardSetting(randomItem, rewardManager.PlayerGetItem);
             }
@@ -68,31 +89,23 @@ public class RewardCardWindow : MonoBehaviour
     public void ScaleMax() => transform.GetComponent<RectTransform>().localScale = new Vector3(1, 1, 1);
     public void ScaleMin() => transform.GetComponent<RectTransform>().localScale = new Vector3(0, 0, 0);
 
+    public void OpneReward(AssetLabelReference label) => StartCoroutine(RewardCreatePop(label));
 
-
-
-
-    public void RewardTest()
+    private IEnumerator RewardCreatePop(AssetLabelReference label)
     {
         transform.gameObject.SetActive(true);
-        if(!isProgress)
-        {
-            StartCoroutine(CoRewardTest());
-        }
-    }
-    private IEnumerator CoRewardTest()
-    {
         isProgress = true;
         WindowBlock();
-        CreateReward(testLabel);
+        CreateReward(label);
         WindowPop();
-        while(!isComplete)
-        {
-            yield return null;
-        }
+        yield return new WaitUntil(() => isComplete);
         WindowBlock();
         isProgress = false;
-        ResetReward();
+
     }
+
+
+
+
 
 }

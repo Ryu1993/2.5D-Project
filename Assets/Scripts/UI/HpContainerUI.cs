@@ -30,14 +30,8 @@ public class HpContainerUI : MonoBehaviour
     IEnumerator CoOnEnabel()
     {
         isProgress = true;
-        while(true)
-        {
-            if(GameManager.instance!=null)
-            {
-                if (GameManager.instance.isSetComplete) break;
-            }
-            yield return null;
-        }
+        yield return WaitList.isGameManagerSet;
+        yield return new WaitUntil(() => GameManager.instance.scenePlayer.isReady);
         Player player = GameManager.instance.scenePlayer;
         while(true)
         {

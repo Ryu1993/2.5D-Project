@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class TestSlime : Monster
 {
-    private void OnEnable()
+    protected override void OnEnable()
     {
+        base.OnEnable();
         StartCoroutine(Die());
-
     }
 
     IEnumerator Die()

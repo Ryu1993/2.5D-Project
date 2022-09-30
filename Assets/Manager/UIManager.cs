@@ -8,9 +8,11 @@ public class UIManager : Singleton<UIManager>
     public WeaponUI weaponUI;
     public MapUI mapUI;
     public ArtifactUI artifactUI;
+    public RewardCardWindow rewardCardWindow;
 
     protected override void Awake()
     {
+        instance = null;
         base.Awake();
     }
 }

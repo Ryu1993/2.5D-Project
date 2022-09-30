@@ -17,10 +17,10 @@ public class GameManager : Singleton<GameManager>
     {
         base.Awake();
         DontDestroyOnLoad(gameObject);
-        PlayerInfoSet();
-        StartCoroutine(SingletonCheck());
+        PlayerInfoSet();    
     }
 
+    public void OnEnable()=> StartCoroutine(SingletonCheck());
     private void PlayerInfoSet()
     {
         playerInfo.player_name = savePlayerInfo.player_name;
@@ -41,6 +41,7 @@ public class GameManager : Singleton<GameManager>
 
     IEnumerator SingletonCheck()
     {
+        isSetComplete = false;
         yield return new WaitUntil(() => UIManager.instance != null);
         yield return new WaitUntil(() => ItemManager.instance != null);
         yield return new WaitUntil(() => StatusManager.instance != null);

@@ -1764,7 +1764,7 @@ TextureImporter:
         width: 32
         height: 64
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1772,6 +1772,27 @@ TextureImporter:
       bones: []
       spriteID: 287f893259dc04544913af0f0dd20ab1
       internalID: 757070779
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TX Tileset Wall_66
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 268
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4bce27c256fe62f40b2f31f4e56a9981
+      internalID: -1438958201
       vertices: []
       indices: 
       edges: []
@@ -1822,6 +1843,7 @@ TextureImporter:
       TX Tileset Wall_60: 21300120
       TX Tileset Wall_43: 21300086
       TX Tileset Wall_54: 21300108
+      TX Tileset Wall_66: -1438958201
       TX Tileset Wall_31: 21300062
       TX Tileset Wall_7: 21300014
       TX Tileset Wall_19: 21300038
