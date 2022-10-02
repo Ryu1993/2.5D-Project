@@ -16,7 +16,7 @@ MonoBehaviour:
   itemCardText: "\uCD5C\uB300 \uCCB4\uB825 +1\n\uD604\uC7AC \uCCB4\uB825 +1"
   simpleOptionText: "\uCD5C\uB300 \uCCB4\uB825 +1\n\uD604\uC7AC \uCCB4\uB825 +1"
   backBg: {fileID: -1973765765, guid: 71ad172f81917dc4c88b385499ba85c4, type: 3}
-  backFrame: {fileID: -1973765765, guid: 71ad172f81917dc4c88b385499ba85c4, type: 3}
+  backFrame: {fileID: -1490577542, guid: 71ad172f81917dc4c88b385499ba85c4, type: 3}
   element: {fileID: 45502439, guid: d529f63f32c1a2b438dc3ffcf58f7a73, type: 3}
   rarity: {fileID: 2118651719, guid: b2713bbf286ea3b4d8cf4478d348ee16, type: 3}
   cardIcon: {fileID: -342949846, guid: 91ece539279118a438c900dfb08582ed, type: 3}

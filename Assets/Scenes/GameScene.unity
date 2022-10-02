@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028334, g: 0.22571328, b: 0.3069217, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -295,6 +295,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Main Camera
       objectReference: {fileID: 0}
+    - target: {fileID: 5812800748531799304, guid: 0507e6c0bba0c1149ae01bd761d77dba,
+        type: 3}
+      propertyPath: m_RenderShadows
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5812800748531799305, guid: 0507e6c0bba0c1149ae01bd761d77dba,
         type: 3}
       propertyPath: m_RootOrder
@@ -426,6 +431,7 @@ MonoBehaviour:
   weaponUI: {fileID: 1574484176}
   mapUI: {fileID: 596420138}
   artifactUI: {fileID: 901397542}
+  rewardCardWindow: {fileID: 0}
 --- !u!114 &459841130
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1018,6 +1024,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: 3DCharacter
+      objectReference: {fileID: 0}
+    - target: {fileID: 5921074382065471998, guid: 1b2dd955f6244c34abcac62ddb9db64e,
+        type: 3}
+      propertyPath: m_UseGravity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6549884312048641777, guid: 1b2dd955f6244c34abcac62ddb9db64e,
+        type: 3}
+      propertyPath: dashSpeed
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 6549884312048641777, guid: 1b2dd955f6244c34abcac62ddb9db64e,
         type: 3}

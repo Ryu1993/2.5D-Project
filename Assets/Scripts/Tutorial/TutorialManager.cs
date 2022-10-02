@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using UnityEngine.Playables;
+using UnityEngine.Timeline;
 public class TutorialManager : Singleton<TutorialManager>
 {
     [SerializeField]
@@ -14,6 +16,14 @@ public class TutorialManager : Singleton<TutorialManager>
     Artifact baseArtifact;
     [SerializeField]
     GameObject tutorialReward;
+    [SerializeField]
+    PlayableDirector tutorialDirector;
+    [SerializeField]
+    TutorialGate tutorialGate;
+    [SerializeField]
+    GameObject playerCamera;
+    GameObject basicWeapon;
+
     int monsterCount = 3;
     NewObjectPool.PoolInfo pool;
 
@@ -27,12 +37,15 @@ public class TutorialManager : Singleton<TutorialManager>
     private void Start()
     {
         pool = NewObjectPool.instance.PoolInfoSet(sceneItem, 1, 1);
-        SceneItem go = NewObjectPool.instance.Call(pool, Vector3.zero).GetComponent<SceneItem>();
+        basicWeapon = NewObjectPool.instance.Call(pool, new Vector3(-3, 0, 0)).gameObject;
+        SceneItem go = basicWeapon.GetComponent<SceneItem>();
         go.SceneItemSet(baseWeapon);
+        StartCoroutine(WeaponGetEvent());
     }
 
     private IEnumerator PlayerReset()
     {
+        yield return new WaitUntil(() => !LoadingUI.instance.gameObject.activeSelf);
         yield return WaitList.isGameManagerSet;
         GameManager.instance.playerInfo.curEquip = null;
         GameManager.instance.playerInfo.inventory.Clear();
@@ -49,7 +62,27 @@ public class TutorialManager : Singleton<TutorialManager>
         if(monsterCount==0)
         {
             tutorialReward.SetActive(true);
+            StartCoroutine(RewardGetEvent(tutorialReward.GetComponent<BoxCollider>()));
         }
+    }
+
+    public void TimeSwitch()
+    {
+        if (Time.timeScale == 1) Time.timeScale = 0;
+        if (Time.timeScale == 0) Time.timeScale = 1;
+    }
+    private IEnumerator WeaponGetEvent()
+    {
+        yield return new WaitUntil(() => scenePlayer.weaponContainer.curWeapon != null);
+        yield return WaitList.isPlay;
+        playerCamera.SetActive(false);
+        tutorialDirector.Play();  
+    }
+    private IEnumerator RewardGetEvent(BoxCollider collider)
+    {
+        yield return new WaitUntil(() => collider.isTrigger);
+        tutorialGate.GateOpne();
+        
     }
 
 

@@ -7,7 +7,9 @@ public class HpContainerUI : MonoBehaviour
 {
     [SerializeField]
     Image[] heartList;
+    [SerializeField]
     int curHeart = 0;
+    [SerializeField]
     int _maxHeart = 0;
     public int maxHeart
     {
@@ -20,8 +22,6 @@ public class HpContainerUI : MonoBehaviour
     }
     int curIndex = 0;
     bool isProgress;
-    [SerializeField]
-    GameManager gameManager;
     private void OnEnable()
     {
         if (isProgress) return;
@@ -31,6 +31,7 @@ public class HpContainerUI : MonoBehaviour
     {
         isProgress = true;
         yield return WaitList.isGameManagerSet;
+        yield return new WaitUntil(() => GameManager.instance.scenePlayer!=null);
         yield return new WaitUntil(() => GameManager.instance.scenePlayer.isReady);
         Player player = GameManager.instance.scenePlayer;
         while(true)
@@ -38,6 +39,7 @@ public class HpContainerUI : MonoBehaviour
             if (player.isReady) break;
             yield return null;
         }
+        foreach (Image heart in heartList) heart.fillAmount = 0f;
         AddMaxHeart((int)player.maxHp);
         AddHeart((int)player.curHp);
         player.hpUp += HeartChange;

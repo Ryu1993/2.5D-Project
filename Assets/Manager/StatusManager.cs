@@ -17,4 +17,5 @@ public class StatusManager : Singleton<StatusManager>
     }
 
 
+
 }

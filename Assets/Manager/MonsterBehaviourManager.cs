@@ -10,14 +10,18 @@ public class MonsterBehaviourManager : Singleton<MonsterBehaviourManager>
     public UnityAction monsterBehaviour;
     public Coroutine coFixeUpdate;
 
-    protected override void Awake()=> base.Awake();    
+    protected override void Awake()=> base.Awake();
 
-    private void Start()
+    private IEnumerator Start()
     {
+        yield return WaitList.isGameManagerSet;
+        yield return WaitList.isPlayerSet;
+        yield return WaitList.isPlayerReady;
         secenePlayer = GameManager.instance.scenePlayer;
         StartCoroutine(CoFixedUpdate());
-    }
 
+    } 
+ 
     private IEnumerator CoFixedUpdate()
     {
         while (true)

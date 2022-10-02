@@ -41,21 +41,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - TestWeapon_Label
-  - m_GUID: 60d5061a992cc774a8e79b29abfe1a48
-    m_Address: Assets/Prefabs/Map/CaveRoom.prefab
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - TestMap_Label
-  - m_GUID: 3087254b52fc5534bb0108615ea9ae7e
-    m_Address: Assets/Prefabs/Monster/Slime_02.prefab
+  - m_GUID: 90b21d2eb9f56a043855d2f36ea09bde
+    m_Address: Assets/Prefabs/Monster/TestSlime.prefab
     m_ReadOnly: 0
     m_SerializedLabels:
     - TestEnemy_Label
-  - m_GUID: 290fbc44314b8594c8315ed636065b2d
-    m_Address: Assets/Prefabs/Map/PixelMapSample.prefab
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - TestMap_Label
   - m_GUID: 983abba3ad6cea047ab16d8ab0f4cf9b
     m_Address: Assets/Prefabs/Item/BasicSword.prefab
     m_ReadOnly: 0
@@ -66,6 +56,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - Tutorial_Artifact
+  - m_GUID: c335f39f291075b4083edc6304c200a9
+    m_Address: Assets/Prefabs/Map/CrossEnemyRoom.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - TestMap_Label
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: a36bbc9cce32b754382bb97867bcb24f, type: 2}
   m_SchemaSet:

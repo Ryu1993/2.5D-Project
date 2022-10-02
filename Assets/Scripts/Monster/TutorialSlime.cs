@@ -9,6 +9,7 @@ public class TutorialSlime : Monster
     protected override void OnEnable()
     {
         base.OnEnable();
+        deadEvent += stateMachine.ResetState;
         deadEvent += TutorialManager.instance.TutorialMonsterEvent;
         deadEvent += () => this.gameObject.SetActive(false);
     }
@@ -17,9 +18,10 @@ public class TutorialSlime : Monster
     public override void MonsterAttack()
     {
         attackBox[0] = null;
-        Physics.OverlapBoxNonAlloc(transform.forward, new Vector3(0.5f, 0.5f, 0.5f), attackBox, Quaternion.identity, mask);
+        Physics.OverlapBoxNonAlloc(transform.position, new Vector3(1, 1, 1), attackBox, Quaternion.identity, mask);
         if (attackBox[0] != null)
         {
+            Debug.Log("몬스터공격");
             Player target = attackBox[0].GetComponent<Player>();
             target.Hit(this, transform.position);
         }

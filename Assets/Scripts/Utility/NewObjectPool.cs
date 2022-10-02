@@ -56,7 +56,7 @@ public class NewObjectPool : Singleton<NewObjectPool>
     public PoolInfo PoolInfoSearch(GameObject gameObject) => PoolInfoSearch(gameObject.name);
     public PoolInfo PoolInfoSearch(string goName)
     {
-        if (poolInfoDic.ContainsKey(goName)) return poolInfoDic[gameObject.name];
+        if (poolInfoDic.ContainsKey(goName)) return poolInfoDic[goName];   
         return null;
     }
 

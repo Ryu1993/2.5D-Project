@@ -40,6 +40,7 @@ public class RewardCardSet : MonoBehaviour
         cardIcon.sprite = item.cardIcon;
         simpleIcon.sprite = item.simpleIcon;
         simpleRarity.sprite = item.simpleRarity;
+        simpleIconFrame.sprite = item.simpleIconFrame;
         nameTag.text = item.Name;
         itemText.text = item.itemCardText;
         onclick += action;

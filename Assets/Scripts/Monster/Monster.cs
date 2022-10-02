@@ -11,27 +11,29 @@ public class Monster : Character,IReturnable,IAttackable
     public enum MonState { Idle,Chase,Ready,Attack,Hit,Dead}
     protected StateMachine<MonState, Monster> stateMachine;
     [SerializeField]
-    Transform direction;
-    [SerializeField]
-    Transform realDirection;
-    [SerializeField]
-    Transform graphic;
-    [SerializeField]
-    protected NavMeshAgent navMeshAgent;
-    [SerializeField]
-    protected LayerMask mask;
-    [SerializeField]
     protected float scanRange;
     [SerializeField]
     protected float attackRange;
     [SerializeField]
     protected float attackDelay;
     [SerializeField]
-    protected float attackDelayCount = 0;
-    public int isAttack { get; private set; }
-    public bool isAnimation;
+    protected float attackCooltime;
     public float damage;
+    [Header("Parts")]
+    [SerializeField]
+    protected Transform direction;
+    [SerializeField]
+    protected Transform graphic;
+    protected NavMeshAgent navMeshAgent;
+    [HideInInspector]
+    public Animator animator;
+    [SerializeField]
+    protected LayerMask mask;
+    protected float attackDelayCount = 0;
+    protected float attackCooltimeCount = 0;
+    protected bool isAttackCooltime;
     protected Collider[] attackBox = new Collider[1];
+    public readonly int animator_Ready = Animator.StringToHash("Ready");
 
 
     #region Returnable
@@ -57,7 +59,8 @@ public class Monster : Character,IReturnable,IAttackable
 
     public void StateSet()
     {
-        isAttack = Animator.StringToHash("isAttack");
+        navMeshAgent = transform.GetComponent<NavMeshAgent>();
+        animator = graphic.GetComponent<Animator>();
         stateMachine = new StateMachine<MonState, Monster>(this);
         stateMachine.AddState(MonState.Idle, new MonsterState.Idle());
         stateMachine.AddState(MonState.Ready, new MonsterState.Ready());
@@ -66,6 +69,7 @@ public class Monster : Character,IReturnable,IAttackable
         stateMachine.AddState(MonState.Hit, new MonsterState.Hit());
         stateMachine.AddState(MonState.Dead, new MonsterState.Dead());
         _curHp = _maxHp;
+        navMeshAgent.speed = moveSpeed;
     }
     public IEnumerator CoChangeState()
     {
@@ -73,14 +77,11 @@ public class Monster : Character,IReturnable,IAttackable
         ChangeState(MonState.Idle);
     }
 
-    public override void DirectHit(float damage)
-    {
-        curHp -= damage;
-    }
-
+    public override void DirectHit(float damage)=> curHp -= damage;
 
     public bool ScanTarget()
     {
+        if (isAttackCooltime) return false;
         if ((transform.position - MonsterBehaviourManager.instance.playerPosition).magnitude <= scanRange) return true;
         return false;
     }
@@ -93,19 +94,31 @@ public class Monster : Character,IReturnable,IAttackable
     protected virtual void AttackRangeCheck()
     {
         attackBox[0] = null;
-        Physics.OverlapBoxNonAlloc(transform.position, new Vector3(attackRange, attackRange, attackRange), attackBox, Quaternion.identity, mask);
+        Physics.OverlapBoxNonAlloc(direction.position, new Vector3(attackRange, attackRange, attackRange), attackBox, Quaternion.identity, mask);
         if(attackBox[0]!=null)
         {
-            float temp = Vector3.Dot(graphic.forward,(attackBox[0].transform.position-graphic.forward).normalized);
-            if (temp < 0) attackBox[0] = null;
+            float temp = Vector3.Dot(direction.forward,(attackBox[0].transform.position-direction.forward).normalized);
+            if (temp>-0.5f&&temp<-0.5f) attackBox[0] = null;
         }
     }
     public bool AttackDelayCount()
     {
-        attackDelayCount += 0.02f;
-        if(attackDelayCount>=attackDelay) return true;
+        attackDelayCount += Time.fixedDeltaTime;
+        if (attackDelayCount>=attackDelay) return true;
         return false;
     }
+
+    public void AttackCooltimeCount()
+    {
+        isAttackCooltime = true;
+        attackCooltimeCount += Time.fixedDeltaTime;
+        if (attackCooltimeCount >= attackCooltime)
+        {
+            isAttackCooltime = false;
+            MonsterBehaviourManager.instance.monsterBehaviour -= this.AttackCooltimeCount;
+        }
+    }
+
 
     public virtual void MonsterAttack()
     {
@@ -116,19 +129,17 @@ public class Monster : Character,IReturnable,IAttackable
 
     public bool MonsterHitCheck() => HitInput != null;
     public void AttackDelayCountReset() => attackDelayCount = 0;
-    public void MonsterMove()
+    public virtual void MonsterMove()
     {
         if (navMeshAgent.isOnNavMesh)
         { 
             navMeshAgent.SetDestination(MonsterBehaviourManager.instance.playerPosition);
             direction.LookAt(MonsterBehaviourManager.instance.playerPosition);
-            realDirection.localRotation = direction.localRotation;
-            graphic.transform.rotation = realDirection.rotation;
+            graphic.transform.localRotation = direction.localRotation;
+            animator.SetFloat("Speed", navMeshAgent.velocity.magnitude);
         }
     }
     public void MonsterMoveSwitch() => navMeshAgent.enabled = !navMeshAgent.enabled;
-    public void MonsterKinematicSwitch() => rigi.isKinematic = !rigi.isKinematic;
-    public void MonsterAnimationkStateSwitch() => isAnimation = !isAnimation;
     public void ChangeState(MonState state) => stateMachine.ChangeState(state);
 
     public virtual void Attack(IDamageable target) { }

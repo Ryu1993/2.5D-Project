@@ -47,7 +47,7 @@ public class WeaponContainer : MonoBehaviour
             yield return null;
         }
         if (isDisable) containerBackRenderer.transform.localScale = Vector3.zero;
-        else containerBackRenderer.transform.localScale = new Vector3(2, 2, 1);
+        else containerBackRenderer.transform.localScale = new Vector3(3, 3, 3);
     }
 
  

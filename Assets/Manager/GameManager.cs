@@ -47,7 +47,10 @@ public class GameManager : Singleton<GameManager>
         yield return new WaitUntil(() => StatusManager.instance != null);
         isSetComplete = true;
     }
+    public void GameOver()
+    {
 
+    }
 
 
 }

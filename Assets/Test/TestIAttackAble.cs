@@ -17,7 +17,7 @@ public class TestIAttackAble : Monster
     protected override void OnEnable()
     {
         base.OnEnable();
-        //Invoke("MonsterTestDead", 4f);
+        Invoke("MonsterTestDead", 4f);
     }
 
     public void MonsterTestDead() => curHp = 0;

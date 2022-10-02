@@ -14,7 +14,10 @@ public class PlayerInfo : ScriptableObject
     [Range(0f, 12f)]
     public int player_curHp;
     public int curStage;
-
+    public List<StageManager.MapConnetInfo> curStageInfoList;
+    public StageManager.MapConnetInfo curStageInfo;
+    public StageInfo progressStageInfo;
+    public MapInfo curMapInfo;
 
 
 }

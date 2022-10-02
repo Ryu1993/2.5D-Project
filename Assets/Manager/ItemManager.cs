@@ -23,6 +23,7 @@ public class ItemManager : Singleton<ItemManager>
     {
         ArtifactEffectAdd();
         base.Awake();
+        DontDestroyOnLoad(gameObject);
     }
 
     public void PlayerGetArtifact(Artifact artifact)

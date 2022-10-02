@@ -34,7 +34,7 @@ public class ArtifactUI : MonoBehaviour
             artifactSlotsList.Add(scSlot);
             curSlotIndex = 0;
         }
-        artifactSlotsList[curContainerIndex][curSlotIndex].GetComponent<Image>().sprite = artifact.simpleIcon;
+        artifactSlotsList[curContainerIndex][curSlotIndex].GetComponent<Image>().sprite = artifact.cardIcon;
         curSlotIndex++;
     }
 

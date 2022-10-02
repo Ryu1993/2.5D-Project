@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: BasicSword
   m_EditorClassIdentifier: 
   Type: 0
-  itemCardText: "\uAE30\uBCF8 \uAC80"
+  Name: "\uC18C\uAC80"
+  itemCardText: "\uD754\uD574\uBE60\uC9C4 \uAC80"
   simpleOptionText: "\uACF5\uACA9\uB825 : 1"
   backBg: {fileID: 0}
   backFrame: {fileID: 0}

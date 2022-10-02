@@ -8,12 +8,12 @@ public class TutorialGate : MonoBehaviour
     [SerializeField]
     Collider gateColli;
     [SerializeField]
-    GameObject gateParticle;
+    GameObject[] gateParticles;
 
     public void GateOpne()
     {
         gateColli.isTrigger = true;
-        gateParticle.SetActive(false);
+        foreach(var gateParticle in gateParticles) gateParticle.SetActive(false);
     }
 
     private void OnTriggerEnter(Collider other)

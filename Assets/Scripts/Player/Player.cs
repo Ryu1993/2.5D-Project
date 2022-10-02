@@ -11,14 +11,17 @@ public class Player : Character
     //private State curDirection;
     public bool isReady { private set; get; }
     public float dashSpeed;
+    public float dashCoolTime;
+    public float dashInvincibleTime;
+    public float invincibleTime;
+    public float comboTime = 0.5f;
     private bool isHit;
     private bool isInvicible;
     private bool isDashInvincible;
     private float moveX;
     private float moveZ;
     #region playerParts
-    //[SerializeField]
-    //private Transform spriteTransform;
+    [Header("Parts")]
     [SerializeField]
     private Transform mousePointer;
     [SerializeField]
@@ -26,6 +29,8 @@ public class Player : Character
     [SerializeField]
     private DirectionCircle directionCircle;
     public WeaponContainer weaponContainer;
+    public Animator animator;
+    private Rigidbody rigi;
     #endregion
     #region ActionList
     private UnityAction InputCheck;
@@ -43,17 +48,9 @@ public class Player : Character
     private bool isDeadBehavior;
     #endregion
     #region Delay&Cooltime
-    [SerializeField]
-    private float dashCoolTime;
     private float dashCoolCount = 0;
-    [SerializeField]
-    private float dashInvincibleTime;
-    [SerializeField]
     private float dashInvincibleCount = 0;
-    [SerializeField]
-    private float invincibleTime;
     private float invincibleCount = 0;
-    public float comboTime = 0.5f;
     private float comboCount = 0f;
     #endregion
     #region PlayerStat
@@ -81,7 +78,10 @@ public class Player : Character
     }
     public Coroutine coUpdate;
     #endregion
+    public readonly int animator_Dash = Animator.StringToHash("Dash");
 
+
+    private void Awake()=> rigi = transform.GetComponent<Rigidbody>();
     private void Start() => coUpdate = StartCoroutine(CoUpdate());
 
     #region Setting
@@ -136,8 +136,7 @@ public class Player : Character
         InputCheck += MoveInput;
         InputCheck += AttackInput;
         InputCheck += SkillInput;
-        InputCheck += DashInput;
-        InputCheck += DeadInput;     
+        InputCheck += DashInput; 
     }
     #endregion
     #region BehaviorCheck
@@ -168,7 +167,6 @@ public class Player : Character
     private void SkillInput()
     {
     }
-    private void DeadInput() => isDeadBehavior = curHp <= 0;
     private void ReSetInput()
     {
         isMoveBehavior = false;
@@ -185,19 +183,41 @@ public class Player : Character
         if (isDashInvincible) return;
         if (HitInput == null) return;
         ComboCancle();
-        animator.SetTrigger("MotionStop");
+        animator.SetTrigger(animator_Hit);
+        animator.Update(0);
         HitInput?.Invoke(this);
         isHit = true;
         isInvicible = true;
         CooltimeCounter += InvincibleCount;
     }
+    public override bool DeadCheck()
+    {
+        if(curHp<=0)
+        {
+            transform.GetComponent<Collider>().enabled = false;
+            InputCheck = null;
+            BehaviorExecute = null;
+            animator.SetTrigger(animator_Dead);
+            animator.Update(0);
+            StartCoroutine(CoDeadCheck());
+        }
+        return false;
+    }
+    private IEnumerator CoDeadCheck()
+    {
+        yield return new WaitUntil(() => !animator.GetCurrentAnimatorStateInfo(0).IsName("Dead"));
+        GameManager.instance.GameOver();
+    }
+
+
     #endregion
     #region Behavior
     private void PlayerMove()
     {
         if (isBehaviorExecuted) return;
         if (!isMoveBehavior) return;
-        animator.SetBool("Move",true);
+        animator.SetBool(animator_Move, true);
+        animator.Update(0);
         rigi.velocity = moveVec * moveSpeed;
         isBehaviorExecuted = true;
     }
@@ -207,7 +227,8 @@ public class Player : Character
         if (isBehaviorExecuted) return;
         if (!isIdleBehaviour) return;
         rigi.velocity = Vector3.zero;
-        animator.SetBool("Move", false);
+        animator.SetBool(animator_Move, false);
+        animator.Update(0);
         isBehaviorExecuted = true;
     }
 
@@ -224,7 +245,7 @@ public class Player : Character
         directionCircle.isStop = true;
         isDashInvincible = true;
         isBehaviorExecuted = true;
-        animator.SetBool("Dash", true);
+        animator.SetBool(animator_Dash, true);
         ghostCreator.Swith();
         CooltimeCounter += DashCoolCount;
         CooltimeCounter += DashInvincibleCount;
@@ -237,7 +258,7 @@ public class Player : Character
         rigi.velocity = Vector3.zero;
         if (!isComboBehaviour)
         {
-            animator.SetBool("Attack", true);
+            animator.SetBool(animator_Attack, true);
             weaponContainer.StartCoroutine(weaponContainer.CoMaterialNoise(true));
             InputCheck -= MoveInput;
             CooltimeCounter += ComboCount;
@@ -253,15 +274,19 @@ public class Player : Character
         if (!isSkillBehavior) return;
         isBehaviorExecuted = true;
     }
-    #endregion
-    #region CooltimeCounter
 
     public override void DirectHit(float damage)
     {
         rigi.velocity = Vector3.zero;
-        rigi.AddForce(crashVec * 30);
+        rigi.AddForce(crashVec * 400);
         curHp -= damage;
     }
+
+
+    #endregion
+    #region CooltimeCounter
+
+
     private void DashCoolCount()
     {
         dashCoolCount += 0.02f;
@@ -279,6 +304,7 @@ public class Player : Character
         {
             isHit = false;
             isInvicible = false;
+            animator.Update(0);
             CooltimeCounter -= InvincibleCount;
             invincibleCount = 0;
             HitInput = null;
@@ -295,7 +321,7 @@ public class Player : Character
             InputCheck += SkillInput;
             CooltimeCounter -= DashInvincibleCount;
             ghostCreator.Swith();
-            animator.SetBool("Dash", false);
+            animator.SetBool(animator_Dash, false);
             directionCircle.isStop = false;
             HitInput = null;
             dashInvincibleCount = 0;
@@ -308,7 +334,7 @@ public class Player : Character
     }
     private void ComboEnd()
     {
-        animator.SetBool("Attack", false);
+        animator.SetBool(animator_Attack, false);
         animator.Update(0f);
         StartCoroutine(weaponContainer.CoMaterialNoise(false));
         CooltimeCounter += ComboCooltime;

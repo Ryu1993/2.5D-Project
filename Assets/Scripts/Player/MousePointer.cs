@@ -10,18 +10,11 @@ public class MousePointer : MonoBehaviour
     [SerializeField]
     LayerMask mask;
 
-    private void Update()
-    {
-        TraceMouse();
-    }
+    private void Update() => TraceMouse();
 
     void TraceMouse()
     {
         ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        Debug.DrawRay(ray.origin, ray.direction * 1000, Color.red);
-        if (Physics.Raycast(ray, out hit, Mathf.Infinity, mask))
-        {
-            transform.position = hit.point;
-        }
+        if (Physics.Raycast(ray, out hit, Mathf.Infinity, mask)) transform.position = hit.point;
     }
 }

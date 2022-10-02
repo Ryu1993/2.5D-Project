@@ -28,7 +28,7 @@ public class SceneItem : MonoBehaviour,IReturnable
     {
         this.item = item;
         spriteRenderer.sprite = item.cardIcon;
-        nameScript.text = item.name;
+        nameScript.text = item.Name;
         textScript.text = item.simpleOptionText;
         if (item.Type == Item.ItemType.Equip) getItemEvent = getEquip;
         if (item.Type == Item.ItemType.Buff) { getItemEvent = getBuff; }

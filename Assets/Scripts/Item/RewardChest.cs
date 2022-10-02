@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,8 +16,9 @@ public class RewardChest : MonoBehaviour
     public void OpenChest()
     {
         animator.SetTrigger(open);
-        UIManager.instance.rewardCardWindow.OpneReward(label);
         chestColli.isTrigger = true;
+        UIManager.instance.rewardCardWindow.OpneReward(label);
+
     }
 
     public void OnCollisionEnter(Collision collision) => OpenChest();

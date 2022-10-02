@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028334, g: 0.22571328, b: 0.3069217, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -123,12 +123,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 23800000, guid: 7d05ca8b92ef9b645a7cacefc2f56f91, type: 2}
---- !u!4 &101645 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3475304916690294363, guid: 22fe6b05080bc2b4dbac1f59a3909a43,
-    type: 3}
-  m_PrefabInstance: {fileID: 3475304917402718121}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &33645942
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6386,6 +6380,7 @@ MonoBehaviour:
   weaponUI: {fileID: 1493611114}
   mapUI: {fileID: 0}
   artifactUI: {fileID: 1082401073}
+  rewardCardWindow: {fileID: 0}
 --- !u!114 &779457542
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15996,7 +15991,7 @@ PrefabInstance:
         type: 3}
       propertyPath: graphic
       value: 
-      objectReference: {fileID: 101645}
+      objectReference: {fileID: 0}
     - target: {fileID: 4517654360529390351, guid: 22fe6b05080bc2b4dbac1f59a3909a43,
         type: 3}
       propertyPath: direction

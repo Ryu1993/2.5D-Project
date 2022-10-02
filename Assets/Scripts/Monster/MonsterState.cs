@@ -10,9 +10,9 @@ namespace MonsterState
         public override void Enter(Monster order)
         {
             if(this.order==null) this.order = order;
-            MonsterBehaviourManager.instance.monsterBehaviour += Progress;
+            MonsterBehaviourManager.instance.monsterBehaviour += this.Progress;
         }
-        public override void Exit() => MonsterBehaviourManager.instance.monsterBehaviour -= Progress;
+        public override void Exit() => MonsterBehaviourManager.instance.monsterBehaviour -= this.Progress;
         public override void Progress() { }
    
     }
@@ -29,41 +29,27 @@ namespace MonsterState
 
     public class Hit : BaseState
     {
-        public override void Enter(Monster order)
-        {
-            base.Enter(order);
-            order.MonsterKinematicSwitch();
-        }
         public override void Progress()
         {
         
             order.HitInput?.Invoke(order);
-            if(order.HitInput!=null) order.animator.SetTrigger("Hit");
+            if(order.HitInput!=null) order.animator.SetTrigger(order.animator_Hit);
             order.HitInput = null;
             if (order.DeadCheck()) order.ChangeState(Monster.MonState.Dead);
             else if (!order.animator.GetCurrentAnimatorStateInfo(0).IsName("Hit"))
             {
                 order.ChangeState(Monster.MonState.Idle);
             }
-            Debug.Log(order.animator.GetCurrentAnimatorStateInfo(0).IsName("Hit"));
         }
-        public override void Exit()
-        {
-            order.rigi.velocity = Vector3.zero;
-            order.MonsterKinematicSwitch();
-            base.Exit();
-        }
-
-
     }
 
     public class Chase : BaseState
     {
         public override void Enter(Monster order)
         {
-            Debug.Log("추적시작");
             base.Enter(order);
             order.MonsterMoveSwitch();
+           
         }
 
         public override void Progress()
@@ -77,7 +63,6 @@ namespace MonsterState
         {
             order.MonsterMoveSwitch();
             base.Exit();
-            Debug.Log("추적끝");
         }
 
     }
@@ -87,11 +72,10 @@ namespace MonsterState
         public override void Enter(Monster order)
         {
             base.Enter(order);
-            order.animator.SetTrigger("Ready");
+            order.animator.SetTrigger(order.animator_Ready);
         }
         public override void Progress()
         {
-
             if (order.DeadCheck()) order.ChangeState(Monster.MonState.Dead);
             else if (order.MonsterHitCheck()) order.ChangeState(Monster.MonState.Hit);
             else if (order.AttackDelayCount()) order.ChangeState(Monster.MonState.Attack);
@@ -108,7 +92,7 @@ namespace MonsterState
         public override void Enter(Monster order)
         {
             base.Enter(order);
-            order.animator.SetTrigger("Attack");
+            order.animator.SetTrigger(order.animator_Attack);
             order.animator.Update(0);
         }
         public override void Progress()
@@ -119,17 +103,24 @@ namespace MonsterState
             if (order.DeadCheck()) order.ChangeState(Monster.MonState.Dead);
             else if (!order.animator.GetCurrentAnimatorStateInfo(0).IsName("Attack")) order.ChangeState(Monster.MonState.Idle);
         }
+        public override void Exit()
+        {
+            base.Exit();
+            MonsterBehaviourManager.instance.monsterBehaviour += order.AttackCooltimeCount;
+        }
+
     }
     public class Dead : BaseState
     {
         public override void Enter(Monster order)
         {
             base.Enter(order);
-            order.animator.SetTrigger("Dead");
+            order.animator.SetTrigger(order.animator_Dead);
+            order.animator.Update(0);
         }
         public override void Progress()
         {
-            if (!order.isAnimation)Exit();
+            if (!order.animator.GetCurrentAnimatorStateInfo(0).IsName("Dead")) Exit();
         }
         public override void Exit()
         {

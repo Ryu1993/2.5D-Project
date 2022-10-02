@@ -7,7 +7,7 @@ public abstract class Item : ScriptableObject
 {
     public enum ItemType { Equip,Artifact,Buff}
     public ItemType Type;
-    public string Name { get; }
+    public string Name;
     [Header("CardInfo")]
     [TextArea]
     public string itemCardText;

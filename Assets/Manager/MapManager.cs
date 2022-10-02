@@ -150,6 +150,7 @@ public class MapManager : Singleton<MapManager>
 
     public void GameEneter(MapInfo mapInfo)
     {
+        GameManager.instance.scenePlayer.PlayerSetting();
         RoomCreate(mapInfo);
         mapUI.CreateRoomIcon(allRoomList);
         curRoomInfo = startInfo;
