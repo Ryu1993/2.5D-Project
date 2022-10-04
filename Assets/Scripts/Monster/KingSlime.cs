@@ -135,7 +135,7 @@ public class KingSlime : BossMonster
     #region JumpAttack
     private void JumpStart()
     {
-        rigi.isKinematic = false;
+        rigi.isKinematic = true;
         rigi.AddForce(transform.forward * 300);
     }
 
