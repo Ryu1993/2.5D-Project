@@ -12,10 +12,7 @@ public class RoomIconUI : MonoBehaviour
     [SerializeField] GameObject right;
     Dictionary<MapManager.GateDirection, GameObject> iconDirection = new Dictionary<MapManager.GateDirection, GameObject>();
 
-    private void Awake()
-    {
-        SetDirectionIcon();
-    }
+    private void Awake()=> SetDirectionIcon();
 
     public void SetDirectionIcon()
     {
@@ -27,7 +24,10 @@ public class RoomIconUI : MonoBehaviour
 
     public void ActiveIcon(MapManager.RoomConnectInfo roominfo)
     {
-        image.sprite = roominfo.room.icon;
+        if(roominfo.room.icon!=null)
+        {
+            image.sprite = roominfo.room.icon;
+        }
         foreach (MapManager.GateDirection direction in roominfo.GateCheck(true))
         {
             iconDirection[direction].SetActive(true);

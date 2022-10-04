@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0222a5f574ea7e7499f9e68318d001e2, type: 3}
+  m_Name: L2_DashUp
+  m_EditorClassIdentifier: 
+  Type: 1
+  Name: "\uBC18\uC9DD\uC774\uB294 \uAE43\uD138"
+  itemCardText: "\uB300\uC26C \uAC70\uB9AC +3"
+  simpleOptionText: "\uB300\uC26C \uAC70\uB9AC +3"
+  backBg: {fileID: 2106880055, guid: 71ad172f81917dc4c88b385499ba85c4, type: 3}
+  backFrame: {fileID: 333225550, guid: 71ad172f81917dc4c88b385499ba85c4, type: 3}
+  element: {fileID: -1461499335, guid: d529f63f32c1a2b438dc3ffcf58f7a73, type: 3}
+  rarity: {fileID: 779533456, guid: b2713bbf286ea3b4d8cf4478d348ee16, type: 3}
+  cardIcon: {fileID: 21300000, guid: 5319e90cdef08eb4a90ed29d73271916, type: 3}
+  simpleIcon: {fileID: -1858978265, guid: b2713bbf286ea3b4d8cf4478d348ee16, type: 3}
+  simpleRarity: {fileID: 1647528938, guid: b2713bbf286ea3b4d8cf4478d348ee16, type: 3}
+  simpleIconFrame: {fileID: 21079388, guid: b2713bbf286ea3b4d8cf4478d348ee16, type: 3}
+  weaponPrefab:
+    m_LabelString: 
+  artifactType: 3
+  strength: 3

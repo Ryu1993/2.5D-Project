@@ -103,19 +103,22 @@ MonoBehaviour:
   curAction: 0
   curStatusEffect: 
   isHitInput: 0
+  _curHp: 0
   moveSpeed: 1
   _maxHp: 3
   scanRange: 3
   attackRange: 1
   attackDelay: 0.5
   attackCooltime: 1
-  damage: 0
+  damage: 1
   direction: {fileID: 4010024414410093399}
   graphic: {fileID: 5870099042851767458}
   animator: {fileID: 6261336563650161963}
   mask:
     serializedVersion: 2
     m_Bits: 128
+  isNamed: 0
+  target: {fileID: 0}
 --- !u!1 &5549613116315204451
 GameObject:
   m_ObjectHideFlags: 0

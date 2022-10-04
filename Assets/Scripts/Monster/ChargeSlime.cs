@@ -6,6 +6,8 @@ public class ChargeSlime : Monster
 {
     [SerializeField]
     private SphereCollider sphereCollider;
+    [SerializeField]
+    private Rigidbody rigi;
    
 
     protected override void Awake()
@@ -14,16 +16,15 @@ public class ChargeSlime : Monster
         attackStart += () => 
         {
             sphereCollider.enabled = true;
-            MonsterMoveSwitch();
-            navMeshAgent.SetDestination(direction.forward*2);
-            navMeshAgent.speed = 8;
-                     
+            rigi.isKinematic = false;
+            rigi.AddForce(direction.forward * 200);
+            
         };
         attackEnd += () =>
         {
             sphereCollider.enabled = false;
-            navMeshAgent.ResetPath();
-            navMeshAgent.speed = moveSpeed;
+            rigi.velocity = Vector3.zero;
+            rigi.isKinematic = true;
             MonsterMoveSwitch();
         };
     }

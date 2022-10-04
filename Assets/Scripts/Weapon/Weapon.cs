@@ -15,6 +15,7 @@ public abstract class Weapon : MonoBehaviour
     public Sprite sprite;
     [SerializeField]
     protected float damage;
+    public int maxCombo;
     public abstract void WeaponAttack();
 
 

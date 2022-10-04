@@ -98,6 +98,16 @@ MonoBehaviour:
     - RewardRoom
     - EndRoom
     - SlimeEnemy
+    - NormalRoom
+    - Level1_Reward
+    - Level2_Reward
+    - CloseSlime
+    - RangeSlime
+    - BasicSlime
+    - L1Chest
+    - L2Chest
+    - AllChest
+    - BossMonster
   m_SchemaTemplates: []
   m_GroupTemplateObjects:
   - {fileID: 11400000, guid: bb16e0181677ac74b95368d51420f5dc, type: 2}

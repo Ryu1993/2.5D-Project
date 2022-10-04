@@ -58,12 +58,13 @@ public class ItemManager : Singleton<ItemManager>
 
     private void MaxHpUp(float strength)
     {
-        player.maxHp += strength;
-        player.curHp += strength;
+        player.maxHp += (float)strength;
+        player.curHp += (float)strength;
     }
-    private void MoveSpeedUp(float strength)
-    {
-        player.moveSpeed += strength;
-    }
+    private void MoveSpeedUp(float strength)=> player.moveSpeed += strength;
+    private void DashLengthUp(float strength)=> player.dashSpeed += strength;
+
+
+
 
 }

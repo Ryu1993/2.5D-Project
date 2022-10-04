@@ -166,6 +166,7 @@ MonoBehaviour:
   curAction: 0
   curStatusEffect: 
   isHitInput: 0
+  _curHp: 0
   moveSpeed: 1.5
   _maxHp: 20
   scanRange: 8
@@ -199,7 +200,7 @@ MonoBehaviour:
     delay: 2
     animationHash: 0
   sphereCollider: {fileID: 4993241862443391603}
-  rangeAttackCycle: 2
+  rangeAttackCycle: 1
 --- !u!1001 &1862836631524505091
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -267,6 +268,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 11.945448
       objectReference: {fileID: 0}
+    - target: {fileID: 2348533616728591503, guid: c8eced71a2e8c0e4182c466a7a527804,
+        type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2348533616728591503, guid: c8eced71a2e8c0e4182c466a7a527804,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 507fed0338ce65948937cd10a0904a51, type: 2}
     - target: {fileID: 3284476614372009154, guid: c8eced71a2e8c0e4182c466a7a527804,
         type: 3}
       propertyPath: m_Layer
@@ -351,6 +362,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Layer
       value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 7021556488524243105, guid: c8eced71a2e8c0e4182c466a7a527804,
+        type: 3}
+      propertyPath: m_CastShadows
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7742023579735404407, guid: c8eced71a2e8c0e4182c466a7a527804,
         type: 3}

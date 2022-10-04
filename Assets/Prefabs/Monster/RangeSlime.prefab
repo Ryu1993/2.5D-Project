@@ -166,12 +166,13 @@ MonoBehaviour:
   curAction: 0
   curStatusEffect: 
   isHitInput: 0
+  _curHp: 0
   moveSpeed: 1
   _maxHp: 3
   scanRange: 5
   attackRange: 3
   attackDelay: 1
-  attackCooltime: 2
+  attackCooltime: 3
   damage: 1
   direction: {fileID: 6231771538771705125}
   graphic: {fileID: 3624404264604598703}
@@ -181,8 +182,8 @@ MonoBehaviour:
     m_Bits: 128
   isNamed: 0
   target: {fileID: 0}
-  rangeCooltime: 2
-  rangeSpeed: 2
+  rangeCooltime: 4
+  rangeSpeed: 1.5
   rangeDuration: 2
 --- !u!1001 &7396150235116278649
 PrefabInstance:
@@ -206,6 +207,11 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 6
       objectReference: {fileID: 0}
+    - target: {fileID: 2604282136720742071, guid: fb2ecc06702262f4483e4278987c747b,
+        type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3648376236285552310, guid: fb2ecc06702262f4483e4278987c747b,
         type: 3}
       propertyPath: m_Layer
@@ -215,6 +221,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Layer
       value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 4926935057241198777, guid: fb2ecc06702262f4483e4278987c747b,
+        type: 3}
+      propertyPath: m_CastShadows
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5286268979643726068, guid: fb2ecc06702262f4483e4278987c747b,
         type: 3}

@@ -166,12 +166,13 @@ MonoBehaviour:
   curAction: 0
   curStatusEffect: 
   isHitInput: 0
+  _curHp: 0
   moveSpeed: 1
   _maxHp: 5
   scanRange: 5
   attackRange: 3
   attackDelay: 1
-  attackCooltime: 2
+  attackCooltime: 4
   damage: 1
   direction: {fileID: 6231771538771705125}
   graphic: {fileID: 7126962661321972488}
@@ -179,8 +180,10 @@ MonoBehaviour:
   mask:
     serializedVersion: 2
     m_Bits: 128
+  isNamed: 0
   target: {fileID: 0}
   sphereCollider: {fileID: 3531765961467252924}
+  rigi: {fileID: 8597623170245267029}
 --- !u!1001 &3851363562427359252
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -202,6 +205,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Layer
       value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 4732727214664355461, guid: 8173c30eeccdc7c4da2b82f76b0db9ab,
+        type: 3}
+      propertyPath: m_CastShadows
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5345283121177989438, guid: 8173c30eeccdc7c4da2b82f76b0db9ab,
         type: 3}
@@ -292,6 +300,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Layer
       value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 9050560461943646305, guid: 8173c30eeccdc7c4da2b82f76b0db9ab,
+        type: 3}
+      propertyPath: m_CastShadows
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8173c30eeccdc7c4da2b82f76b0db9ab, type: 3}

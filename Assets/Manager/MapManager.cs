@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.ResourceLocations;
 
 public class MapManager : Singleton<MapManager>
 {
@@ -14,6 +16,7 @@ public class MapManager : Singleton<MapManager>
     {
         [HideInInspector]
         public RoomData room;
+        public IResourceLocation roomLocation;
         public Dictionary<GateDirection, RoomConnectInfo> gate = new Dictionary<GateDirection, RoomConnectInfo>();
         public Vector2 rectPosition = Vector2.zero;
         public bool isClear = false;
@@ -150,7 +153,6 @@ public class MapManager : Singleton<MapManager>
 
     public void GameEneter(MapInfo mapInfo)
     {
-        GameManager.instance.scenePlayer.PlayerSetting();
         RoomCreate(mapInfo);
         mapUI.CreateRoomIcon(allRoomList);
         curRoomInfo = startInfo;
@@ -162,13 +164,21 @@ public class MapManager : Singleton<MapManager>
         player.PlayerKinematic();
         if (direction != GateDirection.Start)
         {
-            curRoomInfo.isClear = true;
             curRoomInfo = curRoomInfo.gate[direction]; 
             AddressObject.Release(curRoom);
             mapUI.MapMove(direction);
         }
-        curRoom = AddressObject.RandomInstinate(curRoomInfo.room.map_pack);
-        curRoomManager = curRoom.GetComponent<RoomManager>();
+        if(curRoomInfo.roomLocation == null)
+        {
+            curRoomInfo.roomLocation = AddressObject.RandomLocation(curRoomInfo.room.map_pack);
+        }
+        curRoom = Addressables.InstantiateAsync(curRoomInfo.roomLocation).WaitForCompletion();
+        if (!curRoom.TryGetComponent<RoomManager>(out curRoomManager))
+        {
+            curRoom.TryGetComponent<BossRoomManager>(out var bossRoomManager);
+            curRoomManager = bossRoomManager;
+        }
+        curRoomManager = curRoom.GetComponent<RoomManager>();       
         curRoomManager.roomData = curRoomInfo.room;
         curRoomManager.ConnectedSet(curRoomInfo.GateCheck(true));
         if(!curRoomInfo.isClear)curRoomManager.RoomSetting();
@@ -176,6 +186,8 @@ public class MapManager : Singleton<MapManager>
         curRoomManager.PlayerSpawn(player.transform, MatchDirection(direction));
         player.PlayerKinematic();
     }
+
+    public void CurMapClear()=> curRoomInfo.isClear = true;
 
 
 

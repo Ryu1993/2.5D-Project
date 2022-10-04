@@ -2,25 +2,32 @@ using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
+using UnityEngine.Events;
+
 
 public class RewardChest : MonoBehaviour
 {
-    public AssetLabelReference label;
+    public UnityEngine.AddressableAssets.AssetLabelReference label;
     [SerializeField]
-    Animator animator;
+    private Animator animator;
     [SerializeField]
-    Collider chestColli;
+    private Collider chestColli;
+    public UnityAction openEvent;
     private readonly int open = Animator.StringToHash("Open");
 
-    public void RewardSet(AssetLabelReference _label) => label = _label;
+    public void RewardSet(UnityEngine.AddressableAssets.AssetLabelReference _label) => label = _label;
     public void OpenChest()
     {
         animator.SetTrigger(open);
-        chestColli.isTrigger = true;
+        TriggerOn();
+        openEvent?.Invoke();
         UIManager.instance.rewardCardWindow.OpneReward(label);
-
+        if (MapManager.instance != null)
+        {
+            MapManager.instance.CurMapClear();
+        }
     }
+    public void TriggerOn() => chestColli.isTrigger = true;
 
     public void OnCollisionEnter(Collision collision) => OpenChest();
 

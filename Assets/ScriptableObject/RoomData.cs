@@ -13,5 +13,6 @@ public class RoomData : ScriptableObject
     public AssetLabelReference monster_pack;
     public AssetLabelReference npc_pack;
     public AssetLabelReference reward_pack;
+    public bool isReward;
 
 }

@@ -31,6 +31,7 @@ public class NewObjectPool : Singleton<NewObjectPool>
 
     protected override void Awake()
     {
+        instance = null;
         base.Awake();
         active = new GameObject("ActivePool").transform;
         deacitve = new GameObject("DeActivePool").transform;

@@ -9,6 +9,6 @@ public class RealCollider : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(TryGetComponent<IDamageable>(out var target)) monster.target = target.Hit(monster, transform.position);
+        if(other.TryGetComponent<IDamageable>(out var target)) monster.target = target.Hit(monster, transform.position);
     }
 }

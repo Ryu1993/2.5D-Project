@@ -15,13 +15,17 @@ public class WeaponContainer : MonoBehaviour
     public Transform weaponVFX;
     public Transform weaponSlot;
     public UnityAction weaponAttack;
-    public float duration;
-    public float comboDelay = 0;
-    public float comboCoolCount = 0;
+    public float attackCooltime;
+    [HideInInspector]
+    public float attackCoolCount = 0;
+    [HideInInspector]
     public bool isComboCooltime;
+    [HideInInspector]
     public bool superArmor;
+    [HideInInspector]
     public int comboCount = 0;
-
+    [HideInInspector]
+    public int maxCombo = 0;
 
     public void WeaponSet(UnityEngine.AddressableAssets.AssetLabelReference weaponLabel)
     {
@@ -33,21 +37,7 @@ public class WeaponContainer : MonoBehaviour
         curWeapon.attackPoint = attackPoint;
         superArmor = curWeapon.superArmor;
         weaponAttack = curWeapon.WeaponAttack;
-    }
-
-    public IEnumerator CoMaterialNoise(bool isDisable)
-    {
-        float backBaseNoise = 0;
-        float addNoise = 1f / duration;
-        if(isDisable) {addNoise = -1*addNoise; backBaseNoise = 2;  }
-        for (int i = 0; i < duration; i++)
-        {
-            backBaseNoise -= addNoise;
-            containerBackRenderer.transform.localScale = new Vector3(backBaseNoise, backBaseNoise, 1);
-            yield return null;
-        }
-        if (isDisable) containerBackRenderer.transform.localScale = Vector3.zero;
-        else containerBackRenderer.transform.localScale = new Vector3(3, 3, 3);
+        maxCombo = curWeapon.maxCombo;
     }
 
  
@@ -62,9 +52,9 @@ public class WeaponContainer : MonoBehaviour
     {
         if (!weaponVFX.gameObject.activeSelf)
         {
-            if (comboCount > 2) comboCount = 0;
+            if (comboCount > maxCombo) comboCount = 0;
             weaponVFX.localPosition = new Vector3(-0.3f, 0.5f, (float)comboCount*1f);
-            weaponVFX.localRotation = Quaternion.Euler(new Vector3(0, 0, -30+comboCount*30));
+            weaponVFX.localRotation = Quaternion.Euler(new Vector3(0, 0,comboCount*180));
             weaponVFX.gameObject.SetActive(true);
             weaponAttack?.Invoke();
             comboCount++;

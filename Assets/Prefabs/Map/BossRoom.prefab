@@ -229,7 +229,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1444458903830707250}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 1.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -6408,7 +6408,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7122046889123070105}
   - component: {fileID: 7122046889123070102}
-  - component: {fileID: 7122046889123070104}
+  - component: {fileID: 597395953056160686}
   m_Layer: 0
   m_Name: BossRoom
   m_TagString: Untagged
@@ -6459,7 +6459,7 @@ Grid:
   m_CellGap: {x: 0, y: 0, z: 0}
   m_CellLayout: 0
   m_CellSwizzle: 1
---- !u!114 &7122046889123070104
+--- !u!114 &597395953056160686
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -6468,7 +6468,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7122046889123070103}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e6d7a557e6c24c0478aa94788c9680c0, type: 3}
+  m_Script: {fileID: 11500000, guid: 67286e79562b0ae449e24916ef841b99, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   roomData: {fileID: 0}
@@ -6477,6 +6477,8 @@ MonoBehaviour:
   rewardPointer: {fileID: 85881326705754248}
   gate: {fileID: 7122046889516972771}
   center: {fileID: 7122046889123070105}
+  bossUIPrefab: {fileID: 9217818027684316515, guid: e56f47b69a068b04bbe5dbeec52342ae,
+    type: 3}
 --- !u!1 &7122046889516972768
 GameObject:
   m_ObjectHideFlags: 0

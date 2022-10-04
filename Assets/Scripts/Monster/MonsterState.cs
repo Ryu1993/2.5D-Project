@@ -32,6 +32,7 @@ namespace MonsterState
         public override void Progress()
         {
             NamedHitCheck();
+            order.MonsterLookAt();
             if (order.DeadCheck()) order.ChangeState(Monster.MonState.Dead);
             else if(order.MonsterHitCheck() && !order.isNamed) order.ChangeState(Monster.MonState.Hit);
             else if(order.ScanTarget()) order.ChangeState(Monster.MonState.Chase);
@@ -73,7 +74,6 @@ namespace MonsterState
         }
         public override void Exit()
         {
-            order.MonsterNavReset();
             order.MonsterMoveSwitch();
             base.Exit();
         }

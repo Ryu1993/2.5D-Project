@@ -127,22 +127,21 @@ public class Monster : Character,IReturnable,IAttackable
     }
 
 
-    public virtual void MonsterAttack()
-    {
-
-
-
-    }
-
+    public virtual void MonsterAttack() { }
     public bool MonsterHitCheck() => HitInput != null;
     public void AttackDelayCountReset() => attackDelayCount = 0;
+
+    public virtual void MonsterLookAt()
+    {
+        direction.LookAt(MonsterBehaviourManager.instance.playerPosition);
+        graphic.transform.localRotation = direction.localRotation;
+    }
     public virtual void MonsterMove()
     {
         if (navMeshAgent.isOnNavMesh)
-        { 
+        {
+            MonsterLookAt();
             navMeshAgent.SetDestination(MonsterBehaviourManager.instance.playerPosition);
-            direction.LookAt(MonsterBehaviourManager.instance.playerPosition);
-            graphic.transform.localRotation = direction.localRotation;
             animator.SetFloat("Speed", navMeshAgent.velocity.magnitude);
         }
     }

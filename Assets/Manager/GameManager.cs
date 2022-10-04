@@ -38,6 +38,17 @@ public class GameManager : Singleton<GameManager>
         foreach(Item item in playerInfo.inventory) savePlayerInfo.inventory.Add(item);
     }
 
+    public void PlayerInfoReset()
+    {
+        GameManager.instance.playerInfo.curEquip = null;
+        GameManager.instance.playerInfo.inventory.Clear();
+        GameManager.instance.playerInfo.player_maxHp = 6;
+        GameManager.instance.playerInfo.player_curHp = 6;
+        GameManager.instance.playerInfo.curStage = 0;
+        GameManager.instance.playerInfo.progressStageInfo = null;
+        GameManager.instance.playerInfo.curStageInfoList = null;
+    }
+
     IEnumerator SingletonCheck()
     {
         isSetComplete = false;

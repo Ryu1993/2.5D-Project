@@ -54,15 +54,15 @@ public class Player : Character
     private float comboCount = 0f;
     #endregion
     #region PlayerStat
-    public UnityAction<int> hpUp;
-    public UnityAction<int> maxHpUp; 
+    public UnityAction<float> hpUp;
+    public UnityAction<float> maxHpUp; 
     public override float curHp 
     { 
         get => base.curHp;
         set
         {
             if (value > _maxHp) value = _maxHp;
-            hpUp?.Invoke((int)(value - _curHp));
+            hpUp?.Invoke(value);
             _curHp = value;
         }
     }
@@ -72,7 +72,7 @@ public class Player : Character
         set
         {
             if (value > 12) value = 12;
-            maxHpUp?.Invoke((int)(value - _maxHp));
+            maxHpUp?.Invoke(value);
             _maxHp = value;
         }
     } 
@@ -262,7 +262,6 @@ public class Player : Character
         if (!isComboBehaviour)
         {
             animator.SetBool(animator_Attack, true);
-            weaponContainer.StartCoroutine(weaponContainer.CoMaterialNoise(true));
             InputCheck -= MoveInput;
             CooltimeCounter += ComboCount;
             isComboBehaviour = true;
@@ -282,6 +281,7 @@ public class Player : Character
     {
         rigi.velocity = Vector3.zero;
         rigi.AddForce(crashVec * 300);
+        Debug.Log(damage);
         curHp -= damage;
     }
 
@@ -334,14 +334,13 @@ public class Player : Character
     private void ComboCount()
     {
         comboCount += 0.02f;
-        if(comboCount>=comboTime||weaponContainer.comboCount>=3) ComboEnd();
+        if(comboCount>=comboTime||weaponContainer.comboCount>=weaponContainer.maxCombo) ComboEnd();
     }
     private void ComboEnd()
     {
         animator.SetBool(animator_Attack, false);
         animator.Update(0f);
-        StartCoroutine(weaponContainer.CoMaterialNoise(false));
-        CooltimeCounter += ComboCooltime;
+        CooltimeCounter += AttackCooltime;
         CooltimeCounter -= ComboCount;
         InputCheck += MoveInput;
         weaponContainer.isComboCooltime = true;
@@ -357,14 +356,14 @@ public class Player : Character
         ComboEnd();
     }
 
-    public void ComboCooltime()
+    public void AttackCooltime()
     {
-        weaponContainer.comboCoolCount += 0.02f;
-        if (weaponContainer.comboCoolCount >= weaponContainer.comboDelay)
+        weaponContainer.attackCoolCount += 0.02f;
+        if (weaponContainer.attackCoolCount >= weaponContainer.attackCooltime)
         {
-            CooltimeCounter -= ComboCooltime;
+            CooltimeCounter -= AttackCooltime;
             weaponContainer.isComboCooltime = false;
-            weaponContainer.comboCoolCount = 0f;
+            weaponContainer.attackCoolCount = 0f;
         }
 
     }

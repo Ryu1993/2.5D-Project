@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SwordVFXControl : MonoBehaviour
 {
-    public float duration;
+    public float attackDelay;
     float count = 0;
 
     private void Update()
@@ -14,7 +14,7 @@ public class SwordVFXControl : MonoBehaviour
     void DisableCount()
     {
         count+=Time.deltaTime;
-        if(count>=duration)
+        if(count>=attackDelay)
         {
             count = 0;
             gameObject.SetActive(false);

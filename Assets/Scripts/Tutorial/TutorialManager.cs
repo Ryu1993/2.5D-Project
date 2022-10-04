@@ -47,11 +47,7 @@ public class TutorialManager : Singleton<TutorialManager>
     {
         yield return new WaitUntil(() => !LoadingUI.instance.gameObject.activeSelf);
         yield return WaitList.isGameManagerSet;
-        GameManager.instance.playerInfo.curEquip = null;
-        GameManager.instance.playerInfo.inventory.Clear();
-        GameManager.instance.playerInfo.player_maxHp = 6;
-        GameManager.instance.playerInfo.player_curHp = 6;
-        GameManager.instance.playerInfo.curStage = 0;
+        GameManager.instance.PlayerInfoReset();
         GameManager.instance.scenePlayer = scenePlayer;
         scenePlayer.PlayerSetting();
     }

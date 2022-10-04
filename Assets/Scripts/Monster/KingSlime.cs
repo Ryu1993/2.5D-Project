@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class KingSlime : Monster
+public class KingSlime : BossMonster
 {
     [System.Serializable]
     private class AttackPattern
@@ -19,6 +19,8 @@ public class KingSlime : Monster
     public enum Pattern { Range,Charge,Jump,Normal}
     private NewObjectPool.PoolInfo bullet;
     private UnityAction selectedAttack;
+    [SerializeField]
+    private Rigidbody rigi;
     [Header("PatternCooltime(desiSeconds)")]
     [Header("PatternDelay")]
     [SerializeField]
@@ -106,40 +108,35 @@ public class KingSlime : Monster
         MonsterBullet[] bullets = new MonsterBullet[12];
         for (int i = 0; i < bullets.Length; i++)
         {
-            NewObjectPool.instance.Call(bullet, transform.position).TryGetComponent<MonsterBullet>(out bullets[i]);
+            NewObjectPool.instance.Call(bullet, transform.position+new Vector3(0,0.5f,0)).TryGetComponent<MonsterBullet>(out bullets[i]);
             bullets[i].OwnerSet(this, 2, 2f, Quaternion.Euler(new Vector3(0, 15 * i, 0)));
+            bullets[i].transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
         }
     }
 
-    private void RangeEnd()
-    {
-        StartCoroutine(CoCooltimeCount(Pattern.Range, curPatternCooltime));
-    }
+    private void RangeEnd()=> StartCoroutine(CoCooltimeCount(Pattern.Range, curPatternCooltime));
+
     #endregion
     #region ChargeAttack
     private void ChargeStart()
     {
         sphereCollider.enabled = true;
-        MonsterMoveSwitch();
-        navMeshAgent.SetDestination(direction.forward * 2);
-        navMeshAgent.speed = 8;
-
+        rigi.isKinematic = false;
+        rigi.AddForce(transform.forward * 200);
     }
     private void ChargeEnd()
     {
         sphereCollider.enabled = false;
-        navMeshAgent.ResetPath();
-        navMeshAgent.speed = moveSpeed;
-        MonsterMoveSwitch();
+        rigi.velocity = Vector3.zero;
+        rigi.isKinematic = true;
         StartCoroutine(CoCooltimeCount(Pattern.Charge, curPatternCooltime));
     }
     #endregion
     #region JumpAttack
     private void JumpStart()
     {
-        MonsterMoveSwitch();
-        navMeshAgent.SetDestination(direction.forward * 3);
-        navMeshAgent.speed = 4;
+        rigi.isKinematic = false;
+        rigi.AddForce(transform.forward * 300);
     }
 
     private void JumpAttack()
@@ -151,9 +148,8 @@ public class KingSlime : Monster
     private void JumpEnd()
     {
         sphereCollider.enabled = false;
-        navMeshAgent.ResetPath();
-        navMeshAgent.speed = moveSpeed;
-        MonsterMoveSwitch();
+        rigi.velocity = Vector3.zero;
+        rigi.isKinematic = true;
         StartCoroutine(CoCooltimeCount(Pattern.Jump, curPatternCooltime));
     }
     #endregion

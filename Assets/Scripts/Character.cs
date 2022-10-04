@@ -17,6 +17,7 @@ public class Character : MonoBehaviour, IDamageable
     protected Vector3 moveVec;
     [HideInInspector]
     public bool isHitInput;
+    [SerializeField]
     protected float _curHp;
     public virtual float curHp { get { return _curHp; } set { _curHp = value; } }
 
@@ -41,8 +42,6 @@ public class Character : MonoBehaviour, IDamageable
     public virtual void DirectHit(float damage) => curHp -= damage;
 
     public virtual bool DeadCheck() => _curHp <= 0;
-
-
 
 
 }
