@@ -15,7 +15,7 @@ public class MapManager : Singleton<MapManager>
         [HideInInspector]
         public RoomData room;
         public Dictionary<GateDirection, RoomConnectInfo> gate = new Dictionary<GateDirection, RoomConnectInfo>();
-        public Vector2 rectPosition;
+        public Vector2 rectPosition = Vector2.zero;
         public bool isClear = false;
         public List<GateDirection> GateCheck(bool isFull)
         {
@@ -59,19 +59,17 @@ public class MapManager : Singleton<MapManager>
             if(!connectedList.Contains(matchRoom)) connectedList.Add(matchRoom);
             if(!allRoomList.Contains(matchRoom)) allRoomList.Add(matchRoom);
         }
-        if(!allRoomList.Contains(startInfo))allRoomList.Add(startInfo);
         allRoomList.Remove(startInfo);
-        allRoomList.Remove(endInfo);
         while(true)
         {
             RoomConnectInfo randomRoom = connectedList[Random.Range(0, connectedList.Count)];
             if (randomRoom.gate.ContainsKey(GateDirection.Up)) continue;
-            if (!SearchInfofromRectPosition(RectPositionFromDirection(GateDirection.Up, randomRoom)))
-            { }
-
-
+            if (!SearchInfofromRectPosition(RectPositionFromDirection(GateDirection.Down, randomRoom))) continue;
+            randomRoom.gate.Add(GateDirection.Up, endInfo);
+            endInfo.gate.Add(GateDirection.Down, randomRoom);
+            endInfo.rectPosition = RectPositionFromDirection(GateDirection.Down, randomRoom);
+            break;
         }
-
         for (int i = 0; i < allRoomList.Count; i++) allRoomList[i].RoomDataSet(mapInfo.progressRooms[i]);
         startInfo.RoomDataSet(mapInfo.startRoom);
         endInfo.RoomDataSet(mapInfo.endRoom);
@@ -117,8 +115,7 @@ public class MapManager : Singleton<MapManager>
         foreach (RoomConnectInfo roomConnectInfo in checkList) outputList.Add(roomConnectInfo);
         startInfo.rectPosition = new Vector2(0, 0);
         connectedList.Add(startInfo);
-        //checkList.Add(endInfo);
-        //outputList.Add(endInfo);
+        allRoomList.Add(startInfo);
     }
     private GateDirection MatchDirection(GateDirection direction)
     {
@@ -140,7 +137,7 @@ public class MapManager : Singleton<MapManager>
 
     private bool SearchInfofromRectPosition(Vector2 target)
     {
-        foreach(var info in connectedList)
+        foreach(var info in allRoomList)
         {
             if (info.rectPosition == target) return false;
         }

@@ -15,9 +15,9 @@ MonoBehaviour:
   curRoomType: 3
   icon: {fileID: 2631046323181635569, guid: c902e08bd83e04947b6e8d7f31f385be, type: 3}
   map_pack:
-    m_LabelString: TestMap_Label
+    m_LabelString: EnemyMap
   monster_pack:
-    m_LabelString: TestEnemy_Label
+    m_LabelString: SlimeEnemy
   npc_pack:
     m_LabelString: default
   reward_pack:

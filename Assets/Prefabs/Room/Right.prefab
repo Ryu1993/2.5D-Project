@@ -91,7 +91,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5615a2c145fc37b46850390853ca3864, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gateParticle: {fileID: 0}
+  gateParticle: {fileID: 1380083865968848539}
   colli: {fileID: 3594918513984641326}
 --- !u!1001 &6899035491740746922
 PrefabInstance:

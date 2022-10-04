@@ -18,6 +18,6 @@ public class GameSceneManager : MonoBehaviour
         GameManager.instance.scenePlayer = scenePlayer;
         StatusManager.instance.playerStatusUI = statusContainerUi;
         scenePlayer.PlayerSetting();
-        mapManager.GameEneter(GameManager.instance.playerInfo.curMapInfo);
+        mapManager.GameEneter(GameManager.instance.playerInfo.curStageInfo.curMap);
     }
 }

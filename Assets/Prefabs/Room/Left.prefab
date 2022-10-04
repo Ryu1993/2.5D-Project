@@ -60,7 +60,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5615a2c145fc37b46850390853ca3864, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gateParticle: {fileID: 0}
+  gateParticle: {fileID: 5231436252665647957}
   colli: {fileID: 7135102473836881337}
 --- !u!1 &7436986723103702647
 GameObject:

@@ -28,7 +28,7 @@ public class RoomIconUI : MonoBehaviour
     public void ActiveIcon(MapManager.RoomConnectInfo roominfo)
     {
         image.sprite = roominfo.room.icon;
-        foreach (MapManager.GateDirection direction in roominfo.GateCheck())
+        foreach (MapManager.GateDirection direction in roominfo.GateCheck(true))
         {
             iconDirection[direction].SetActive(true);
         }

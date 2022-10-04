@@ -43,7 +43,7 @@ public class StageIcon : MonoBehaviour
         if(count>=0.5f)
         {
             boxCollider.enabled = false;
-            GameManager.instance.playerInfo.curMapInfo = mapConnetInfo.curMap;
+            GameManager.instance.playerInfo.curStageInfo = mapConnetInfo;
             AsyncOperation operation = SceneManager.LoadSceneAsync("GameScene");
             operation.allowSceneActivation = false;
             LoadingUI.instance.CallLoading(operation);

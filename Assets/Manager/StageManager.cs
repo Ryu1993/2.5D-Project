@@ -73,6 +73,12 @@ public class StageManager : Singleton<StageManager>
             StageCreate(player.progressStageInfo);
             player.curStageInfoList = allConnetInfos;
             player.curStageInfo = startMap;
+            player.stageMaxLevel = lastPrevStageLevel;
+        }
+        else
+        {
+            allConnetInfos = player.curStageInfoList;
+            lastPrevStageLevel = player.stageMaxLevel;
         }
         SceneCreate();
         stagePlayer.position = iconsDic[player.curStageInfo].transform.position;

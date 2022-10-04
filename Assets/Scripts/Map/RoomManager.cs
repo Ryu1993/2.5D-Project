@@ -44,8 +44,11 @@ public class RoomManager : MonoBehaviour
         Gate.Add(MapManager.GateDirection.Right, gate.Find("Right"));
         foreach(MapManager.GateDirection direction in MapManager.instance.gateDirections)
         {
-            Gate temp = Gate[direction].GetComponent<Gate>();
-            temp.DirectionSet(direction);
+            if (Gate[direction] != null)
+            {
+                Gate[direction].TryGetComponent<Gate>(out var gate);
+                gate.DirectionSet(direction);
+            }
         }
     }
     public void ActivateGate()

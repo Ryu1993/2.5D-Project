@@ -13,6 +13,7 @@ public class RangeSlime : Monster
     [SerializeField]
     private float rangeDuration;
     private Coroutine rangeAttack;
+    MonsterBullet[] bullets = new MonsterBullet[6];
 
     protected override void Awake()
     {
@@ -38,11 +39,11 @@ public class RangeSlime : Monster
 
     private void RangeAttack()
     {
-        MonsterBullet[] bullets = new MonsterBullet[3];
+        
         for(int i=0;i<bullets.Length;i++)
         {
             NewObjectPool.instance.Call(bullet, transform.position).TryGetComponent<MonsterBullet>(out bullets[i]);
-            bullets[i].OwnerSet(this, rangeSpeed, rangeDuration,Quaternion.Euler(new Vector3(0, direction.eulerAngles.y,0) -new Vector3(0,15*(i-1),0)));
+            bullets[i].OwnerSet(this, rangeSpeed, rangeDuration,Quaternion.Euler(new Vector3(0, 30*i,0)));
         }
     }
 

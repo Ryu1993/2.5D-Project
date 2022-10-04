@@ -152,7 +152,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49be9d43db86a6f46955856cd40a9385, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  secenePlayer: {fileID: 1023465288}
   playerPosition: {x: 0, y: 0, z: 0}
+  monsterBullet: {fileID: 1875356018731203462, guid: 211151b2501f8f648b1738a3ad194fc1,
+    type: 3}
 --- !u!4 &45666428
 Transform:
   m_ObjectHideFlags: 0

@@ -16,4 +16,4 @@ MonoBehaviour:
   startRoom: {fileID: 11400000, guid: e37c944adff88bc4fb4073015801af3b, type: 2}
   progressRooms:
   - {fileID: 11400000, guid: e37c944adff88bc4fb4073015801af3b, type: 2}
-  endRoom: {fileID: 11400000, guid: e37c944adff88bc4fb4073015801af3b, type: 2}
+  endRoom: {fileID: 11400000, guid: d1dbdeff6716a2846b56e16e24fa5890, type: 2}

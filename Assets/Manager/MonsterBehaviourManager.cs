@@ -25,9 +25,9 @@ public class MonsterBehaviourManager : Singleton<MonsterBehaviourManager>
     private IEnumerator Start()
     {
         yield return WaitList.isGameManagerSet;
-        //yield return WaitList.isPlayerSet;
-        //yield return WaitList.isPlayerReady;
-        //secenePlayer = GameManager.instance.scenePlayer;
+        yield return WaitList.isPlayerSet;
+        yield return WaitList.isPlayerReady;
+        secenePlayer = GameManager.instance.scenePlayer;
         StartCoroutine(CoFixedUpdate());
 
     } 

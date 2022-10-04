@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6231771538771705125}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Direction
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -40,7 +40,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6330325197792537895}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: RealDirection
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -76,7 +76,7 @@ GameObject:
   - component: {fileID: 6988312519402825096}
   - component: {fileID: 175335103582965223}
   - component: {fileID: 1191263998210446782}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: KingSlime
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -167,7 +167,7 @@ MonoBehaviour:
   curStatusEffect: 
   isHitInput: 0
   moveSpeed: 1.5
-  _maxHp: 40
+  _maxHp: 20
   scanRange: 8
   attackRange: 4
   attackDelay: 1
@@ -207,10 +207,20 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 6330325197792537895}
     m_Modifications:
+    - target: {fileID: 1074905056841419171, guid: c8eced71a2e8c0e4182c466a7a527804,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 1130853571538141387, guid: c8eced71a2e8c0e4182c466a7a527804,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
       value: -89.98021
+      objectReference: {fileID: 0}
+    - target: {fileID: 1342700970717424045, guid: c8eced71a2e8c0e4182c466a7a527804,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 1583740906413404108, guid: c8eced71a2e8c0e4182c466a7a527804,
         type: 3}
@@ -256,6 +266,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 11.945448
+      objectReference: {fileID: 0}
+    - target: {fileID: 3284476614372009154, guid: c8eced71a2e8c0e4182c466a7a527804,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 3467851699220123360, guid: c8eced71a2e8c0e4182c466a7a527804,
         type: 3}
@@ -312,16 +327,46 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3808139919822216049, guid: c8eced71a2e8c0e4182c466a7a527804,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 4281683080859636826, guid: c8eced71a2e8c0e4182c466a7a527804,
         type: 3}
       propertyPath: m_Name
       value: Slime_03 King
+      objectReference: {fileID: 0}
+    - target: {fileID: 4281683080859636826, guid: c8eced71a2e8c0e4182c466a7a527804,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 5514111997265349643, guid: c8eced71a2e8c0e4182c466a7a527804,
         type: 3}
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 9100000, guid: 3138d68d57327054ea27a620b2d960ec, type: 2}
+    - target: {fileID: 6226777814166338176, guid: c8eced71a2e8c0e4182c466a7a527804,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 7742023579735404407, guid: c8eced71a2e8c0e4182c466a7a527804,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 8822947617055703412, guid: c8eced71a2e8c0e4182c466a7a527804,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 9213536415483104170, guid: c8eced71a2e8c0e4182c466a7a527804,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c8eced71a2e8c0e4182c466a7a527804, type: 3}
 --- !u!4 &3024845225414260963 stripped

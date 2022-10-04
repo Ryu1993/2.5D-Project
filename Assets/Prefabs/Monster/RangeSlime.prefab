@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6231771538771705125}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Direction
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -40,7 +40,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6330325197792537895}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: RealDirection
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -76,7 +76,7 @@ GameObject:
   - component: {fileID: 6988312519402825096}
   - component: {fileID: 175335103582965223}
   - component: {fileID: 5884532832191802209}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: RangeSlime
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -179,6 +179,7 @@ MonoBehaviour:
   mask:
     serializedVersion: 2
     m_Bits: 128
+  isNamed: 0
   target: {fileID: 0}
   rangeCooltime: 2
   rangeSpeed: 2
@@ -195,6 +196,36 @@ PrefabInstance:
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 9100000, guid: 08a2210d485ffb44ba56922afdb0a627, type: 2}
+    - target: {fileID: 1133049861285851969, guid: fb2ecc06702262f4483e4278987c747b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 1951564114070542236, guid: fb2ecc06702262f4483e4278987c747b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 3648376236285552310, guid: fb2ecc06702262f4483e4278987c747b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 4549964650012030818, guid: fb2ecc06702262f4483e4278987c747b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 5286268979643726068, guid: fb2ecc06702262f4483e4278987c747b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 5769512038960252743, guid: fb2ecc06702262f4483e4278987c747b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 6118174221721670358, guid: fb2ecc06702262f4483e4278987c747b,
         type: 3}
       propertyPath: m_RootOrder
@@ -254,6 +285,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Slime_03 Leaf
+      objectReference: {fileID: 0}
+    - target: {fileID: 6891580169314388076, guid: fb2ecc06702262f4483e4278987c747b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 7647819984296596885, guid: fb2ecc06702262f4483e4278987c747b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 8532752144766547355, guid: fb2ecc06702262f4483e4278987c747b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fb2ecc06702262f4483e4278987c747b, type: 3}

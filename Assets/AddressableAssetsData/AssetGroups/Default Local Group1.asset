@@ -66,6 +66,36 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - EnemyMap
+  - m_GUID: d66fc2ee14d8d74418b0274474547980
+    m_Address: Assets/Prefabs/Map/BossRoom.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - BossRoom
+  - m_GUID: 743025eb4d8fd33428b04192d3fe3bd0
+    m_Address: Assets/Prefabs/Map/EndRoom.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - EndRoom
+  - m_GUID: cc5a550e250ed694299806b71235fae6
+    m_Address: Assets/Prefabs/Map/RewardRoom.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - RewardRoom
+  - m_GUID: 62b789f990a28e644a313055dfbab8dd
+    m_Address: Assets/Prefabs/Monster/BasicSlime.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - SlimeEnemy
+  - m_GUID: 5b1140f386d69354bbe720328d10b293
+    m_Address: Assets/Prefabs/Monster/ChargeSlime.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - SlimeEnemy
+  - m_GUID: adec80b8a7c789446a8461b8634905b0
+    m_Address: Assets/Prefabs/Monster/RangeSlime.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - SlimeEnemy
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: a36bbc9cce32b754382bb97867bcb24f, type: 2}
   m_SchemaSet:
