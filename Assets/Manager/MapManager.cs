@@ -17,16 +17,10 @@ public class MapManager : Singleton<MapManager>
         public Dictionary<GateDirection, RoomConnectInfo> gate = new Dictionary<GateDirection, RoomConnectInfo>();
         public Vector2 rectPosition;
         public bool isClear = false;
-        public List<GateDirection> NullGateCheck()
+        public List<GateDirection> GateCheck(bool isFull)
         {
             var result = new List<GateDirection>();
-            foreach(var gateDirection in MapManager.instance.gateDirections) if (!gate.ContainsKey(gateDirection)) result.Add(gateDirection);
-            return result;
-        }
-        public List<GateDirection> GateCheck()
-        {
-            var result = new List<GateDirection>();
-            foreach (var gateDirection in MapManager.instance.gateDirections) if (gate.ContainsKey(gateDirection)) result.Add(gateDirection);
+            foreach (var gateDirection in MapManager.instance.gateDirections) if (gate.ContainsKey(gateDirection)==isFull) result.Add(gateDirection);
             return result;
         }
         public void RoomDataSet(RoomData _room) => room = _room;
@@ -48,11 +42,10 @@ public class MapManager : Singleton<MapManager>
     public void RoomCreate(MapInfo mapInfo)
     {
         RoomListCreate(mapInfo);
-
         while(checkList.Count > 0)
         {
             RoomConnectInfo curRoom = connectedList[Random.Range(0, connectedList.Count)];
-            var curRoomNullGate = curRoom.NullGateCheck();
+            var curRoomNullGate = curRoom.GateCheck(false);
             if (curRoomNullGate.Count == 0){ RemoveList(curRoom); continue; }
             GateDirection curRoomDirection = curRoomNullGate[Random.Range(0, curRoomNullGate.Count)];
             GateDirection curRoomMatchDirection = MatchDirection(curRoomDirection);
@@ -69,6 +62,16 @@ public class MapManager : Singleton<MapManager>
         if(!allRoomList.Contains(startInfo))allRoomList.Add(startInfo);
         allRoomList.Remove(startInfo);
         allRoomList.Remove(endInfo);
+        while(true)
+        {
+            RoomConnectInfo randomRoom = connectedList[Random.Range(0, connectedList.Count)];
+            if (randomRoom.gate.ContainsKey(GateDirection.Up)) continue;
+            if (!SearchInfofromRectPosition(RectPositionFromDirection(GateDirection.Up, randomRoom)))
+            { }
+
+
+        }
+
         for (int i = 0; i < allRoomList.Count; i++) allRoomList[i].RoomDataSet(mapInfo.progressRooms[i]);
         startInfo.RoomDataSet(mapInfo.startRoom);
         endInfo.RoomDataSet(mapInfo.endRoom);
@@ -114,8 +117,8 @@ public class MapManager : Singleton<MapManager>
         foreach (RoomConnectInfo roomConnectInfo in checkList) outputList.Add(roomConnectInfo);
         startInfo.rectPosition = new Vector2(0, 0);
         connectedList.Add(startInfo);
-        checkList.Add(endInfo);
-        outputList.Add(endInfo);
+        //checkList.Add(endInfo);
+        //outputList.Add(endInfo);
     }
     private GateDirection MatchDirection(GateDirection direction)
     {
@@ -170,7 +173,7 @@ public class MapManager : Singleton<MapManager>
         curRoom = AddressObject.RandomInstinate(curRoomInfo.room.map_pack);
         curRoomManager = curRoom.GetComponent<RoomManager>();
         curRoomManager.roomData = curRoomInfo.room;
-        curRoomManager.ConnectedSet(curRoomInfo.GateCheck());
+        curRoomManager.ConnectedSet(curRoomInfo.GateCheck(true));
         if(!curRoomInfo.isClear)curRoomManager.RoomSetting();
         if(curRoomInfo.isClear)curRoomManager.ActivateGate();
         curRoomManager.PlayerSpawn(player.transform, MatchDirection(direction));
@@ -182,18 +185,6 @@ public class MapManager : Singleton<MapManager>
 
 
 
-
-
-    [SerializeField]
-    MapInfo map;
-    void Test()
-    {
-        GameEneter(map);
-    }
-    private void Start()
-    {
-        Test();
-    }
 
 
 }

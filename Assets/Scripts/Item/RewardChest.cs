@@ -11,8 +11,9 @@ public class RewardChest : MonoBehaviour
     Animator animator;
     [SerializeField]
     Collider chestColli;
-    static readonly int open = Animator.StringToHash("Open");
+    private readonly int open = Animator.StringToHash("Open");
 
+    public void RewardSet(AssetLabelReference _label) => label = _label;
     public void OpenChest()
     {
         animator.SetTrigger(open);

@@ -29,10 +29,16 @@ public class Monster : Character,IReturnable,IAttackable
     public Animator animator;
     [SerializeField]
     protected LayerMask mask;
+    public bool isNamed;
     protected float attackDelayCount = 0;
     protected float attackCooltimeCount = 0;
     protected bool isAttackCooltime;
     protected Collider[] attackBox = new Collider[1];
+    public UnityAction attackStart;
+    public UnityAction attackEnd;
+    public UnityAction attackReady;
+    [HideInInspector]
+    public Character target;
     public readonly int animator_Ready = Animator.StringToHash("Ready");
 
 
@@ -53,7 +59,7 @@ public class Monster : Character,IReturnable,IAttackable
     }
     #endregion
 
-    private void Awake() => StateSet();
+    protected virtual void Awake() => StateSet();
     protected virtual void OnEnable() => StartCoroutine(CoChangeState());
 
 
@@ -115,7 +121,8 @@ public class Monster : Character,IReturnable,IAttackable
         if (attackCooltimeCount >= attackCooltime)
         {
             isAttackCooltime = false;
-            MonsterBehaviourManager.instance.monsterBehaviour -= this.AttackCooltimeCount;
+            attackCooltimeCount = 0;
+            MonsterBehaviourManager.instance.monsterBehaviour -= AttackCooltimeCount;
         }
     }
 
@@ -139,6 +146,7 @@ public class Monster : Character,IReturnable,IAttackable
             animator.SetFloat("Speed", navMeshAgent.velocity.magnitude);
         }
     }
+    public void MonsterNavReset() => navMeshAgent.ResetPath();
     public void MonsterMoveSwitch() => navMeshAgent.enabled = !navMeshAgent.enabled;
     public void ChangeState(MonState state) => stateMachine.ChangeState(state);
 

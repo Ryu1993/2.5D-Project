@@ -1,11 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class StageIcon : MonoBehaviour
 {
     private int onSelect = Animator.StringToHash("OnSelect");
-    [SerializeField]
     private SpriteRenderer spriteRenderer;
     private Animator animator;
     private BoxCollider boxCollider;
@@ -17,47 +17,62 @@ public class StageIcon : MonoBehaviour
     {
         animator = GetComponent<Animator>();
         boxCollider = GetComponent<BoxCollider>();
+        spriteRenderer = transform.GetChild(0).GetComponent<SpriteRenderer>();
     }
     public void CurMapConnetInfo(StageManager.MapConnetInfo info)
     {
         mapConnetInfo = info;
-        spriteRenderer.sprite = info.curMap.iconSprite;
+        if (info.curMap!=null) spriteRenderer.sprite = info.curMap.iconSprite;
+
     }
 
     public void Enable() => boxCollider.enabled = true;
-    public void Disable() => boxCollider.enabled = false;
+    public void Disable() => boxCollider.isTrigger = true;
 
 
     private void OnTriggerEnter(Collider other)
     {
-        other.GetComponent<Animator>().SetBool("Move", false);
+        if (other.gameObject.tag != "Player") return;
+        Animator animator = other.GetComponent<Animator>();
+        animator.SetBool("Move", false);
     }
     private void OnTriggerStay(Collider other)
     {
+        if (other.gameObject.tag != "Player") return;
         count += Time.fixedDeltaTime;
         if(count>=0.5f)
         {
-
+            boxCollider.enabled = false;
+            GameManager.instance.playerInfo.curMapInfo = mapConnetInfo.curMap;
+            AsyncOperation operation = SceneManager.LoadSceneAsync("GameScene");
+            operation.allowSceneActivation = false;
+            LoadingUI.instance.CallLoading(operation);
         }
  
     }
 
+
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.layer == 10) animator.SetBool(onSelect, true);
+        if (collision.gameObject.tag == "GameController") animator.SetBool(onSelect, true);
     }
 
     private void OnCollisionStay(Collision collision)
     {
-        if (collision.gameObject.layer == 10)
+        if (collision.gameObject.tag == "GameController")
         {
             if(Input.GetMouseButton(0))
             {
+                animator.SetBool(onSelect, false);
                 StageManager.instance.IconSelected(transform.position);
-                boxCollider.isTrigger = true;
             }     
         }
     }
+    private void OnCollisionExit(Collision collision)
+    {
+        if (collision.gameObject.tag == "GameController") animator.SetBool(onSelect, false);
+    }
+
 
 
 }

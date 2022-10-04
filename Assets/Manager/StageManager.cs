@@ -12,8 +12,11 @@ public class StageManager : Singleton<StageManager>
     public class MapConnetInfo
     { 
         public MapInfo curMap;
+        [HideInInspector]
         public MapConnetInfo left = null;
+        [HideInInspector]
         public MapConnetInfo right = null;
+        [HideInInspector]
         public List<MapConnetInfo> prev = new List<MapConnetInfo>();
         public int stagLevel;
         public MapConnetInfo(MapInfo _curMap)
@@ -44,10 +47,11 @@ public class StageManager : Singleton<StageManager>
     [SerializeField]
     float stageDistance;
     [SerializeField]
-    StageIcon icon;
+    GameObject icon;
     [SerializeField]
     Transform stagePlayer;
     NavMeshAgent playerAgent;
+    Animator playerAnim;
     [SerializeField]
     StageInfo test;
 
@@ -56,8 +60,8 @@ public class StageManager : Singleton<StageManager>
         instance = null;
         base.Awake();
         playerAgent = stagePlayer.GetComponent<NavMeshAgent>();
-        StageCreate(test);
-        SceneCreate();
+        playerAnim = stagePlayer.GetComponent<Animator>();
+        
     }
 
     private IEnumerator Start()
@@ -78,10 +82,10 @@ public class StageManager : Singleton<StageManager>
 
     public void IconSelected(Vector3 targetPos)
     {
-        iconsDic[player.curStageInfo.left].Disable();
-        iconsDic[player.curStageInfo.right].Enable();
+        if (player.curStageInfo.left != null) iconsDic[player.curStageInfo.left].Disable();
+        if (player.curStageInfo.right != null) iconsDic[player.curStageInfo.right].Disable();
         playerAgent.SetDestination(targetPos);
-        player.GetComponent<Animator>().SetBool("Move", true);
+        playerAnim.SetBool("Move", true);
     }
 
 
@@ -146,7 +150,7 @@ public class StageManager : Singleton<StageManager>
             temp -= new Vector3(stageDistance*(curLevelMap.Count/2), 0, 0);
             for(int j=0;j<curLevelMap.Count;j++)
             {
-                StageIcon tempIcon = Instantiate(icon.gameObject).GetComponent<StageIcon>();
+                StageIcon tempIcon = Instantiate(icon).GetComponent<StageIcon>();
                 tempIcon.transform.position = temp+new Vector3(j*stageDistance, 0, 0);
                 tempIcon.CurMapConnetInfo(curLevelMap[j]);
                 iconsDic.Add(curLevelMap[j], tempIcon);

@@ -47,10 +47,6 @@ namespace AsyncState
             base.EnterEvent(order);
             Debug.Log(order.name+"È­»óÁøÀÔ");      
         }
-        protected override void EffectEvent(Character order)
-        {
-            base.EffectEvent(order);
-        }
         protected override void ExitEvent(Character order)
         {
             base.ExitEvent(order);
@@ -69,12 +65,36 @@ namespace AsyncState
         protected override void EnterEvent(Character order)
         {
             base.EnterEvent(order);
-            Debug.Log(order.name + "Èú");
+            order.curHp++;
+        }
+
+    }
+
+    public class Sturn : StatusEffect
+    {
+        Player target;
+        bool isPlayer;
+        public Sturn(int duration,Character order)
+        {
+            type = Type.Sturn;
+            startDuration = duration;
+            order.StartCoroutine(Progress(duration, order));
+        }
+        protected override void EnterEvent(Character order)
+        {
+            base.EnterEvent(order);
+            target = order as Player;
+            isPlayer = target != null;
+            if(isPlayer) target.InputCheckRemove();
         }
         protected override void ExitEvent(Character order)
         {
             base.ExitEvent(order);
-            Debug.Log("Èú Á¾·á");
+            if (isPlayer)
+            {
+                target.InputCheckRemove();
+                target.InputCheckSet();
+            }
         }
 
 

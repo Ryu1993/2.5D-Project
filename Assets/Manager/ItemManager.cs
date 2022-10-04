@@ -28,8 +28,12 @@ public class ItemManager : Singleton<ItemManager>
 
     public void PlayerGetArtifact(Artifact artifact)
     {
+        GameManager.instance.playerInfo.inventory.Add(artifact);
+        ArtifactActivation(artifact);
+    }
+    public void ArtifactActivation(Artifact artifact)
+    {
         if (ArtifactEffet.ContainsKey(artifact.artifactType)) ArtifactEffet[artifact.artifactType]?.Invoke(artifact.strength);
-        else Debug.Log("아직 정해지지않은 아티팩트 효과");
         UIManager.instance.artifactUI.ArtifactDraw(artifact);
     }
 
@@ -37,6 +41,7 @@ public class ItemManager : Singleton<ItemManager>
     {
         UIManager.instance.weaponUI.ChangeWeapon(equip);
         player.weaponContainer.WeaponSet(equip.weaponPrefab);
+        GameManager.instance.playerInfo.curEquip = equip;
     }
 
     public void CreateSceneItem(Item item, Vector3 position)
@@ -48,16 +53,17 @@ public class ItemManager : Singleton<ItemManager>
     public void ArtifactEffectAdd()
     {
         ArtifactEffet.Add(Artifact.ArtifactType.MaxHp, MaxHpUp);
-
+        ArtifactEffet.Add(Artifact.ArtifactType.MoveSpeed,MoveSpeedUp); 
     }
 
     private void MaxHpUp(float strength)
     {
         player.maxHp += strength;
         player.curHp += strength;
-
     }
-
-
+    private void MoveSpeedUp(float strength)
+    {
+        player.moveSpeed += strength;
+    }
 
 }

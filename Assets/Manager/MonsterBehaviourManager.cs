@@ -5,19 +5,29 @@ using UnityEngine.Events;
 
 public class MonsterBehaviourManager : Singleton<MonsterBehaviourManager>
 {
+    [SerializeField]
     private Player secenePlayer;
     public Vector3 playerPosition;
     public UnityAction monsterBehaviour;
     public Coroutine coFixeUpdate;
+    [SerializeField]
+    private GameObject monsterBullet;
+    private NewObjectPool.PoolInfo bulletInfo;
+    
 
-    protected override void Awake()=> base.Awake();
+    protected override void Awake()
+    {
+        instance = null;
+        base.Awake();
+    }
+
 
     private IEnumerator Start()
     {
         yield return WaitList.isGameManagerSet;
-        yield return WaitList.isPlayerSet;
-        yield return WaitList.isPlayerReady;
-        secenePlayer = GameManager.instance.scenePlayer;
+        //yield return WaitList.isPlayerSet;
+        //yield return WaitList.isPlayerReady;
+        //secenePlayer = GameManager.instance.scenePlayer;
         StartCoroutine(CoFixedUpdate());
 
     } 
@@ -32,6 +42,13 @@ public class MonsterBehaviourManager : Singleton<MonsterBehaviourManager>
         }
 
     }
+
+    public NewObjectPool.PoolInfo RequestBullet()
+    {
+        if (bulletInfo == null) bulletInfo = NewObjectPool.instance.PoolInfoSet(monsterBullet, 30, 15);
+        return bulletInfo;    
+    }
+
 
  
 }

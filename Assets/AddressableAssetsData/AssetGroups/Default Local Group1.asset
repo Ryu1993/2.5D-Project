@@ -60,7 +60,12 @@ MonoBehaviour:
     m_Address: Assets/Prefabs/Map/CrossEnemyRoom.prefab
     m_ReadOnly: 0
     m_SerializedLabels:
-    - TestMap_Label
+    - EnemyMap
+  - m_GUID: 170e57422ff5f6d4f87dbdb69354f34e
+    m_Address: Assets/Prefabs/Map/BigRoom.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - EnemyMap
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: a36bbc9cce32b754382bb97867bcb24f, type: 2}
   m_SchemaSet:

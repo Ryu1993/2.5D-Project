@@ -10,7 +10,6 @@ public class GameManager : Singleton<GameManager>
     public PlayerInfo playerInfo;
     public Player scenePlayer;
     public bool isSetComplete;
-    public Vector3 PlayerPosition;
  
 
     protected override void Awake()

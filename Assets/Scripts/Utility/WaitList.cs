@@ -7,6 +7,8 @@ public static class WaitList
     public static WaitForFixedUpdate fixedUpdate = new WaitForFixedUpdate();
     public static WaitForEndOfFrame endOfFrame = new WaitForEndOfFrame();
     public static WaitForSeconds oneSecond = new WaitForSeconds(1f);
+    public static WaitForSeconds deciSecond = new WaitForSeconds(0.1f);
+    public static WaitForSeconds halfSecond = new WaitForSeconds(0.5f);
     public static WaitForSecondsRealtime realOneSecond = new WaitForSecondsRealtime(1f);
     public static WaitUntil isPause = new WaitUntil(() => Time.timeScale == 0f);
     public static WaitUntil isPlay = new WaitUntil(() => Time.timeScale > 0f);

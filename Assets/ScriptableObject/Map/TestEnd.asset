@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a7a5b0606bf5064d96b67e40fab07ff, type: 3}
   m_Name: TestEnd
   m_EditorClassIdentifier: 
-  startRoom: {fileID: 0}
-  progressRooms: []
-  endRoom: {fileID: 0}
+  iconSprite: {fileID: 21300000, guid: e30e7f1121c83ed469e6242c11d18e05, type: 3}
+  startRoom: {fileID: 11400000, guid: e37c944adff88bc4fb4073015801af3b, type: 2}
+  progressRooms:
+  - {fileID: 11400000, guid: e37c944adff88bc4fb4073015801af3b, type: 2}
+  endRoom: {fileID: 11400000, guid: e37c944adff88bc4fb4073015801af3b, type: 2}

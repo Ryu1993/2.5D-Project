@@ -7,8 +7,16 @@ using TMPro;
 
 public class StatusContainerUi : MonoBehaviour
 {
+
+    [System.Serializable]
+    private class StatusSpriteMatch
+    {
+        public AsyncState.Type status;
+        public Sprite sprite;
+    }
+
     [SerializeField]
-    Sprite[] statusSprites;
+    StatusSpriteMatch[] statusMatchList;
     [SerializeField]
     GameObject statusIcon;
     NewObjectPool.PoolInfo statusIconKey;
@@ -16,21 +24,18 @@ public class StatusContainerUi : MonoBehaviour
 
     private void Awake()
     {
-        DicInfoSet();
+        foreach (StatusSpriteMatch statusSpriteMatch in statusMatchList) statusSprite.Add(statusSpriteMatch.status, statusSpriteMatch.sprite);
     }
     private IEnumerator Start()
     {
+        yield return new WaitUntil(() => StatusManager.instance != null);
+        StatusManager.instance.playerStatusUI = this;
         yield return new WaitUntil(() => NewObjectPool.instance != null);
         statusIconKey = NewObjectPool.instance.PoolInfoSet(statusIcon, 6, 3);
     } 
-    public void DicInfoSet() // sprite ¶û ¿©±â¼­ ¸ÅÄª
-    {
-        statusSprite.Add(AsyncState.Type.Burn, statusSprites[0]);
-        statusSprite.Add(AsyncState.Type.Heal, statusSprites[1]);
-    }
     public StatusIconManager StatusAdd(AsyncState.Type type,int duration)
     {
-        StatusIconManager manager = NewObjectPool.instance.Call(statusIconKey,transform).GetComponent<StatusIconManager>();
+        NewObjectPool.instance.Call(statusIconKey,transform).TryGetComponent<StatusIconManager>(out var manager);
         manager.SetIcon(statusSprite[type],duration);
         return manager;
     }

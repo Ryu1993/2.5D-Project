@@ -75,10 +75,10 @@ public class Player : Character
             maxHpUp?.Invoke((int)(value - _maxHp));
             _maxHp = value;
         }
-    }
-    public Coroutine coUpdate;
+    } 
     #endregion
     public readonly int animator_Dash = Animator.StringToHash("Dash");
+    public Coroutine coUpdate;
 
 
     private void Awake()=> rigi = transform.GetComponent<Rigidbody>();
@@ -112,7 +112,7 @@ public class Player : Character
             foreach (Item item in GameManager.instance.playerInfo.inventory)
             {
                 Artifact artifact = item as Artifact;
-                if (artifact != null) ItemManager.instance.PlayerGetArtifact(artifact);
+                if (artifact != null) ItemManager.instance.ArtifactActivation(artifact);
             }
         }
         InputCheckSet();
@@ -131,13 +131,15 @@ public class Player : Character
         BehaviorExecute += PlayerMove;
         BehaviorExecute += PlayerIdle;
     }
-    private void InputCheckSet()
+    public void InputCheckSet()
     {
         InputCheck += MoveInput;
         InputCheck += AttackInput;
         InputCheck += SkillInput;
         InputCheck += DashInput; 
     }
+    public void InputCheckRemove() => InputCheck = null;
+
     #endregion
     #region BehaviorCheck
     private void MoveInput()
@@ -236,6 +238,7 @@ public class Player : Character
     {
         if (isBehaviorExecuted) return; // 필요없음
         if (!isDashBehavior) return;
+        gameObject.layer = 11;
         ComboCancle();
         rigi.velocity = (mousePointer.position - transform.position).normalized * dashSpeed;
         InputCheck -= MoveInput;
@@ -278,7 +281,7 @@ public class Player : Character
     public override void DirectHit(float damage)
     {
         rigi.velocity = Vector3.zero;
-        rigi.AddForce(crashVec * 400);
+        rigi.AddForce(crashVec * 300);
         curHp -= damage;
     }
 
@@ -316,15 +319,16 @@ public class Player : Character
         if (dashInvincibleCount >= dashInvincibleTime)
         {
             isDashInvincible = false;
+            animator.SetBool(animator_Dash, false);
+            directionCircle.isStop = false;
             InputCheck += MoveInput;
             InputCheck += AttackInput;
             InputCheck += SkillInput;
             CooltimeCounter -= DashInvincibleCount;
             ghostCreator.Swith();
-            animator.SetBool(animator_Dash, false);
-            directionCircle.isStop = false;
             HitInput = null;
             dashInvincibleCount = 0;
+            gameObject.layer = 7;
         }
     }
     private void ComboCount()

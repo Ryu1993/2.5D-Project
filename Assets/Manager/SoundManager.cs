@@ -21,6 +21,7 @@ public class SoundManager : Singleton<SoundManager>
     {
         base.Awake();
         gameObject.SetActive(false);
+        DontDestroyOnLoad(gameObject);
     }
     public void BgmVolumeChange() => audioMixer.SetFloat("Bgm", bgmSlider.value);
     public void EffectVolumeChange() => audioMixer.SetFloat("Effect", effectSlider.value);
