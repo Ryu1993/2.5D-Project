@@ -6,6 +6,7 @@ using UnityEditor.Search.Providers;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.AI;
+using UnityEngine.SceneManagement;
 
 public class StageManager : Singleton<StageManager>
 {
@@ -23,7 +24,6 @@ public class StageManager : Singleton<StageManager>
         {
             curMap = _curMap;
         }
-
         public bool NullNextDirection()
         {
             if (left == null && right == null)
@@ -80,6 +80,15 @@ public class StageManager : Singleton<StageManager>
             allConnetInfos = player.curStageInfoList;
             lastPrevStageLevel = player.stageMaxLevel;
         }
+        if(player.curStageInfo.stagLevel == lastPrevStageLevel)
+        {
+            player.curStageInfoList = null;
+            GameManager.instance.PlayerInfoSave();
+            AsyncOperation operation = SceneManager.LoadSceneAsync("Home");
+            operation.allowSceneActivation = false;
+            LoadingUI.instance.CallLoading(operation);
+            yield break;
+        }
         SceneCreate();
         stagePlayer.position = iconsDic[player.curStageInfo].transform.position;
         if (player.curStageInfo.left != null) iconsDic[player.curStageInfo.left].Enable();
@@ -93,8 +102,6 @@ public class StageManager : Singleton<StageManager>
         playerAgent.SetDestination(targetPos);
         playerAnim.SetBool("Move", true);
     }
-
-
     public void StageCreate(StageInfo stage)
     {
         startMap = new MapConnetInfo(null);

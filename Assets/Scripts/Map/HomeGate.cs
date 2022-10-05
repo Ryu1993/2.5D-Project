@@ -5,17 +5,12 @@ using UnityEngine.SceneManagement;
 
 public class HomeGate : MonoBehaviour
 {
+    [SerializeField]
+    GameObject stageSelectUI;
     private void OnCollisionEnter(Collision collision)
     {
-        GameManager.instance.PlayerInfoSave();
-        SceneChangeMain();
-    }
-
-    private void SceneChangeMain()
-    {
-        var operation = SceneManager.LoadSceneAsync("Main");
-        operation.allowSceneActivation = false;
-        LoadingUI.instance.CallLoading(operation);
+        stageSelectUI.SetActive(true);
+        Time.timeScale = 0;
     }
 
 

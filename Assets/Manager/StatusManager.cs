@@ -14,6 +14,7 @@ public class StatusManager : Singleton<StatusManager>
         StatusEffectCreate.Add(AsyncState.Type.Burn,(character,duration)=>new AsyncState.Burn(duration,character));
         StatusEffectCreate.Add(AsyncState.Type.Heal,(character,duration)=>new AsyncState.Heal(duration,character));
         StatusEffectCreate.Add(AsyncState.Type.Sturn,(character,duration)=>new AsyncState.Sturn(duration,character));
+        StatusEffectCreate.Add(AsyncState.Type.MoveUP,(character,duration)=>new AsyncState.MoveUP(duration,character));
     }
 
 

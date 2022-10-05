@@ -128,6 +128,21 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - BossMonster
+  - m_GUID: 38e06637f14d0944b9b4e4d5a72211e5
+    m_Address: Assets/Prefabs/Map/BuffRoom.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - BuffRoom
+  - m_GUID: 32ca7c5029267824baab11678ef582ee
+    m_Address: Assets/Prefabs/Item/SceneItemCase/Buff.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - BuffEventItem
+  - m_GUID: 6097858e587cb2b498a8e3939d89921c
+    m_Address: Assets/Prefabs/Item/BuffItem/MoveUp.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - BuffEventItem
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: a36bbc9cce32b754382bb97867bcb24f, type: 2}
   m_SchemaSet:

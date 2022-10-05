@@ -88,7 +88,7 @@ public class Player : Character
     #region Setting
     IEnumerator CoUpdate()
     {
-        PlayerSetting();//Trest
+        //PlayerSetting();//Test
         yield return new WaitUntil(() => isReady);
         while(true)
         {        
@@ -120,6 +120,15 @@ public class Player : Character
         InputCheckSet();
         BehaviorExcuteSet();
         isReady = true;
+    }
+    public void PlayerSetting(bool isHome)
+    {
+        if(isHome)
+        {
+            InputCheckSet();
+            BehaviorExcuteSet();
+            isReady = true;
+        }
     }
 
 
@@ -284,7 +293,6 @@ public class Player : Character
     {
         rigi.velocity = Vector3.zero;
         rigi.AddForce(crashVec * 300);
-        Debug.Log(damage);
         curHp -= damage;
     }
 
@@ -369,7 +377,6 @@ public class Player : Character
             weaponContainer.isComboCooltime = false;
             weaponContainer.attackCoolCount = 0f;
         }
-
     }
 
 

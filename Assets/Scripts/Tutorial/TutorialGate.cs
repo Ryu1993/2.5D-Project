@@ -22,6 +22,7 @@ public class TutorialGate : MonoBehaviour
     {
         GameManager.instance.playerInfo.curStageInfoList = null;
         GameManager.instance.playerInfo.progressStageInfo = firstStage;
+        GameManager.instance.playerInfo.curStage = 1;
         GameManager.instance.PlayerInfoSave();
         var operation = SceneManager.LoadSceneAsync("Main");
         operation.allowSceneActivation = false;

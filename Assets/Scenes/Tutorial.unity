@@ -557,6 +557,7 @@ MonoBehaviour:
   secenePlayer: {fileID: 1761388560}
   playerPosition: {x: 0, y: 0, z: 0}
   monsterBullet: {fileID: 0}
+  isTest: 0
 --- !u!4 &295664741
 Transform:
   m_ObjectHideFlags: 0
@@ -3931,8 +3932,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1303544137}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 6.4586897, y: -0.043154746, z: 3.4508011}
-  m_LocalScale: {x: 2, y: 1, z: 4}
+  m_LocalPosition: {x: 6.4586897, y: -0.043154746, z: 8.74}
+  m_LocalScale: {x: 3, y: 1, z: 4}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 605599067}
@@ -6041,8 +6042,7 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 375638857302533642, guid: 225c65312b853c746987e19e1946c480, type: 3}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 225c65312b853c746987e19e1946c480, type: 3}
 --- !u!114 &1460190754 stripped
 MonoBehaviour:

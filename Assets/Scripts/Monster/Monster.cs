@@ -67,8 +67,8 @@ public class Monster : Character,IReturnable,IAttackable
 
     public void StateSet()
     {
-        navMeshAgent = transform.GetComponent<NavMeshAgent>();
-        animator = graphic.GetComponent<Animator>();
+        transform.TryGetComponent(out navMeshAgent);
+        graphic.TryGetComponent(out animator);
         stateMachine = new StateMachine<MonState, Monster>(this);
         stateMachine.AddState(MonState.Idle, new MonsterState.Idle());
         stateMachine.AddState(MonState.Ready, new MonsterState.Ready());
@@ -115,7 +115,6 @@ public class Monster : Character,IReturnable,IAttackable
         if (attackDelayCount>=attackDelay) return true;
         return false;
     }
-
     public void AttackCooltimeCount()
     {
         isAttackCooltime = true;
@@ -127,12 +126,9 @@ public class Monster : Character,IReturnable,IAttackable
             MonsterBehaviourManager.instance.monsterBehaviour -= AttackCooltimeCount;
         }
     }
-
-
     public virtual void MonsterAttack() { }
     public bool MonsterHitCheck() => HitInput != null;
     public void AttackDelayCountReset() => attackDelayCount = 0;
-
     public virtual void MonsterLookAt()
     {
         direction.LookAt(MonsterBehaviourManager.instance.playerPosition);

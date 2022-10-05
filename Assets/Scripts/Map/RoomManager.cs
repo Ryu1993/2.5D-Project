@@ -8,6 +8,7 @@ using System.Linq;
 using UnityEngine.SocialPlatforms.GameCenter;
 using UnityEngine.Events;
 using UnityEngine.ResourceManagement.ResourceProviders.Simulation;
+using static MapManager;
 
 public class RoomManager : MonoBehaviour
 {
@@ -19,13 +20,14 @@ public class RoomManager : MonoBehaviour
     [SerializeField] protected Transform gate;
     [SerializeField] protected Transform center;
     protected Dictionary<Object, List<Transform>> SpawnPoint = new Dictionary<Object, List<Transform>>();
-    protected Dictionary<MapManager.GateDirection,Transform> Gate = new Dictionary<MapManager.GateDirection,Transform>();
-    protected List<MapManager.GateDirection> connectedDirection = new List<MapManager.GateDirection>();
+    protected Dictionary<GateDirection,Transform> Gate = new Dictionary<GateDirection,Transform>();
+    protected List<GateDirection> connectedDirection = new List<GateDirection>();
     protected List<NewObjectPool.PoolInfo> enemyPools = new List<NewObjectPool.PoolInfo>();
     protected List<GameObject> enemys = new List<GameObject>();
     protected List<GameObject> npcs = new List<GameObject>();
     protected List<RewardChest> rewards = new List<RewardChest>();
     protected UnityAction chestOpen;
+    protected UnityAction npcInteraction;
     protected int monsterCounter = 0;
 
     protected void Awake()
@@ -43,12 +45,9 @@ public class RoomManager : MonoBehaviour
     protected void CreateGate()
     {
         Gate.Clear();
-        Gate.Add(MapManager.GateDirection.Up, gate.Find("Up"));
-        Gate.Add(MapManager.GateDirection.Down, gate.Find("Down"));
-        Gate.Add(MapManager.GateDirection.Left, gate.Find("Left"));
-        Gate.Add(MapManager.GateDirection.Right, gate.Find("Right"));
-        foreach(MapManager.GateDirection direction in MapManager.instance.gateDirections)
+        foreach(GateDirection direction in MapManager.instance.gateDirections)
         {
+            Gate.Add(direction, gate.Find(direction.ToString()));
             if (Gate[direction] != null)
             {
                 Gate[direction].TryGetComponent<Gate>(out var gate);
@@ -58,15 +57,14 @@ public class RoomManager : MonoBehaviour
     }
     public void ActivateGate()
     {
-        foreach (MapManager.GateDirection direction in connectedDirection)
+        foreach (GateDirection direction in connectedDirection)
         {
             Gate[direction].GetComponent<Gate>().GateOpen();
         }
     }
-
-    public void ConnectedSet(List<MapManager.GateDirection> directions) => connectedDirection = directions;
+    public void ConnectedGateSet(List<GateDirection> directions) => connectedDirection = directions;
     public void RoomSetting()
-    {
+    { 
         if (roomData.curRoomType == RoomData.RoomType.Event) NPCSpawn();
         if (roomData.curRoomType == RoomData.RoomType.Battle) EnemySpawn();
         if (roomData.curRoomType == RoomData.RoomType.Boss) BossSpawn();
@@ -99,6 +97,12 @@ public class RoomManager : MonoBehaviour
         }
         Addressables.Release(list);
     }
+
+    protected void SubMonsterCountEvent()
+    {
+        monsterCounter--;
+        if (monsterCounter == 0) RewardSpawn();
+    }
     public void EnemyAdd(int num)
     {
         int subCount = 0;
@@ -120,11 +124,7 @@ public class RoomManager : MonoBehaviour
     {
     }
 
-    protected void SubMonsterCountEvent()
-    {
-        monsterCounter--;
-        if (monsterCounter == 0) RewardSpawn();
-    }
+
     protected void NPCSpawn()
     {
         if(roomData.npc_pack!=null)
@@ -133,9 +133,20 @@ public class RoomManager : MonoBehaviour
             if (count > 0)
             {
                 npcs = AddressObject.LimitInstinates(roomData.npc_pack, count);
+                IEventable[] eventables = new IEventable[npcs.Count];
                 for (int i = 0; i < npcs.Count; i++)
                 {
                     npcs[i].transform.position = SpawnPoint[Object.Npc][i].position;
+                    if(npcs[i].TryGetComponent<IEventable>(out var npc))
+                    {
+                        npcInteraction += npc.EventClear;
+                        eventables[i] = npc;
+                    }
+                }
+                npcInteraction += MapManager.instance.CurMapClear;
+                foreach(var eventable in eventables)
+                {
+                    eventable.EventInteraction(npcInteraction);
                 }
             }
         }

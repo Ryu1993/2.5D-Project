@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: FirstMap
   m_EditorClassIdentifier: 
   iconSprite: {fileID: 21300000, guid: a6c10312421cb5e438d8b9edaad2db28, type: 3}
-  startRoom: {fileID: 11400000, guid: 2e7ff73207b72d2409db4ab28b3b3632, type: 2}
+  startRoom: {fileID: 11400000, guid: 39404b9aeb8c2424cba424ccbcbbda58, type: 2}
   progressRooms: []
   endRoom: {fileID: 11400000, guid: d1dbdeff6716a2846b56e16e24fa5890, type: 2}

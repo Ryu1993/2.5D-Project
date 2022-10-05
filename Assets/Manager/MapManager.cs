@@ -23,12 +23,12 @@ public class MapManager : Singleton<MapManager>
         public List<GateDirection> GateCheck(bool isFull)
         {
             var result = new List<GateDirection>();
-            foreach (var gateDirection in MapManager.instance.gateDirections) if (gate.ContainsKey(gateDirection)==isFull) result.Add(gateDirection);
+            foreach (var gateDirection in MapManager.instance.gateDirections)
+            {
+                if (gate.ContainsKey(gateDirection) == isFull) result.Add(gateDirection);
+            }
             return result;
         }
-        public void RoomDataSet(RoomData _room) => room = _room;
-
-
     }
     List<RoomConnectInfo> checkList;
     List<RoomConnectInfo> outputList;
@@ -48,16 +48,27 @@ public class MapManager : Singleton<MapManager>
         while(checkList.Count > 0)
         {
             RoomConnectInfo curRoom = connectedList[Random.Range(0, connectedList.Count)];
+            
             var curRoomNullGate = curRoom.GateCheck(false);
-            if (curRoomNullGate.Count == 0){ RemoveList(curRoom); continue; }
+            
+            if (curRoomNullGate.Count == 0)
+            { 
+                RemoveList(curRoom); 
+                continue; 
+            }
+            
             GateDirection curRoomDirection = curRoomNullGate[Random.Range(0, curRoomNullGate.Count)];
             GateDirection curRoomMatchDirection = MatchDirection(curRoomDirection);
+            
             var matchRooms = MatchRoomList(curRoomMatchDirection, curRoom);
             if (matchRooms.Count == 0) continue;
             RoomConnectInfo matchRoom = matchRooms[Random.Range(0, matchRooms.Count)];
+
             curRoom.gate.Add(curRoomDirection, matchRoom);
             matchRoom.gate.Add(curRoomMatchDirection, curRoom);
+
             matchRoom.rectPosition = RectPositionFromDirection(curRoomMatchDirection, curRoom);
+
             if(checkList.Contains(matchRoom)) checkList.Remove(matchRoom);
             if(!connectedList.Contains(matchRoom)) connectedList.Add(matchRoom);
             if(!allRoomList.Contains(matchRoom)) allRoomList.Add(matchRoom);
@@ -73,9 +84,9 @@ public class MapManager : Singleton<MapManager>
             endInfo.rectPosition = RectPositionFromDirection(GateDirection.Down, randomRoom);
             break;
         }
-        for (int i = 0; i < allRoomList.Count; i++) allRoomList[i].RoomDataSet(mapInfo.progressRooms[i]);
-        startInfo.RoomDataSet(mapInfo.startRoom);
-        endInfo.RoomDataSet(mapInfo.endRoom);
+        for (int i = 0; i < allRoomList.Count; i++) allRoomList[i].room = mapInfo.progressRooms[i];
+        startInfo.room = mapInfo.startRoom;
+        endInfo.room = mapInfo.endRoom;
         allRoomList.Add(startInfo);
         allRoomList.Add(endInfo);
     }
@@ -138,11 +149,11 @@ public class MapManager : Singleton<MapManager>
         else return new Vector2(x - 1, y);
     }
 
-    private bool SearchInfofromRectPosition(Vector2 target)
+    private bool SearchInfofromRectPosition(Vector2 rectPosition)
     {
         foreach(var info in allRoomList)
         {
-            if (info.rectPosition == target) return false;
+            if (info.rectPosition == rectPosition) return false;
         }
         return true;
     }
@@ -173,14 +184,9 @@ public class MapManager : Singleton<MapManager>
             curRoomInfo.roomLocation = AddressObject.RandomLocation(curRoomInfo.room.map_pack);
         }
         curRoom = Addressables.InstantiateAsync(curRoomInfo.roomLocation).WaitForCompletion();
-        if (!curRoom.TryGetComponent<RoomManager>(out curRoomManager))
-        {
-            curRoom.TryGetComponent<BossRoomManager>(out var bossRoomManager);
-            curRoomManager = bossRoomManager;
-        }
-        curRoomManager = curRoom.GetComponent<RoomManager>();       
+        curRoom.TryGetComponent(out curRoomManager);       
         curRoomManager.roomData = curRoomInfo.room;
-        curRoomManager.ConnectedSet(curRoomInfo.GateCheck(true));
+        curRoomManager.ConnectedGateSet(curRoomInfo.GateCheck(true));
         if(!curRoomInfo.isClear)curRoomManager.RoomSetting();
         if(curRoomInfo.isClear)curRoomManager.ActivateGate();
         curRoomManager.PlayerSpawn(player.transform, MatchDirection(direction));

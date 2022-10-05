@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class LoadingUI : Singleton<LoadingUI>
@@ -17,6 +18,15 @@ public class LoadingUI : Singleton<LoadingUI>
         DontDestroyOnLoad(this.gameObject);
         this.gameObject.SetActive(false);
     }
+
+    public void SceneChange(string sceneName)
+    {
+        loadingUI.SetActive(true);
+        var operation = SceneManager.LoadSceneAsync(sceneName);
+        operation.allowSceneActivation = false;
+        CallLoading(operation);
+    }
+
     public Coroutine CallLoading(AsyncOperation operation)
     {
         loadingUI.SetActive(true);
@@ -37,7 +47,7 @@ public class LoadingUI : Singleton<LoadingUI>
         loadingUI.SetActive(false);
     }
 
-   
+  
 
 
 

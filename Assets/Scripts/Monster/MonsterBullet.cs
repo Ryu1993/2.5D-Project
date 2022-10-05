@@ -29,7 +29,6 @@ public class MonsterBullet : MonoBehaviour,IReturnable
             Return();
         }
     }
-
     public void OwnerSet(Monster _owner,float _speed,float _duraition,Quaternion rotation)
     {
         owner = _owner;

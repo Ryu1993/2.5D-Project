@@ -10,6 +10,4 @@ public abstract class State<T> where T : MonoBehaviour
     public abstract void Exit();
     public abstract void Progress();
 
-
-
 }

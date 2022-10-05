@@ -59,7 +59,11 @@ public class RewardCardWindow : MonoBehaviour
     public void CloseReward()=> gameObject.SetActive(false);
     public void WindowBlock() => blockScreen.SetActive(!blockScreen.activeSelf);
     public void WindowPop() => animator.SetTrigger("Pop");
-    public void WindowClose() => animator.SetTrigger("Close");
+    public void WindowClose()
+    {
+        animator.SetTrigger("Close");
+        animator.Update(0);
+    }
     public void CreateReward(AssetLabelReference label)
     {
         ResetReward();

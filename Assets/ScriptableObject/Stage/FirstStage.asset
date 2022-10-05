@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: FirstStage
   m_EditorClassIdentifier: 
   progressMap:
-  - {fileID: 11400000, guid: c7f0a41634a258f4abfd06829afa01e6, type: 2}
+  - {fileID: 11400000, guid: 1f53ce2d142e8f34492668594e61be24, type: 2}
   endMap: {fileID: 11400000, guid: b91544ceb99a996439bf3e4be91d753d, type: 2}

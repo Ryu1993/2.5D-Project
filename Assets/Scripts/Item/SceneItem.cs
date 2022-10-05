@@ -22,6 +22,10 @@ public class SceneItem : MonoBehaviour,IReturnable
     [SerializeField]
     Animator animator;
 
+    protected void Awake()
+    {
+        if(item != null) SceneItemSet(item);
+    }
 
 
     public void SceneItemSet(Item item)
@@ -31,7 +35,7 @@ public class SceneItem : MonoBehaviour,IReturnable
         nameScript.text = item.Name;
         textScript.text = item.simpleOptionText;
         if (item.Type == Item.ItemType.Equip) getItemEvent = getEquip;
-        if (item.Type == Item.ItemType.Buff) { getItemEvent = getBuff; }
+        if (item.Type == Item.ItemType.Buff)  getItemEvent = getBuff; 
         if(item.Type == Item.ItemType.Artifact) getItemEvent = getArtifact;
     }
 
@@ -42,7 +46,7 @@ public class SceneItem : MonoBehaviour,IReturnable
         isGet = false;
     }
 
-    private void getEquip(Player player)
+    protected void getEquip(Player player)
     {
         Equip equip = item as Equip;
         ItemManager.instance.PlayerGetWeapon(equip);
@@ -50,7 +54,7 @@ public class SceneItem : MonoBehaviour,IReturnable
         StartCoroutine(WaitAnimation());
     }
 
-    private void getBuff(Player player)
+     protected void getBuff(Player player)
     {
         BuffItem buff = item as BuffItem;
         StatusManager.instance.StatusEffectCreate[buff.buffType].Invoke(player, buff.duration);
@@ -58,7 +62,7 @@ public class SceneItem : MonoBehaviour,IReturnable
         StartCoroutine(WaitAnimation());
     }
 
-    private void getArtifact(Player player)
+    protected void getArtifact(Player player)
     {
         Artifact artifact = item as Artifact;
         ItemManager.instance.PlayerGetArtifact(artifact);
@@ -81,7 +85,7 @@ public class SceneItem : MonoBehaviour,IReturnable
         objectCamera.gameObject.SetActive(false);
         Time.timeScale = 1f;
     }
-    private void OnCollisionEnter(Collision collision)
+    protected void OnCollisionEnter(Collision collision)
     {
         player = collision.gameObject.GetComponent<Player>();
         if (player == null) return;
@@ -91,13 +95,13 @@ public class SceneItem : MonoBehaviour,IReturnable
         animator.SetTrigger("PopUp");
     }
 
-    private void OnCollisionExit(Collision collision)
+    protected void OnCollisionExit(Collision collision)
     {
         if (!isGet) return;
         isGet=false;
     }
 
-    private IEnumerator WaitAnimation()
+    protected virtual IEnumerator WaitAnimation()
     {
         yield return WaitList.isPlay;
         ResetItem();

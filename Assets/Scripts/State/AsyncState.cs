@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace AsyncState
 {
-    public enum Type { Burn,Poison,Sturn,Heal};
+    public enum Type { Burn,Poison,Sturn,Heal,MoveUP};
     public class StatusEffect
     { 
         protected WaitForSeconds wait = new WaitForSeconds(1);
@@ -36,21 +36,19 @@ namespace AsyncState
 
     public class Burn : StatusEffect
     {
+        int strength;
         public Burn(int duration, Character order)
         {
             type = Type.Burn;
             startDuration = duration;
+            strength = duration;
             order.StartCoroutine(Progress(duration,order));
         }
-        protected override void EnterEvent(Character order)
-        {
-            base.EnterEvent(order);
-            Debug.Log(order.name+"화상진입");      
-        }
+
         protected override void ExitEvent(Character order)
         {
             base.ExitEvent(order);
-            Debug.Log(order.name + "화상끝");
+            order.curHp -= strength / 3;
         }
     }
 
@@ -60,13 +58,14 @@ namespace AsyncState
         {
             type = Type.Heal;
             startDuration = duration;
-            order.StartCoroutine (Progress(duration,order));    
+            EnterEvent(order);   
         }
         protected override void EnterEvent(Character order)
         {
             base.EnterEvent(order);
-            order.curHp++;
+            order.curHp += startDuration;
         }
+
 
     }
 
@@ -96,11 +95,27 @@ namespace AsyncState
                 target.InputCheckSet();
             }
         }
-
-
     }
 
-
+    public class MoveUP : StatusEffect
+    {
+        public MoveUP(int duration,Character order)
+        {
+            type = Type.MoveUP;
+            startDuration = duration;
+            order.StartCoroutine(Progress(duration, order));
+        }
+        protected override void EnterEvent(Character order)
+        {
+            base.EnterEvent(order);
+            order.moveSpeed += 2f;
+        }
+        protected override void ExitEvent(Character order)
+        {
+            order.moveSpeed -= 2f;
+            base.ExitEvent(order);
+        }
+    }
 
 
 }

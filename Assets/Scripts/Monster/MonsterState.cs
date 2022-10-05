@@ -6,6 +6,8 @@ using UnityEngine.AI;
 
 namespace MonsterState
 {
+
+
     public class BaseState : State<Monster>
     {
         public override void Enter(Monster order)
@@ -42,8 +44,7 @@ namespace MonsterState
     public class Hit : BaseState
     {
         public override void Progress()
-        {
-        
+        {    
             order.HitInput?.Invoke(order);
             if(order.HitInput!=null) order.animator.SetTrigger(order.animator_Hit);
             order.HitInput = null;
@@ -147,8 +148,5 @@ namespace MonsterState
             order.deadEvent?.Invoke();
         }
     }
-
-
-
 
 }
