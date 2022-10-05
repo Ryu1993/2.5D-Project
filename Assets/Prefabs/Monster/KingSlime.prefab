@@ -207,7 +207,7 @@ MonoBehaviour:
     attackRange: 8
     animationHash: 0
   sphereCollider: {fileID: 4597080913737025872}
-  rangeAttackCycle: 0
+  rangeAttackCycle: 1
   targetMark: {fileID: 7122869547378076739}
   lineMark: {fileID: 3625635755587049417}
 --- !u!1001 &225045083823767100

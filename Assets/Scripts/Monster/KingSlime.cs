@@ -40,6 +40,7 @@ public class KingSlime : BossMonster
     private Dictionary<Pattern, AttackPattern> patterns = new Dictionary<Pattern, AttackPattern>();
     private int curPatternCooltime;
     private Vector3 targetVec;
+    MonsterBullet[] bullets = new MonsterBullet[12];
 
     protected override void Awake()
     {
@@ -116,14 +117,16 @@ public class KingSlime : BossMonster
     }
     private IEnumerator CoRangeAttack()
     {
-        SphereRangeAttack();
-        for (int i = 0; i < rangeAttackCycle; i++) yield return WaitList.deciSecond;
+        for (int i = 0; i < rangeAttackCycle; i++)
+        {
+            SphereRangeAttack();
+            yield return WaitList.deciSecond;
+        }
         rangeAttackCoroutine = null;
     }
 
     private void SphereRangeAttack()
     {
-        MonsterBullet[] bullets = new MonsterBullet[12];
         for (int i = 0; i < bullets.Length; i++)
         {
             NewObjectPool.instance.Call(bullet, transform.position+new Vector3(0,0.5f,0)).TryGetComponent<MonsterBullet>(out bullets[i]);
@@ -132,7 +135,15 @@ public class KingSlime : BossMonster
         }
     }
 
-    private void RangeEnd()=> StartCoroutine(CoCooltimeCount(Pattern.Range, curPatternCooltime));
+    private void RangeEnd()
+    {
+        if (rangeAttackCoroutine != null)
+        {
+            StopCoroutine(rangeAttackCoroutine);
+            rangeAttackCoroutine = null;
+        }
+        StartCoroutine(CoCooltimeCount(Pattern.Range, curPatternCooltime));
+    }
 
     #endregion
     #region ChargeAttack
@@ -155,7 +166,7 @@ public class KingSlime : BossMonster
     }
     private void ChargeAttack()
     {
-        transform.position = Vector3.Lerp(transform.position, targetVec, Time.fixedDeltaTime * 3);
+        transform.position = Vector3.Lerp(transform.position, targetVec, Time.fixedDeltaTime * 5);
     }
 
     private void ChargeEnd()
