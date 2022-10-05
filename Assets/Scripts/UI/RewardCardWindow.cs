@@ -21,6 +21,7 @@ public class RewardCardWindow : MonoBehaviour
 
         public void PlayerGetItem()
         {
+            window.WindowBlock();
             if (item.Type == Item.ItemType.Buff)
             {
                 BuffItem buff = item as BuffItem;
