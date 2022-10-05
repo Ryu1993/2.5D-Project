@@ -12,6 +12,7 @@ public class KingSlime : BossMonster
         public Pattern pattern;
         public int cooltime;
         public float delay;
+        public float attackRange;
         [HideInInspector]
         public int animationHash;
     }
@@ -21,25 +22,31 @@ public class KingSlime : BossMonster
     private UnityAction selectedAttack;
     [SerializeField]
     private Rigidbody rigi;
-    [Header("PatternCooltime(desiSeconds)")]
-    [Header("PatternDelay")]
+    [Header("PatternInfo")]
     [SerializeField]
     AttackPattern[] attackPatterns;
+    [Header("RealCollider")]
     [SerializeField]
     SphereCollider sphereCollider;
     [SerializeField]
     private int rangeAttackCycle;
+    [SerializeField]
+    private ParticleSystem targetMark;
+    [SerializeField]
+    private GameObject lineMark;
     private Coroutine rangeAttackCoroutine;
     private AttackPattern curPattern;
     private List<Pattern> enablePatterns = new List<Pattern>();
     private Dictionary<Pattern, AttackPattern> patterns = new Dictionary<Pattern, AttackPattern>();
     private int curPatternCooltime;
+    private Vector3 targetVec;
+
     protected override void Awake()
     {
         base.Awake();
         bullet = MonsterBehaviourManager.instance.RequestBullet();
-        attackReady = RandomPattern;
-        foreach(AttackPattern attackpattern in attackPatterns)
+        attackReady = PatternReady;
+        foreach (AttackPattern attackpattern in attackPatterns)
         {
             attackpattern.animationHash = Animator.StringToHash(attackpattern.pattern.ToString());
             patterns.Add(attackpattern.pattern, attackpattern);       
@@ -52,9 +59,16 @@ public class KingSlime : BossMonster
 
     public override void MonsterAttack() => selectedAttack?.Invoke();
 
-    private void RandomPattern()
+    protected override void AttackRangeCheck()
     {
+        curPattern = null;
         curPattern = patterns[enablePatterns[UnityEngine.Random.Range(0, enablePatterns.Count)]];
+        attackRange = curPattern.attackRange;
+        base.AttackRangeCheck();
+    }
+
+    private void PatternReady()
+    {
         animator.SetTrigger(curPattern.animationHash);
         animator.Update(0);
         attackDelay = curPattern.delay;
@@ -68,6 +82,8 @@ public class KingSlime : BossMonster
         attackStart = null;
         selectedAttack = null;
         attackEnd = null;
+        attackReadyProgress = null;
+        attackReadyEnd = null;
         if (pattern==Pattern.Normal)
         {
             attackStart = () => sphereCollider.enabled = true;
@@ -80,12 +96,14 @@ public class KingSlime : BossMonster
         }
         if(pattern == Pattern.Charge)
         {
+            attackReadyProgress = ChargeReadyProgress;
             attackStart = ChargeStart;
+            selectedAttack = ChargeAttack;
             attackEnd = ChargeEnd;
         }
         if(pattern == Pattern.Jump)
         {
-            attackStart = JumpStart;
+            attackReadyProgress = JumpReadyProgress;
             selectedAttack = JumpAttack;
             attackEnd = JumpEnd;
         }
@@ -118,45 +136,71 @@ public class KingSlime : BossMonster
 
     #endregion
     #region ChargeAttack
+
+    private void ChargeReadyProgress()
+    {
+        if(!lineMark.activeSelf) lineMark.SetActive(true);
+        if (attackDelayCount <= attackDelay * 0.7f)
+        {
+            MonsterLookAt();
+            targetVec = MonsterBehaviourManager.instance.playerPosition;
+            lineMark.transform.rotation = direction.rotation;
+        }
+        else lineMark.SetActive(false);
+    }
     private void ChargeStart()
     {
         sphereCollider.enabled = true;
-        rigi.isKinematic = false;
-        rigi.AddForce(transform.forward * 200);
+
     }
+    private void ChargeAttack()
+    {
+        transform.position = Vector3.Lerp(transform.position, targetVec, Time.fixedDeltaTime * 3);
+    }
+
     private void ChargeEnd()
     {
         sphereCollider.enabled = false;
-        rigi.velocity = Vector3.zero;
-        rigi.isKinematic = true;
         StartCoroutine(CoCooltimeCount(Pattern.Charge, curPatternCooltime));
     }
     #endregion
     #region JumpAttack
-    private void JumpStart()
-    {
-        rigi.isKinematic = true;
-        rigi.AddForce(transform.forward * 300);
-    }
 
+    private void JumpReadyProgress()
+    {
+        if(!targetMark.isPlaying)
+        {
+            targetMark.transform.position = MonsterBehaviourManager.instance.playerPosition;
+            targetMark.gameObject.SetActive(true);
+        }
+        if (attackDelayCount<=attackDelay*0.7f)
+        {
+            targetVec = MonsterBehaviourManager.instance.playerPosition;
+            targetMark.transform.position = Vector3.Lerp(new Vector3(targetVec.x,0.1f,targetVec.z), targetVec, Time.fixedDeltaTime);        
+        }
+        else if(attackDelayCount>=attackDelay*0.8f)
+        {
+            targetMark.gameObject.SetActive(false);
+        }
+    }
     private void JumpAttack()
     {
-        if (!animator.GetCurrentAnimatorStateInfo(0).IsName("Jump")) return;
-        if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime <= 0.5f) return;
+        if (!animator.GetCurrentAnimatorStateInfo(0).IsName("JumpAttack")) return;
+        if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime <= 0.3f) return;
+        transform.position = targetVec;
+        if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime <= 0.4f) return;
         sphereCollider.enabled = true;
     }
     private void JumpEnd()
     {
         sphereCollider.enabled = false;
-        rigi.velocity = Vector3.zero;
-        rigi.isKinematic = true;
         StartCoroutine(CoCooltimeCount(Pattern.Jump, curPatternCooltime));
     }
     #endregion
     private IEnumerator CoCooltimeCount(Pattern pattern,int duration)
     {
         enablePatterns.Remove(pattern);
-        for (int i = 0; i < duration; i++) yield return WaitList.deciSecond;
+        for (int i = 0; i < duration; i++) yield return WaitList.oneSecond;
         enablePatterns.Add(pattern);
     }
 

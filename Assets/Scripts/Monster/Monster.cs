@@ -37,6 +37,8 @@ public class Monster : Character,IReturnable,IAttackable
     public UnityAction attackStart;
     public UnityAction attackEnd;
     public UnityAction attackReady;
+    public UnityAction attackReadyProgress;
+    public UnityAction attackReadyEnd;
     [HideInInspector]
     public Character target;
     public readonly int animator_Ready = Animator.StringToHash("Ready");

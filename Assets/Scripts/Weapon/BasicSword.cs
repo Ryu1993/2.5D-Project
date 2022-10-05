@@ -12,7 +12,7 @@ public class BasicSword : Weapon , IAttackable
     {
         Debug.Log("attack");
         for(int i = 0; i < colliders.Length; i++) colliders[i] = null;
-        Physics.OverlapBoxNonAlloc(attackPoint.position, new Vector3(0.5f, 0.5f,0.5f), colliders,Quaternion.identity,layerMask);
+        Physics.OverlapBoxNonAlloc(attackPoint.position, new Vector3(0.5f, 0.5f,0.5f), colliders,Quaternion.identity,layerMask,QueryTriggerInteraction.Collide);
         for (int i = 0; i < colliders.Length; i++)
         {
             if (colliders[i]!=null)

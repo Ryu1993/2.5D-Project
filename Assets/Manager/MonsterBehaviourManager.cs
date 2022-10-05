@@ -12,6 +12,8 @@ public class MonsterBehaviourManager : Singleton<MonsterBehaviourManager>
     public Coroutine coFixeUpdate;
     [SerializeField]
     private GameObject monsterBullet;
+    [SerializeField]
+    bool isTest;
     private NewObjectPool.PoolInfo bulletInfo;
     
 
@@ -24,6 +26,11 @@ public class MonsterBehaviourManager : Singleton<MonsterBehaviourManager>
 
     private IEnumerator Start()
     {
+        if(isTest)
+        {
+            StartCoroutine(CoFixedUpdate());
+            yield break;
+        }
         yield return WaitList.isGameManagerSet;
         yield return WaitList.isPlayerSet;
         yield return WaitList.isPlayerReady;

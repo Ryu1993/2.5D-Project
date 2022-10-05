@@ -124,7 +124,7 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4760783580318445544}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
@@ -166,7 +166,9 @@ MonoBehaviour:
   curAction: 0
   curStatusEffect: 
   isHitInput: 0
+  _curHp: 0
   moveSpeed: 0
+  _maxHp: 0
   scanRange: 4
   attackRange: 1
   attackDelay: 0.5
@@ -174,11 +176,12 @@ MonoBehaviour:
   damage: 0
   direction: {fileID: 6231771538771705125}
   graphic: {fileID: 3609948255007086531}
-  navMeshAgent: {fileID: 175335103582965223}
   animator: {fileID: 4194274942754243655}
   mask:
     serializedVersion: 2
     m_Bits: 128
+  isNamed: 0
+  target: {fileID: 0}
 --- !u!1001 &3860611492655165480
 PrefabInstance:
   m_ObjectHideFlags: 0

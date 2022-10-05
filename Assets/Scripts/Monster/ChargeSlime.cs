@@ -6,27 +6,24 @@ public class ChargeSlime : Monster
 {
     [SerializeField]
     private SphereCollider sphereCollider;
-    [SerializeField]
-    private Rigidbody rigi;
+    Vector3 targetVec;
    
 
     protected override void Awake()
     {
         base.Awake();
-        attackStart += () => 
+        attackReadyProgress += () =>
         {
-            sphereCollider.enabled = true;
-            rigi.isKinematic = false;
-            rigi.AddForce(direction.forward * 200);
-            
+            MonsterLookAt();
+            targetVec = MonsterBehaviourManager.instance.playerPosition;
         };
-        attackEnd += () =>
-        {
-            sphereCollider.enabled = false;
-            rigi.velocity = Vector3.zero;
-            rigi.isKinematic = true;
-            MonsterMoveSwitch();
-        };
+        attackStart += () => sphereCollider.enabled = true;
+        attackEnd += () => sphereCollider.enabled = false;
+    }
+
+    public override void MonsterAttack()
+    {
+        transform.position = Vector3.Lerp(transform.position, targetVec, Time.fixedDeltaTime * 2);
     }
 
     public override void Attack(IDamageable target)

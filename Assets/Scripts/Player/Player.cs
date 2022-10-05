@@ -77,7 +77,8 @@ public class Player : Character
         }
     } 
     #endregion
-    public readonly int animator_Dash = Animator.StringToHash("Dash");
+    private readonly int animator_Dash = Animator.StringToHash("Dash");
+    private readonly int animator_Offset = Animator.StringToHash("Offset");
     public Coroutine coUpdate;
 
 
@@ -87,6 +88,7 @@ public class Player : Character
     #region Setting
     IEnumerator CoUpdate()
     {
+        PlayerSetting();//Trest
         yield return new WaitUntil(() => isReady);
         while(true)
         {        
@@ -261,6 +263,7 @@ public class Player : Character
         rigi.velocity = Vector3.zero;
         if (!isComboBehaviour)
         {
+            directionCircle.isStop = true;
             animator.SetBool(animator_Attack, true);
             InputCheck -= MoveInput;
             CooltimeCounter += ComboCount;
@@ -340,6 +343,7 @@ public class Player : Character
     {
         animator.SetBool(animator_Attack, false);
         animator.Update(0f);
+        directionCircle.isStop = false;
         CooltimeCounter += AttackCooltime;
         CooltimeCounter -= ComboCount;
         InputCheck += MoveInput;

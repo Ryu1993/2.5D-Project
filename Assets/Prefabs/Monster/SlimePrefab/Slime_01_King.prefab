@@ -44,7 +44,7 @@ Animator:
   m_GameObject: {fileID: 873531700701352353}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 9db70a4a0c0bc294ab8f0166ffcbe76b, type: 3}
-  m_Controller: {fileID: 9100000, guid: 46673b7216400bb4590c64bdd354b9d9, type: 2}
+  m_Controller: {fileID: 9100000, guid: 3138d68d57327054ea27a620b2d960ec, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -310,6 +310,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2156295224627675165}
+  - component: {fileID: 2294943024162140969}
+  - component: {fileID: 1467601600784073271}
   m_Layer: 0
   m_Name: Bone
   m_TagString: Untagged
@@ -335,6 +337,32 @@ Transform:
   m_Father: {fileID: 6021738969730251511}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!135 &2294943024162140969
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8662673802754208993}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 0
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1467601600784073271
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8662673802754208993}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 071e7e26cf77eb542a8c21df3b3ed984, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  monster: {fileID: 0}
 --- !u!1001 &6188267293087203459
 PrefabInstance:
   m_ObjectHideFlags: 0

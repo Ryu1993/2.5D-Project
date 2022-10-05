@@ -60,8 +60,7 @@ namespace MonsterState
         public override void Enter(Monster order)
         {
             base.Enter(order);
-            order.MonsterMoveSwitch();
-           
+            order.MonsterMoveSwitch();          
         }
 
         public override void Progress()
@@ -92,6 +91,7 @@ namespace MonsterState
         public override void Progress()
         {
             NamedHitCheck();
+            order.attackReadyProgress?.Invoke();
             if (order.DeadCheck()) order.ChangeState(Monster.MonState.Dead);
             else if (order.MonsterHitCheck()&&!order.isNamed) order.ChangeState(Monster.MonState.Hit);
             else if (order.AttackDelayCount()) order.ChangeState(Monster.MonState.Attack);
@@ -99,6 +99,7 @@ namespace MonsterState
         public override void Exit()
         {
             base.Exit();
+            order.attackReadyEnd?.Invoke();
             order.AttackDelayCountReset();
         }
 

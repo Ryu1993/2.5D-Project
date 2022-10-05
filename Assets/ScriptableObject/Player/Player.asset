@@ -12,16 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1168991184c4d7d48bec21789e91b74f, type: 3}
   m_Name: Player
   m_EditorClassIdentifier: 
-  player_name: SaveTEst
-  curEquip: {fileID: 11400000, guid: 913437a10d386904ca8c437bb52b3757, type: 2}
+  player_name: 0
+  curEquip: {fileID: 0}
   inventory:
   - {fileID: 11400000, guid: d25262fba0d674640b6a80322ba34a96, type: 2}
   - {fileID: 11400000, guid: d25262fba0d674640b6a80322ba34a96, type: 2}
-  - {fileID: 11400000, guid: d25262fba0d674640b6a80322ba34a96, type: 2}
-  - {fileID: 11400000, guid: d25262fba0d674640b6a80322ba34a96, type: 2}
-  - {fileID: 11400000, guid: d25262fba0d674640b6a80322ba34a96, type: 2}
-  - {fileID: 11400000, guid: d25262fba0d674640b6a80322ba34a96, type: 2}
-  - {fileID: 11400000, guid: d25262fba0d674640b6a80322ba34a96, type: 2}
-  - {fileID: 11400000, guid: d25262fba0d674640b6a80322ba34a96, type: 2}
   player_maxHp: 12
-  player_curHp: 9
+  player_curHp: 6
+  curStage: 0
+  progressStageInfo: {fileID: 0}
+  stageMaxLevel: 0
