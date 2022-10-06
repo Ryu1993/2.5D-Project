@@ -65,8 +65,6 @@ namespace AsyncState
             base.EnterEvent(order);
             order.curHp += startDuration;
         }
-
-
     }
 
     public class Sturn : StatusEffect

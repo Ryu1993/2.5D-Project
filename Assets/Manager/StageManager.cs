@@ -47,6 +47,8 @@ public class StageManager : Singleton<StageManager>
     [SerializeField]
     float stageDistance;
     [SerializeField]
+    LineRenderer line;
+    [SerializeField]
     GameObject icon;
     [SerializeField]
     Transform stagePlayer;
@@ -82,13 +84,11 @@ public class StageManager : Singleton<StageManager>
         {
             player.curStageInfoList = null;
             GameManager.instance.PlayerInfoSave();
-            //AsyncOperation operation = SceneManager.LoadSceneAsync("Home");
-            //operation.allowSceneActivation = false;
-            //LoadingUI.instance.CallLoading(operation);
             LoadingUI.instance.SceneChange("Home");
             yield break;
         }
         SceneCreate();
+        LineCreate();
         stagePlayer.position = iconsDic[player.curStageInfo].transform.position;
         if (player.curStageInfo.left != null) iconsDic[player.curStageInfo.left].Enable();
         if (player.curStageInfo.right != null) iconsDic[player.curStageInfo.right].Enable();
@@ -105,8 +105,14 @@ public class StageManager : Singleton<StageManager>
     {
         startMap = new MapConnetInfo(null);
         startMap.stagLevel = 0;
-        for (int i =0; i<stage.progressMap.Count;i++) allConnetInfos.Add(new MapConnetInfo(stage.progressMap[i]));
-        foreach (MapConnetInfo mapConnetInfo in allConnetInfos) disconneted.Add(mapConnetInfo);
+        for (int i =0; i<stage.progressMap.Count;i++)
+        {
+            allConnetInfos.Add(new MapConnetInfo(stage.progressMap[i]));
+        }
+        foreach (MapConnetInfo mapConnetInfo in allConnetInfos)
+        {
+            disconneted.Add(mapConnetInfo);
+        }
         conneted.Add(startMap);
         while (disconneted.Count > 0)
         {
@@ -114,7 +120,7 @@ public class StageManager : Singleton<StageManager>
             MapConnetInfo curMapConnectInfo = nullNextList[Random.Range(0, nullNextList.Count)];
             MapConnetInfo targetConnectInfo = allConnetInfos[Random.Range(0, allConnetInfos.Count)];
             if (curMapConnectInfo == targetConnectInfo) continue;
-            if (IsConnetable(targetConnectInfo, curMapConnectInfo.stagLevel)) continue;
+            if (IsDisConnetable(targetConnectInfo, curMapConnectInfo.stagLevel+1)) continue;
             if (curMapConnectInfo.NullNextDirection()) curMapConnectInfo.left = targetConnectInfo;
             else curMapConnectInfo.right = targetConnectInfo;
             targetConnectInfo.prev.Add(curMapConnectInfo);
@@ -168,8 +174,29 @@ public class StageManager : Singleton<StageManager>
                 iconsDic.Add(curLevelMap[j], tempIcon);
             }
         }
-
     }
+
+    private void LineCreate()
+    {
+        foreach(MapConnetInfo info in allConnetInfos)
+        {
+            iconsDic[info].TryGetComponent(out Transform cur);
+            if(info.left!=null)
+            {
+                iconsDic[info.left].TryGetComponent(out Transform target);
+                LineRenderer templine = Instantiate(line);
+                templine.SetPositions(new Vector3[2] {cur.position,target.position });
+            }
+            if(info.right!=null)
+            {
+                iconsDic[info.right].TryGetComponent(out Transform target);
+                LineRenderer templine = Instantiate(line);
+                templine.SetPositions(new Vector3[2] { cur.position, target.position });
+            }
+        }
+    }
+
+
     private List<MapConnetInfo> NullNextSearch(ref List<MapConnetInfo> list)
     {
         List<MapConnetInfo> result = new List<MapConnetInfo>();
@@ -177,14 +204,13 @@ public class StageManager : Singleton<StageManager>
         {
             if (connectIfno.right == null || connectIfno.left == null) result.Add(connectIfno);
         }
-        Debug.Log(result.Count);
         return result;
     }
-    private bool IsConnetable(MapConnetInfo targetInfo,int stageLevel)
+    private bool IsDisConnetable(MapConnetInfo targetInfo,int stageLevel)
     {
         if(IsInList(targetInfo,conneted))
         {
-            if (targetInfo.stagLevel <= stageLevel) return true;
+            if (targetInfo.stagLevel != stageLevel) return true;
         }
         return false;
     }

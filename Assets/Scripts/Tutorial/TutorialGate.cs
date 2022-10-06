@@ -10,12 +10,15 @@ public class TutorialGate : MonoBehaviour
     [SerializeField]
     ParticleSystem[] gateParticles;
     [SerializeField]
+    GameObject portal;
+    [SerializeField]
     StageInfo firstStage;
 
     public void GateOpne()
     {
         gateColli.isTrigger = true;
         foreach (var gateParticle in gateParticles) gateParticle.Stop();
+        portal.SetActive(true);
     }
 
     private void OnTriggerEnter(Collider other)

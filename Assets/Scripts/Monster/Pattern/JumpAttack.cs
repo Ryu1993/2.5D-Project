@@ -16,17 +16,13 @@ public class JumpAttack : MonsterAttackPattern
         TracePlayer();
         targetMarker.gameObject.SetActive(true);
     }
-    public override void AttackReadyProgress()
+    public override void AttackReadyProgress()=> TracePlayer();
+
+    public override void AttackReadyEnd()
     {
-        if (monster.attackDelayCount <= delay * 0.8f)
-        {
-            TracePlayer();
-        }
-        else
-        {
-            targetMarker.gameObject.SetActive(false);
-        }
+        targetMarker.gameObject.SetActive(false);
     }
+
     public override void AttackProgress()
     {
         if (monster.animator.GetCurrentAnimatorStateInfo(0).tagHash!=monster.animator_Attack) return;

@@ -13,6 +13,7 @@ public class BossRoomManager : RoomManager
         monsterCounter = 1;
         BossMonster boss = AddressObject.Instinate(roomData.monster_pack).GetComponent<BossMonster>();
         boss.deadEvent += SubMonsterCountEvent;
+        boss.deadEvent += () => boss.gameObject.SetActive(false);
         Instantiate(bossUIPrefab).TryGetComponent(out bossUI);
         boss.transform.position = enemyPointer.position;
         bossUI.BossConnect(boss);    

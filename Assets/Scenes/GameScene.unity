@@ -156,6 +156,7 @@ MonoBehaviour:
   playerPosition: {x: 0, y: 0, z: 0}
   monsterBullet: {fileID: 1875356018731203462, guid: 211151b2501f8f648b1738a3ad194fc1,
     type: 3}
+  isTest: 0
 --- !u!4 &45666428
 Transform:
   m_ObjectHideFlags: 0
@@ -2149,6 +2150,21 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 152776346}
     m_Modifications:
+    - target: {fileID: 5845313546589949320, guid: 546a8c50ad2dcf44fa8b13585a9d06ad,
+        type: 3}
+      propertyPath: mapMove.x
+      value: 70
+      objectReference: {fileID: 0}
+    - target: {fileID: 5845313546589949320, guid: 546a8c50ad2dcf44fa8b13585a9d06ad,
+        type: 3}
+      propertyPath: mapMove.y
+      value: 70
+      objectReference: {fileID: 0}
+    - target: {fileID: 5845313546589949320, guid: 546a8c50ad2dcf44fa8b13585a9d06ad,
+        type: 3}
+      propertyPath: roomIconLength
+      value: 14
+      objectReference: {fileID: 0}
     - target: {fileID: 5845313546597529688, guid: 546a8c50ad2dcf44fa8b13585a9d06ad,
         type: 3}
       propertyPath: m_Name

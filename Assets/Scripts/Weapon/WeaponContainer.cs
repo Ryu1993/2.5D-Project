@@ -6,14 +6,11 @@ using UnityEngine.VFX;
 
 public class WeaponContainer : MonoBehaviour
 {
-    private readonly int desolve = Shader.PropertyToID("_Desolve");
     public Player player;
     public Weapon curWeapon;
     [SerializeField]
     private SpriteRenderer containerBackRenderer;
-    public Transform attackPoint;
     public Transform weaponVFX;
-    public Transform weaponSlot;
     public UnityAction weaponAttack;
     public float attackCooltime;
     [HideInInspector]
@@ -26,6 +23,23 @@ public class WeaponContainer : MonoBehaviour
     public int comboCount = 0;
     [HideInInspector]
     public int maxCombo = 0;
+    private float afterDelay;
+    private float afterDelayCount = 0;
+    private float fowardLength;
+    private UnityAction afterDelayCounter;
+
+    private void FixedUpdate()=> afterDelayCounter?.Invoke();
+
+    private void AttackAfterDelay()
+    {
+        afterDelayCount += Time.fixedDeltaTime;
+        if(afterDelayCount>afterDelay)
+        {
+            weaponVFX.gameObject.SetActive(false);
+            afterDelayCount = 0;
+            afterDelayCounter -= AttackAfterDelay;
+        }
+    }
 
     public void WeaponSet(UnityEngine.AddressableAssets.AssetLabelReference weaponLabel)
     {
@@ -34,10 +48,11 @@ public class WeaponContainer : MonoBehaviour
         curWeapon.transform.localScale = Vector3.zero;
         containerBackRenderer.sprite = curWeapon.sprite;
         curWeapon.player = player;
-        curWeapon.attackPoint = attackPoint;
         superArmor = curWeapon.superArmor;
         weaponAttack = curWeapon.WeaponAttack;
         maxCombo = curWeapon.maxCombo;
+        afterDelay = curWeapon.afterDelay;
+        fowardLength = curWeapon.forwardLength;
         curWeapon.transform.localScale = Vector3.one;
     }
 
@@ -45,7 +60,6 @@ public class WeaponContainer : MonoBehaviour
     public void WeaponAnimationCancle()
     {
         weaponVFX.gameObject.SetActive(false);
-        containerBackRenderer.material.SetFloat(desolve, 0);
         comboCount = 0;
     }
 
@@ -54,10 +68,10 @@ public class WeaponContainer : MonoBehaviour
         if (!weaponVFX.gameObject.activeSelf)
         {
             if (comboCount > maxCombo) comboCount = 0;
-            attackPoint.localPosition = new Vector3(0, 0.5f, (float)comboCount * 1f);
-            weaponVFX.position = attackPoint.position;
+            weaponVFX.localPosition = new Vector3(0, 0.5f, ((float)comboCount * fowardLength) + fowardLength);
             weaponVFX.localRotation = Quaternion.Euler(new Vector3(0, 0,comboCount*180));
             weaponVFX.gameObject.SetActive(true);
+            afterDelayCounter += AttackAfterDelay;
             weaponAttack?.Invoke();
             comboCount++;
         }

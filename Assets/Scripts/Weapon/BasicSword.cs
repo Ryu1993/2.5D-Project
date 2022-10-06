@@ -8,10 +8,12 @@ public class BasicSword : Weapon , IAttackable
     private Collider[] colliders = new Collider[3];
     [SerializeField]
     LayerMask layerMask;
+    [SerializeField]
+    float attackRange;
     public override void WeaponAttack()
     {
         for(int i = 0; i < colliders.Length; i++) colliders[i] = null;
-        Physics.OverlapBoxNonAlloc(attackPoint.position, new Vector3(0.2f, 0.2f,0.2f), colliders,Quaternion.identity,layerMask,QueryTriggerInteraction.Collide);
+        Physics.OverlapSphereNonAlloc(transform.position, attackRange, colliders,layerMask,QueryTriggerInteraction.Collide);
         for (int i = 0; i < colliders.Length; i++)
         {
             if (colliders[i]!=null)
@@ -21,6 +23,13 @@ public class BasicSword : Weapon , IAttackable
             }
         }
     }
+
+    public void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, attackRange);
+    }
+
 
     public void Attack(IDamageable target)
     {

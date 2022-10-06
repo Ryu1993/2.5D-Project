@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Text.RegularExpressions;
 
 public class BossUI : MonoBehaviour
 {
@@ -14,7 +15,7 @@ public class BossUI : MonoBehaviour
 
     public void BossConnect(BossMonster boss)
     {
-        bossName.text = boss.gameObject.name;
+        bossName.text = Regex.Replace(boss.name, "(Clone)", string.Empty);
         maxHp = boss.maxHp;
         boss.bossHpEvent += BossHpBarControll;
     }

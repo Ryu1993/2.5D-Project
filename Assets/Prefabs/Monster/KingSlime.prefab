@@ -249,11 +249,11 @@ MonoBehaviour:
   attackRange: 6
   animationHash: 0
   rangeSpeed: 2
-  rangeDuration: 2.5
+  rangeDuration: 3
   rangeDegree: 15
   bulletScale: {x: 0.5, y: 0.5, z: 0.5}
   bulletNum: 12
-  rangeCycle: 0.2
+  rangeCycle: 0.33
 --- !u!1001 &225045083823767100
 PrefabInstance:
   m_ObjectHideFlags: 0

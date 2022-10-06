@@ -9,6 +9,8 @@ public class Gate : MonoBehaviour
     [SerializeField]
     Transform gateParticle;
     [SerializeField]
+    GameObject portal;
+    [SerializeField]
     BoxCollider colli;
 
     public void DirectionSet(MapManager.GateDirection direction)
@@ -19,6 +21,7 @@ public class Gate : MonoBehaviour
     public void GateOpen()
     {
         gateParticle.gameObject.SetActive(false);
+        portal.SetActive(true);
         colli.isTrigger = true;
     }
     private void OnTriggerEnter(Collider other)
