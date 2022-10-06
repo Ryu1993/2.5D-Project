@@ -13,6 +13,7 @@ public class StageSelectIcon : MonoBehaviour
     {
         GameManager.instance.playerInfo.progressStageInfo = stageInfo;
         GameManager.instance.PlayerInfoSave();
+        Time.timeScale = 1.0f;
         LoadingUI.instance.SceneChange("Main");
     }
 

@@ -125,7 +125,7 @@ public class Player : Character
     {
         if(isHome)
         {
-            InputCheckSet();
+            InputCheck += MoveInput;
             BehaviorExcuteSet();
             isReady = true;
         }
@@ -249,7 +249,6 @@ public class Player : Character
     {
         if (isBehaviorExecuted) return; // 필요없음
         if (!isDashBehavior) return;
-        gameObject.layer = 11;
         ComboCancle();
         rigi.velocity = (mousePointer.position - transform.position).normalized * dashSpeed;
         InputCheck -= MoveInput;
@@ -260,6 +259,7 @@ public class Player : Character
         isDashInvincible = true;
         isBehaviorExecuted = true;
         animator.SetBool(animator_Dash, true);
+        animator.Update(0);
         ghostCreator.Swith();
         CooltimeCounter += DashCoolCount;
         CooltimeCounter += DashInvincibleCount;
@@ -303,7 +303,7 @@ public class Player : Character
 
     private void DashCoolCount()
     {
-        dashCoolCount += 0.02f;
+        dashCoolCount += Time.fixedDeltaTime;
         if (dashCoolCount >= dashCoolTime)
         {
             InputCheck += DashInput;
@@ -313,8 +313,8 @@ public class Player : Character
     }
     private void InvincibleCount()
     {
-        invincibleCount += 0.02f;
-        if(invincibleCount >= invincibleTime)
+        invincibleCount += Time.fixedDeltaTime;
+        if (invincibleCount >= invincibleTime)
         {
             isHit = false;
             isInvicible = false;
@@ -326,20 +326,20 @@ public class Player : Character
     }
     private void DashInvincibleCount()
     {
-        dashInvincibleCount += 0.02f;
+        dashInvincibleCount += Time.fixedDeltaTime;
         if (dashInvincibleCount >= dashInvincibleTime)
         {
+            ghostCreator.Swith();
             isDashInvincible = false;
             animator.SetBool(animator_Dash, false);
+            animator.Update(0);
             directionCircle.isStop = false;
             InputCheck += MoveInput;
             InputCheck += AttackInput;
             InputCheck += SkillInput;
             CooltimeCounter -= DashInvincibleCount;
-            ghostCreator.Swith();
             HitInput = null;
             dashInvincibleCount = 0;
-            gameObject.layer = 7;
         }
     }
     private void ComboCount()

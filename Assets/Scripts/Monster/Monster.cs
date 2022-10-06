@@ -5,6 +5,7 @@ using UnityEngine.Events;
 using UnityEngine.AI;
 using System;
 using MonsterState;
+using JetBrains.Annotations;
 
 public class Monster : Character,IReturnable,IAttackable
 {
@@ -12,16 +13,14 @@ public class Monster : Character,IReturnable,IAttackable
     protected StateMachine<MonState, Monster> stateMachine;
     [SerializeField]
     protected float scanRange;
-    [SerializeField]
     protected float attackRange;
-    [SerializeField]
-    protected float attackDelay;
+    [HideInInspector]
+    public float attackDelay;
     [SerializeField]
     protected float attackCooltime;
     public float damage;
     [Header("Parts")]
-    [SerializeField]
-    protected Transform direction;
+    public Transform direction;
     [SerializeField]
     protected Transform graphic;
     protected NavMeshAgent navMeshAgent;
@@ -30,19 +29,20 @@ public class Monster : Character,IReturnable,IAttackable
     [SerializeField]
     protected LayerMask mask;
     public bool isNamed;
-    protected float attackDelayCount = 0;
+    [HideInInspector]
+    public float attackDelayCount = 0;
     protected float attackCooltimeCount = 0;
-    protected bool isAttackCooltime;
+    [HideInInspector]
+    public bool isAttackCooltime;
     protected Collider[] attackBox = new Collider[1];
-    public UnityAction attackStart;
-    public UnityAction attackEnd;
-    public UnityAction attackReady;
-    public UnityAction attackReadyProgress;
-    public UnityAction attackReadyEnd;
+    public UnityAction[] attackActions = new UnityAction[6];
+    [SerializeField]
+    protected List<MonsterAttackPattern> patterns = new List<MonsterAttackPattern>();
     [HideInInspector]
     public Character target;
-    public readonly int animator_Ready = Animator.StringToHash("Ready");
-
+    public Vector3 targetVec;
+    public readonly int animation_Ready = Animator.StringToHash("Ready");
+    protected bool isSet;
 
     #region Returnable
     public UnityAction deadEvent;
@@ -61,7 +61,6 @@ public class Monster : Character,IReturnable,IAttackable
     }
     #endregion
 
-    protected virtual void Awake() => StateSet();
     protected virtual void OnEnable() => StartCoroutine(CoChangeState());
 
 
@@ -78,18 +77,28 @@ public class Monster : Character,IReturnable,IAttackable
         stateMachine.AddState(MonState.Dead, new MonsterState.Dead());
         _curHp = _maxHp;
         navMeshAgent.speed = moveSpeed;
+        if(patterns.Count==1)
+        {
+            attackDelay = patterns[0].delay;
+            attackCooltime = patterns[0].cooltime;
+            attackRange = patterns[0].attackRange;
+            for(int i =0; i<attackActions.Length;i++)
+            {
+                attackActions[i] = patterns[0].attakcAction[i];
+            }
+        }
+        isSet = true;
     }
     public IEnumerator CoChangeState()
     {
         yield return WaitList.isMonsterManagerSet;
+        if (!isSet) StateSet();
         ChangeState(MonState.Idle);
     }
 
     public override void DirectHit(float damage)=> curHp -= damage;
-
     public bool ScanTarget()
     {
-        if (isAttackCooltime) return false;
         if ((transform.position - MonsterBehaviourManager.instance.playerPosition).magnitude <= scanRange) return true;
         return false;
     }
@@ -126,7 +135,6 @@ public class Monster : Character,IReturnable,IAttackable
             MonsterBehaviourManager.instance.monsterBehaviour -= AttackCooltimeCount;
         }
     }
-    public virtual void MonsterAttack() { }
     public bool MonsterHitCheck() => HitInput != null;
     public void AttackDelayCountReset() => attackDelayCount = 0;
     public virtual void MonsterLookAt()
@@ -146,7 +154,7 @@ public class Monster : Character,IReturnable,IAttackable
     public void MonsterNavReset() => navMeshAgent.ResetPath();
     public void MonsterMoveSwitch() => navMeshAgent.enabled = !navMeshAgent.enabled;
     public void ChangeState(MonState state) => stateMachine.ChangeState(state);
+    public virtual void Attack(IDamageable target)=> target.DirectHit(damage);
 
-    public virtual void Attack(IDamageable target) { }
 
 }

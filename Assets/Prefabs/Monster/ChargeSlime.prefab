@@ -72,10 +72,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1188382162153718496}
-  - component: {fileID: 8597623170245267029}
   - component: {fileID: 6988312519402825096}
   - component: {fileID: 175335103582965223}
   - component: {fileID: 3843182275496743790}
+  - component: {fileID: 7967817967816615474}
   m_Layer: 6
   m_Name: ChargeSlime
   m_TagString: Untagged
@@ -97,25 +97,10 @@ Transform:
   m_Children:
   - {fileID: 6231771538771705125}
   - {fileID: 6330325197792537895}
+  - {fileID: 2501301711137307371}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!54 &8597623170245267029
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4760783580318445544}
-  serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_UseGravity: 1
-  m_IsKinematic: 1
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
 --- !u!65 &6988312519402825096
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -170,7 +155,6 @@ MonoBehaviour:
   moveSpeed: 1
   _maxHp: 5
   scanRange: 5
-  attackRange: 3
   attackDelay: 1
   attackCooltime: 4
   damage: 1
@@ -181,9 +165,106 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   isNamed: 0
+  attackDelayCount: 0
+  isAttackCooltime: 0
+  patterns:
+  - {fileID: 7967817967816615474}
   target: {fileID: 0}
+  targetVec: {x: 0, y: 0, z: 0}
+--- !u!114 &7967817967816615474
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4760783580318445544}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 270e9f7eff6d8f44483c529dd731a8ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cooltime: 5
+  delay: 2
+  attackRange: 3
+  animationHash: 0
   sphereCollider: {fileID: 3531765961467252924}
-  rigi: {fileID: 8597623170245267029}
+  chargeDirection: {fileID: 2501301711137307371}
+  chargeSpeed: 3
+--- !u!1001 &3454238343124703061
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 1188382162153718496}
+    m_Modifications:
+    - target: {fileID: 961944991957069246, guid: ae09ec29b7cdd904bb29740369060ff3,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 961944991957069246, guid: ae09ec29b7cdd904bb29740369060ff3,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 961944991957069246, guid: ae09ec29b7cdd904bb29740369060ff3,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 961944991957069246, guid: ae09ec29b7cdd904bb29740369060ff3,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 961944991957069246, guid: ae09ec29b7cdd904bb29740369060ff3,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 961944991957069246, guid: ae09ec29b7cdd904bb29740369060ff3,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 961944991957069246, guid: ae09ec29b7cdd904bb29740369060ff3,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 961944991957069246, guid: ae09ec29b7cdd904bb29740369060ff3,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 961944991957069246, guid: ae09ec29b7cdd904bb29740369060ff3,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 961944991957069246, guid: ae09ec29b7cdd904bb29740369060ff3,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 961944991957069246, guid: ae09ec29b7cdd904bb29740369060ff3,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5622687085564629697, guid: ae09ec29b7cdd904bb29740369060ff3,
+        type: 3}
+      propertyPath: m_Name
+      value: LineMark
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: ae09ec29b7cdd904bb29740369060ff3, type: 3}
+--- !u!4 &2501301711137307371 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 961944991957069246, guid: ae09ec29b7cdd904bb29740369060ff3,
+    type: 3}
+  m_PrefabInstance: {fileID: 3454238343124703061}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &3851363562427359252
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -331,8 +412,8 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 0
   serializedVersion: 2
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Radius: 0.3
+  m_Center: {x: 0, y: 0.3, z: 0}
 --- !u!114 &62957885899004353
 MonoBehaviour:
   m_ObjectHideFlags: 0

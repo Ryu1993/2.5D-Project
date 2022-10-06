@@ -52,8 +52,6 @@ public class StageManager : Singleton<StageManager>
     Transform stagePlayer;
     NavMeshAgent playerAgent;
     Animator playerAnim;
-    [SerializeField]
-    StageInfo test;
 
     protected override void Awake()
     {
@@ -84,9 +82,10 @@ public class StageManager : Singleton<StageManager>
         {
             player.curStageInfoList = null;
             GameManager.instance.PlayerInfoSave();
-            AsyncOperation operation = SceneManager.LoadSceneAsync("Home");
-            operation.allowSceneActivation = false;
-            LoadingUI.instance.CallLoading(operation);
+            //AsyncOperation operation = SceneManager.LoadSceneAsync("Home");
+            //operation.allowSceneActivation = false;
+            //LoadingUI.instance.CallLoading(operation);
+            LoadingUI.instance.SceneChange("Home");
             yield break;
         }
         SceneCreate();

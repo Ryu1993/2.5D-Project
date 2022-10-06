@@ -24,7 +24,7 @@ public class LoadingUI : Singleton<LoadingUI>
         loadingUI.SetActive(true);
         var operation = SceneManager.LoadSceneAsync(sceneName);
         operation.allowSceneActivation = false;
-        CallLoading(operation);
+        StartCoroutine(CoCallLoading(operation));
     }
 
     public Coroutine CallLoading(AsyncOperation operation)
@@ -39,7 +39,7 @@ public class LoadingUI : Singleton<LoadingUI>
         while (!operation.isDone)
         {
             loadingImage.fillAmount = operation.progress;
-            if (operation.progress > 0.8f) operation.allowSceneActivation = true;
+            if (operation.progress >= 0.8f) operation.allowSceneActivation = true;
             yield return null;
         }
         loadingImage.fillAmount = 1f;

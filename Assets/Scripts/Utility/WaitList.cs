@@ -17,4 +17,5 @@ public static class WaitList
     public static WaitUntil isMonsterManagerSet = new WaitUntil(() => MonsterBehaviourManager.instance != null);
     public static WaitUntil isPlayerSet = new WaitUntil(() => GameManager.instance.scenePlayer != null);
     public static WaitUntil isPlayerReady = new WaitUntil(() => GameManager.instance.scenePlayer.isReady);
+    public static WaitUntil isObjectPoolSet = new WaitUntil(() => NewObjectPool.instance != null);
 }

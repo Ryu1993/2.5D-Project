@@ -7,6 +7,9 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 public class TestAddresable : MonoBehaviour
 {
     [SerializeField]
+    Player player;
+
+    [SerializeField]
     AssetLabelReference label;
     [SerializeField]
     List<GameObject> testList = new List<GameObject>();
@@ -27,7 +30,10 @@ public class TestAddresable : MonoBehaviour
         Addressables.Release(temp);
     }
 
+    private void Start()
+    {
+        player.PlayerSetting();
+    }
 
-  
 
 }

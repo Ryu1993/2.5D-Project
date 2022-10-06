@@ -189,11 +189,12 @@ public class RoomManager : MonoBehaviour
     {
         foreach(GameObject go in npcs)
         {
-            Addressables.Release(go);
+            if(go!=null) Addressables.Release(go);
+
         }
         foreach(RewardChest go in rewards)
         {
-            Addressables.Release(go.gameObject);
+            if (go != null) Addressables.Release(go.gameObject);
         }
     }
 

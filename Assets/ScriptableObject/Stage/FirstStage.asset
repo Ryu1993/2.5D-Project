@@ -12,6 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e20b46dc79770db49b6a738b0960ce62, type: 3}
   m_Name: FirstStage
   m_EditorClassIdentifier: 
-  progressMap:
-  - {fileID: 11400000, guid: 1f53ce2d142e8f34492668594e61be24, type: 2}
+  progressMap: []
   endMap: {fileID: 11400000, guid: b91544ceb99a996439bf3e4be91d753d, type: 2}

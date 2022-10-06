@@ -76,6 +76,7 @@ GameObject:
   - component: {fileID: 6988312519402825096}
   - component: {fileID: 175335103582965223}
   - component: {fileID: 5884532832191802209}
+  - component: {fileID: 9214095137399394161}
   m_Layer: 6
   m_Name: RangeSlime
   m_TagString: Untagged
@@ -169,8 +170,7 @@ MonoBehaviour:
   _curHp: 0
   moveSpeed: 1
   _maxHp: 3
-  scanRange: 5
-  attackRange: 3
+  scanRange: 6
   attackDelay: 1
   attackCooltime: 3
   damage: 1
@@ -181,10 +181,34 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   isNamed: 0
+  attackDelayCount: 0
+  isAttackCooltime: 0
+  patterns:
+  - {fileID: 9214095137399394161}
   target: {fileID: 0}
-  rangeCooltime: 4
-  rangeSpeed: 1.5
-  rangeDuration: 2
+  targetVec: {x: 0, y: 0, z: 0}
+--- !u!114 &9214095137399394161
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4760783580318445544}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56dba579ee12c694f97c36b3ff4be492, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cooltime: 5
+  delay: 2
+  attackRange: 4
+  animationHash: 0
+  rangeSpeed: 1
+  rangeDuration: 1.5
+  rangeDegree: 30
+  bulletScale: {x: 0.2, y: 0.2, z: 0.2}
+  bulletNum: 6
+  rangeCycle: 0.3
 --- !u!1001 &7396150235116278649
 PrefabInstance:
   m_ObjectHideFlags: 0

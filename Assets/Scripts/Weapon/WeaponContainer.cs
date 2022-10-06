@@ -30,7 +30,7 @@ public class WeaponContainer : MonoBehaviour
     public void WeaponSet(UnityEngine.AddressableAssets.AssetLabelReference weaponLabel)
     {
         if (curWeapon != null) AddressObject.Release(curWeapon.gameObject);
-        curWeapon = AddressObject.Instinate(weaponLabel,weaponSlot).GetComponent<Weapon>();
+        curWeapon = AddressObject.Instinate(weaponLabel,weaponVFX).GetComponent<Weapon>();
         curWeapon.transform.localScale = Vector3.zero;
         containerBackRenderer.sprite = curWeapon.sprite;
         curWeapon.player = player;
@@ -53,7 +53,8 @@ public class WeaponContainer : MonoBehaviour
         if (!weaponVFX.gameObject.activeSelf)
         {
             if (comboCount > maxCombo) comboCount = 0;
-            weaponVFX.localPosition = new Vector3(-0.3f, 0.5f, (float)comboCount*1f);
+            attackPoint.localPosition = new Vector3(-0.3f, 0.5f, (float)comboCount * 1f);
+            weaponVFX.position = attackPoint.position;
             weaponVFX.localRotation = Quaternion.Euler(new Vector3(0, 0,comboCount*180));
             weaponVFX.gameObject.SetActive(true);
             weaponAttack?.Invoke();
