@@ -38,6 +38,7 @@ public class WeaponContainer : MonoBehaviour
         superArmor = curWeapon.superArmor;
         weaponAttack = curWeapon.WeaponAttack;
         maxCombo = curWeapon.maxCombo;
+        curWeapon.transform.localScale = Vector3.one;
     }
 
  
@@ -53,7 +54,7 @@ public class WeaponContainer : MonoBehaviour
         if (!weaponVFX.gameObject.activeSelf)
         {
             if (comboCount > maxCombo) comboCount = 0;
-            attackPoint.localPosition = new Vector3(-0.3f, 0.5f, (float)comboCount * 1f);
+            attackPoint.localPosition = new Vector3(0, 0.5f, (float)comboCount * 1f);
             weaponVFX.position = attackPoint.position;
             weaponVFX.localRotation = Quaternion.Euler(new Vector3(0, 0,comboCount*180));
             weaponVFX.gameObject.SetActive(true);

@@ -78,7 +78,7 @@ public class Player : Character
     } 
     #endregion
     private readonly int animator_Dash = Animator.StringToHash("Dash");
-    private readonly int animator_Offset = Animator.StringToHash("Offset");
+    private readonly int animator_DashProgress = Animator.StringToHash("DashProgress");
     public Coroutine coUpdate;
 
 
@@ -235,6 +235,7 @@ public class Player : Character
         isBehaviorExecuted = true;
     }
 
+
     private void PlayerIdle()
     {
         if (isBehaviorExecuted) return;
@@ -250,7 +251,7 @@ public class Player : Character
         if (isBehaviorExecuted) return; // 필요없음
         if (!isDashBehavior) return;
         ComboCancle();
-        rigi.velocity = (mousePointer.position - transform.position).normalized * dashSpeed;
+        BehaviorExecute += PlayerDashMove;
         InputCheck -= MoveInput;
         InputCheck -= AttackInput;
         InputCheck -= SkillInput;
@@ -258,12 +259,17 @@ public class Player : Character
         directionCircle.isStop = true;
         isDashInvincible = true;
         isBehaviorExecuted = true;
-        animator.SetBool(animator_Dash, true);
+        animator.SetTrigger(animator_Dash);
+        animator.SetBool(animator_DashProgress, true);
         animator.Update(0);
         ghostCreator.Swith();
-        CooltimeCounter += DashCoolCount;
         CooltimeCounter += DashInvincibleCount;
     }
+    private void PlayerDashMove()
+    {
+        rigi.velocity = directionCircle.transform.forward * dashSpeed;
+    }
+
     private void PlayerAttack()
     {
         if (isBehaviorExecuted) return;
@@ -327,17 +333,20 @@ public class Player : Character
     private void DashInvincibleCount()
     {
         dashInvincibleCount += Time.fixedDeltaTime;
-        if (dashInvincibleCount >= dashInvincibleTime)
+        if (dashInvincibleCount >= (dashInvincibleTime+0.5f))
         {
             ghostCreator.Swith();
-            isDashInvincible = false;
-            animator.SetBool(animator_Dash, false);
+            rigi.velocity = Vector3.zero;
+            animator.SetBool(animator_DashProgress, false);
             animator.Update(0);
-            directionCircle.isStop = false;
             InputCheck += MoveInput;
             InputCheck += AttackInput;
             InputCheck += SkillInput;
+            BehaviorExecute -= PlayerDashMove;
             CooltimeCounter -= DashInvincibleCount;
+            CooltimeCounter += DashCoolCount;
+            directionCircle.isStop = false;
+            isDashInvincible = false;
             HitInput = null;
             dashInvincibleCount = 0;
         }

@@ -10,9 +10,8 @@ public class BasicSword : Weapon , IAttackable
     LayerMask layerMask;
     public override void WeaponAttack()
     {
-        Debug.Log("attack");
         for(int i = 0; i < colliders.Length; i++) colliders[i] = null;
-        Physics.OverlapBoxNonAlloc(attackPoint.position, new Vector3(0.5f, 0.5f,0.5f), colliders,Quaternion.identity,layerMask,QueryTriggerInteraction.Collide);
+        Physics.OverlapBoxNonAlloc(attackPoint.position, new Vector3(0.2f, 0.2f,0.2f), colliders,Quaternion.identity,layerMask,QueryTriggerInteraction.Collide);
         for (int i = 0; i < colliders.Length; i++)
         {
             if (colliders[i]!=null)
