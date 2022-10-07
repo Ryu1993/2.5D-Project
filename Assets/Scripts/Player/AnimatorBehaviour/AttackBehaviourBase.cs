@@ -6,10 +6,16 @@ using UnityEngine;
 
 public class AttackBehaviourBase : StateMachineBehaviour
 {
-    Player player;
+    private Player player;
     public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        animator.transform.TryGetComponent(out player);
+        animator.transform.parent.TryGetComponent(out player);
         player.weaponContainer.weaponAttack();
+        player.weaponContainer.weaponVFX.gameObject.SetActive(true);
     }
+    public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    {
+        player.weaponContainer.weaponVFX.gameObject.SetActive(false);
+    }
+
 }

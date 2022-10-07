@@ -2904,9 +2904,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3bd5e7987d4ba034586ff7d29f521eb0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 0}
+  player: {fileID: 6549884312048641777}
   curWeapon: {fileID: 0}
-  containerBackRenderer: {fileID: 2137480375}
   weaponVFX: {fileID: 7509207628450628334}
   attackCooltime: 0.5
   attackCoolCount: 0

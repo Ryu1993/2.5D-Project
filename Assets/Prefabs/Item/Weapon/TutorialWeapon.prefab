@@ -133,7 +133,7 @@ MonoBehaviour:
   damage: 1
   afterDelay: 0.4
   forwardLength: 0.3
-  maxCombo: 2
+  maxCombo: 1
   layerMask:
     serializedVersion: 2
     m_Bits: 64

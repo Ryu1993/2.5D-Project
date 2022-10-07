@@ -28,6 +28,7 @@ public class WeaponContainer : MonoBehaviour
     private Animator playerAnimator;
     private readonly int animator_combo = Animator.StringToHash("Combo");
 
+    private void Awake() => playerAnimator = player.animator;
     private void FixedUpdate()=> afterDelayCounter?.Invoke();
 
     private void AttackAfterDelay()

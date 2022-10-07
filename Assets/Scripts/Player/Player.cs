@@ -273,19 +273,19 @@ public class Player : Character
     private void PlayerAttack()
     {
         if (isBehaviorExecuted) return;
-        if (!isAttackBehavior&&!isSuperAttackBehavior) return;
+        if (!isAttackBehavior&&!isSuperAttackBehavior) return;        
         if (weaponContainer.isComboCooltime) return;
         rigi.velocity = Vector3.zero;
-        if (!isComboBehaviour)
+        if (!animator.IsCurStateTag(animator_Attack, 0))
         {
             directionCircle.isStop = true;
-            animator.SetBool(animator_Attack, true);
+            animator.SetTrigger(animator_Attack);
             InputCheck -= MoveInput;
             CooltimeCounter += ComboCount;
             isComboBehaviour = true;
         }
         else comboCount = 0;
-        AttackBehavior?.Invoke();
+        //AttackBehavior?.Invoke();
         isBehaviorExecuted = true;
     }
     private void PlayerSkill()
@@ -393,6 +393,7 @@ public class Player : Character
 
     #endregion
     public void PlayerKinematic() => rigi.isKinematic = !rigi.isKinematic;
+
 
 
 
