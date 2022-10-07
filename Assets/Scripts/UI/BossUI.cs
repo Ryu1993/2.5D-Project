@@ -15,7 +15,7 @@ public class BossUI : MonoBehaviour
 
     public void BossConnect(BossMonster boss)
     {
-        bossName.text = Regex.Replace(boss.name, "(Clone)", string.Empty);
+        bossName.text = boss.bossName;
         maxHp = boss.maxHp;
         boss.bossHpEvent += BossHpBarControll;
     }

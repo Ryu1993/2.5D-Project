@@ -8,10 +8,7 @@ public class WeaponContainer : MonoBehaviour
 {
     public Player player;
     public Weapon curWeapon;
-    [SerializeField]
-    private SpriteRenderer containerBackRenderer;
     public Transform weaponVFX;
-    public UnityAction weaponAttack;
     public float attackCooltime;
     [HideInInspector]
     public float attackCoolCount = 0;
@@ -27,6 +24,9 @@ public class WeaponContainer : MonoBehaviour
     private float afterDelayCount = 0;
     private float fowardLength;
     private UnityAction afterDelayCounter;
+    public UnityAction weaponAttack;
+    private Animator playerAnimator;
+    private readonly int animator_combo = Animator.StringToHash("Combo");
 
     private void FixedUpdate()=> afterDelayCounter?.Invoke();
 
@@ -46,11 +46,11 @@ public class WeaponContainer : MonoBehaviour
         if (curWeapon != null) AddressObject.Release(curWeapon.gameObject);
         curWeapon = AddressObject.Instinate(weaponLabel,weaponVFX).GetComponent<Weapon>();
         curWeapon.transform.localScale = Vector3.zero;
-        containerBackRenderer.sprite = curWeapon.sprite;
         curWeapon.player = player;
         superArmor = curWeapon.superArmor;
         weaponAttack = curWeapon.WeaponAttack;
         maxCombo = curWeapon.maxCombo;
+        playerAnimator.SetInteger(animator_combo, maxCombo);
         afterDelay = curWeapon.afterDelay;
         fowardLength = curWeapon.forwardLength;
         curWeapon.transform.localScale = Vector3.one;

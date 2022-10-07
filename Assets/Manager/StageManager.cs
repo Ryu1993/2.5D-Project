@@ -1,6 +1,7 @@
 using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 using Unity.VisualScripting;
 using UnityEditor.Search.Providers;
 using UnityEngine;
@@ -150,6 +151,16 @@ public class StageManager : Singleton<StageManager>
         lastMap.stagLevel = lastPrevStageLevel;
         allConnetInfos.Add(lastMap);
         allConnetInfos.Add(startMap);
+        foreach (MapConnetInfo info in allConnetInfos)
+        {
+            if (info == lastMap) return;
+            if(info.left==null&&info.right==null)
+            {
+                int coin = Random.Range(0, 2);
+                if (coin == 1) info.left = NextLevelInfo(info.stagLevel);
+                else info.right = NextLevelInfo(info.stagLevel);
+            }
+        }
     }
 
 
@@ -175,6 +186,22 @@ public class StageManager : Singleton<StageManager>
             }
         }
     }
+
+    
+    private MapConnetInfo NextLevelInfo(int stageLevel)
+    {
+        List<MapConnetInfo> nextLevels = new List<MapConnetInfo>();
+        foreach(var info in allConnetInfos)
+        {
+            if(info.stagLevel == stageLevel+1)
+            {
+                nextLevels.Add(info);
+            }
+        }
+        return nextLevels[Random.Range(0,nextLevels.Count)];
+    }
+
+
 
     private void LineCreate()
     {

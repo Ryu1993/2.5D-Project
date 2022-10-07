@@ -178,6 +178,7 @@ MonoBehaviour:
   - {fileID: 5327385902521630881}
   target: {fileID: 0}
   targetVec: {x: 0, y: 0, z: 0}
+  bossName: SlimeKing
 --- !u!114 &2899574965530842619
 MonoBehaviour:
   m_ObjectHideFlags: 0
