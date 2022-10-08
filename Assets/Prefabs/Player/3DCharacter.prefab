@@ -700,6 +700,7 @@ MonoBehaviour:
   directionCircle: {fileID: 7912677038736676203}
   weaponContainer: {fileID: 6312899132770368302}
   animator: {fileID: 2947975029313614330}
+  comboCount: 0
 --- !u!65 &3123691951350449579
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2907,9 +2908,10 @@ MonoBehaviour:
   player: {fileID: 6549884312048641777}
   curWeapon: {fileID: 0}
   weaponVFX: {fileID: 7509207628450628334}
-  attackCooltime: 0.5
+  vfx: {fileID: 0}
+  attackCooltime: 1
   attackCoolCount: 0
-  isComboCooltime: 0
+  isAttackCooltime: 0
   superArmor: 0
   comboCount: 0
   maxCombo: 0
@@ -8116,7 +8118,7 @@ PrefabInstance:
     - target: {fileID: 3662496979572467538, guid: a42c5543976ca874c8bc0e6bbf8c6eca,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.1
+      value: 0.15
       objectReference: {fileID: 0}
     - target: {fileID: 3662496979572467538, guid: a42c5543976ca874c8bc0e6bbf8c6eca,
         type: 3}
@@ -8126,7 +8128,7 @@ PrefabInstance:
     - target: {fileID: 3662496979572467538, guid: a42c5543976ca874c8bc0e6bbf8c6eca,
         type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.1
+      value: 0.075
       objectReference: {fileID: 0}
     - target: {fileID: 3662496979572467538, guid: a42c5543976ca874c8bc0e6bbf8c6eca,
         type: 3}
@@ -8136,12 +8138,12 @@ PrefabInstance:
     - target: {fileID: 3662496979572467538, guid: a42c5543976ca874c8bc0e6bbf8c6eca,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.5
+      value: 0.8
       objectReference: {fileID: 0}
     - target: {fileID: 3662496979572467538, guid: a42c5543976ca874c8bc0e6bbf8c6eca,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 1
+      value: 0.8
       objectReference: {fileID: 0}
     - target: {fileID: 3662496979572467538, guid: a42c5543976ca874c8bc0e6bbf8c6eca,
         type: 3}
@@ -8196,7 +8198,7 @@ PrefabInstance:
     - target: {fileID: 6445826192643391251, guid: a42c5543976ca874c8bc0e6bbf8c6eca,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 6230802421569949886, guid: a42c5543976ca874c8bc0e6bbf8c6eca, type: 3}

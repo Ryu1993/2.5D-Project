@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 68772259fe93aa84b91e394341dd07e5, type: 3}
-  m_Name: BasicSword
+  m_Name: Lv2WindSwipt
   m_EditorClassIdentifier: 
   Type: 0
-  Name: "\uCE7C\uBC14\uB78C"
+  Name: "\uCE7C\uBC14\uB78C2"
   itemCardText: 
   simpleOptionText: "\uB0A0\uCE74\uB85C\uC6B4 \uBC14\uB78C\n\uACF5\uACA9\uB825 :
-    1\n\uCF64\uBCF4 : 2"
+    1.5\n\uCF64\uBCF4 : 3"
   backBg: {fileID: 0}
   backFrame: {fileID: 0}
   element: {fileID: 0}
@@ -26,4 +26,4 @@ MonoBehaviour:
   simpleRarity: {fileID: 0}
   simpleIconFrame: {fileID: 0}
   weaponPrefab:
-    m_LabelString: Tutorial_Weapon
+    m_LabelString: LV2WindSwept

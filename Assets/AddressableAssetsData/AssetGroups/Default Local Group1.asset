@@ -143,6 +143,24 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - Tutorial_Weapon
+  - m_GUID: d7ed9bd9b633a954c9676900087a977d
+    m_Address: Assets/Prefabs/Item/Weapon/Lv2_Windswept.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - LV2WindSwept
+    - Lv2Weapon
+  - m_GUID: 5201b79d7bb146f4b8c7ee7b0e40d604
+    m_Address: Assets/Prefabs/Item/Weapon/Lv3_Windswept.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Lv3WindSwept
+    - Lv3Weapon
+  - m_GUID: 2359fb08636ff694587deb27e196f301
+    m_Address: Assets/Prefabs/Item/RewardChests/TutorialChest.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - L0Chest
+    - AllChest
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: a36bbc9cce32b754382bb97867bcb24f, type: 2}
   m_SchemaSet:

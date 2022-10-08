@@ -22,7 +22,6 @@ public class ChargeAttack : MonsterAttackPattern
     public override void AttackReadyStart()
     {
         base.AttackReadyStart();
-        chargeDirection.position = sphereCollider.transform.position;
         chargeDirection.gameObject.SetActive(true);
     }
     public override void AttackReadyProgress()
@@ -31,7 +30,6 @@ public class ChargeAttack : MonsterAttackPattern
         {
             monster.MonsterLookAt();
             monster.targetVec = MonsterBehaviourManager.instance.playerPosition;
-            chargeDirection.rotation = monster.direction.rotation;
         }
         else chargeDirection.gameObject.SetActive(false);
     }

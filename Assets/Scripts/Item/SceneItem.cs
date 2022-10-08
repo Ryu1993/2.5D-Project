@@ -31,12 +31,12 @@ public class SceneItem : MonoBehaviour,IReturnable
     public void SceneItemSet(Item item)
     {
         this.item = item;
+        if (item.Type == Item.ItemType.Equip) getItemEvent = getEquip;
+        if (item.Type == Item.ItemType.Buff) getItemEvent = getBuff;
+        if (item.Type == Item.ItemType.Artifact) getItemEvent = getArtifact;
         spriteRenderer.sprite = item.cardIcon;
         nameScript.text = item.Name;
         textScript.text = item.simpleOptionText;
-        if (item.Type == Item.ItemType.Equip) getItemEvent = getEquip;
-        if (item.Type == Item.ItemType.Buff)  getItemEvent = getBuff; 
-        if(item.Type == Item.ItemType.Artifact) getItemEvent = getArtifact;
     }
 
     public void ResetItem()

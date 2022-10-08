@@ -110,6 +110,11 @@ MonoBehaviour:
     - BossMonster
     - BuffRoom
     - BuffEventItem
+    - LV2WindSwept
+    - Lv2Weapon
+    - Lv3WindSwept
+    - Lv3Weapon
+    - L0Chest
   m_SchemaTemplates: []
   m_GroupTemplateObjects:
   - {fileID: 11400000, guid: bb16e0181677ac74b95368d51420f5dc, type: 2}

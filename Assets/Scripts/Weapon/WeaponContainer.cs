@@ -9,11 +9,12 @@ public class WeaponContainer : MonoBehaviour
     public Player player;
     public Weapon curWeapon;
     public Transform weaponVFX;
+    public VisualEffect vfx;
     public float attackCooltime;
     [HideInInspector]
     public float attackCoolCount = 0;
     [HideInInspector]
-    public bool isComboCooltime;
+    public bool isAttackCooltime;
     [HideInInspector]
     public bool superArmor;
     [HideInInspector]
@@ -26,7 +27,7 @@ public class WeaponContainer : MonoBehaviour
     private UnityAction afterDelayCounter;
     public UnityAction weaponAttack;
     private Animator playerAnimator;
-    private readonly int animator_combo = Animator.StringToHash("Combo");
+    public readonly int animator_combo = Animator.StringToHash("Combo");
 
     private void Awake() => playerAnimator = player.animator;
     private void FixedUpdate()=> afterDelayCounter?.Invoke();
@@ -48,11 +49,12 @@ public class WeaponContainer : MonoBehaviour
         curWeapon = AddressObject.Instinate(weaponLabel,weaponVFX).GetComponent<Weapon>();
         curWeapon.transform.localScale = Vector3.zero;
         curWeapon.player = player;
+        curWeapon.TryGetComponent(out vfx);
         superArmor = curWeapon.superArmor;
         weaponAttack = curWeapon.WeaponAttack;
         maxCombo = curWeapon.maxCombo;
         playerAnimator.SetInteger(animator_combo, maxCombo);
-        afterDelay = curWeapon.afterDelay;
+        attackCooltime = curWeapon.afterDelay;
         fowardLength = curWeapon.forwardLength;
         curWeapon.transform.localScale = Vector3.one;
     }
@@ -70,7 +72,7 @@ public class WeaponContainer : MonoBehaviour
         {
             if (comboCount > maxCombo) comboCount = 0;
             weaponVFX.localPosition = new Vector3(0, 0.5f, ((float)comboCount * fowardLength) + fowardLength);
-            weaponVFX.localRotation = Quaternion.Euler(new Vector3(0, 0,comboCount*180));
+            weaponVFX.localRotation = Quaternion.Euler(new Vector3(0, 0,comboCount*45));
             weaponVFX.gameObject.SetActive(true);
             afterDelayCounter += AttackAfterDelay;
             weaponAttack?.Invoke();

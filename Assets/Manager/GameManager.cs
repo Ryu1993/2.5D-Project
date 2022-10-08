@@ -40,13 +40,13 @@ public class GameManager : Singleton<GameManager>
 
     public void PlayerInfoReset()
     {
-        GameManager.instance.playerInfo.curEquip = null;
-        GameManager.instance.playerInfo.inventory.Clear();
-        GameManager.instance.playerInfo.player_maxHp = 6;
-        GameManager.instance.playerInfo.player_curHp = 6;
-        GameManager.instance.playerInfo.curStage = 0;
-        GameManager.instance.playerInfo.progressStageInfo = null;
-        GameManager.instance.playerInfo.curStageInfoList = null;
+       playerInfo.curEquip = null;
+       playerInfo.inventory.Clear();
+       playerInfo.player_maxHp = 6;
+       playerInfo.player_curHp = 6;
+       playerInfo.curStage = 0;
+       playerInfo.progressStageInfo = null;
+       playerInfo.curStageInfoList = null;
     }
 
     IEnumerator SingletonCheck()

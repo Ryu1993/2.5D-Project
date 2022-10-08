@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 381552562762368415}
   - component: {fileID: 5334136809006836229}
   m_Layer: 0
-  m_Name: TutorialWeapon
+  m_Name: Lv2_Windswept
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -26,14 +26,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 381552562762368408}
-  m_LocalRotation: {x: 0, y: 0.5, z: 0, w: 0.8660254}
+  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 60, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!2083052967 &381552562762368414
 VisualEffect:
   m_ObjectHideFlags: 0
@@ -133,8 +133,8 @@ MonoBehaviour:
   damage: 1
   afterDelay: 0.4
   forwardLength: 0.3
-  maxCombo: 1
+  maxCombo: 2
   layerMask:
     serializedVersion: 2
     m_Bits: 64
-  attackRange: 0.4
+  attackRange: 1

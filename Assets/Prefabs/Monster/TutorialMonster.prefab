@@ -120,8 +120,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cooltime: 3
-  delay: 0.5
-  attackRange: 1
+  delay: 1
+  attackRange: 0.5
   animationHash: 0
   sphereCollider: {fileID: 7200711033698408140}
 --- !u!1 &5549613116315204451

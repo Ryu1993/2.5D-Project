@@ -10,12 +10,14 @@ public class AttackBehaviourBase : StateMachineBehaviour
     public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         animator.transform.parent.TryGetComponent(out player);
+        player.comboCount++;
         player.weaponContainer.weaponAttack();
-        player.weaponContainer.weaponVFX.gameObject.SetActive(true);
-    }
-    public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-    {
-        player.weaponContainer.weaponVFX.gameObject.SetActive(false);
+        player.weaponContainer.weaponVFX.transform.localRotation = Quaternion.Euler(0, 0, -45 * player.comboCount+95);
+        player.weaponContainer.vfx.Play();
     }
 
+    public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    {
+        animator.SetBool(player.animator_Continue, false);
+    }
 }

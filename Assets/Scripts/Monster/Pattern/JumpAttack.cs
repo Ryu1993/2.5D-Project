@@ -7,7 +7,10 @@ public class JumpAttack : MonsterAttackPattern
     [SerializeField]
     private Transform targetMarker;
     [SerializeField]
+    private PoolReturn impact;
+    [SerializeField]
     private SphereCollider sphereCollider;
+    private NewObjectPool.PoolInfo key;
 
     public override void AnimationHashSet() => animationHash = Animator.StringToHash("Jump");
     public override void AttackReadyStart()
@@ -35,6 +38,8 @@ public class JumpAttack : MonsterAttackPattern
     }
     public override void AttackEnd()
     {
+        if (key == null) key = NewObjectPool.instance.PoolInfoSet(impact.gameObject, 1, 1);
+        NewObjectPool.instance.Call(key, sphereCollider.transform.position);
         sphereCollider.enabled = false;
         base.AttackEnd();
     }

@@ -75,6 +75,7 @@ public class StageManager : Singleton<StageManager>
             player.curStageInfoList = allConnetInfos;
             player.curStageInfo = startMap;
             player.stageMaxLevel = lastPrevStageLevel;
+            player.player_curHp = player.player_maxHp;
         }
         else
         {

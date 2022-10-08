@@ -14,7 +14,6 @@ public class Player : Character
     public float dashCoolTime;
     public float dashInvincibleTime;
     public float invincibleTime;
-    public float comboTime = 0.5f;
     private bool isHit;
     private bool isInvicible;
     private bool isDashInvincible;
@@ -51,7 +50,9 @@ public class Player : Character
     private float dashCoolCount = 0;
     private float dashInvincibleCount = 0;
     private float invincibleCount = 0;
-    private float comboCount = 0f;
+    public float comboCount = 0;
+    public int maxDashable = 1;
+    private int curDashCount = 1;
     #endregion
     #region PlayerStat
     public UnityAction<float> hpUp;
@@ -64,6 +65,7 @@ public class Player : Character
             if (value > _maxHp) value = _maxHp;
             hpUp?.Invoke(value);
             _curHp = value;
+            GameManager.instance.playerInfo.player_curHp = value;
         }
     }
     public override float maxHp 
@@ -79,6 +81,8 @@ public class Player : Character
     #endregion
     private readonly int animator_Dash = Animator.StringToHash("Dash");
     private readonly int animator_DashProgress = Animator.StringToHash("DashProgress");
+    public readonly int animator_Continue = Animator.StringToHash("Continue");
+    public readonly int animator_MotionStop = Animator.StringToHash("MotionStop");
     public Coroutine coUpdate;
 
 
@@ -250,6 +254,8 @@ public class Player : Character
     {
         if (isBehaviorExecuted) return; // 필요없음
         if (!isDashBehavior) return;
+        if (curDashCount == 0) return;
+        curDashCount--;
         ComboCancle();
         BehaviorExecute += PlayerDashMove;
         InputCheck -= MoveInput;
@@ -274,18 +280,24 @@ public class Player : Character
     {
         if (isBehaviorExecuted) return;
         if (!isAttackBehavior&&!isSuperAttackBehavior) return;        
-        if (weaponContainer.isComboCooltime) return;
+        if (weaponContainer.isAttackCooltime) return;
+        if (animator.IsInTransition(0)) return;
         rigi.velocity = Vector3.zero;
         if (!animator.IsCurStateTag(animator_Attack, 0))
         {
             directionCircle.isStop = true;
             animator.SetTrigger(animator_Attack);
+            animator.Update(0);
             InputCheck -= MoveInput;
             CooltimeCounter += ComboCount;
-            isComboBehaviour = true;
         }
-        else comboCount = 0;
-        //AttackBehavior?.Invoke();
+        else
+        {
+            if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.4f)
+            {
+                animator.SetBool(animator_Continue,true);
+            }
+        }
         isBehaviorExecuted = true;
     }
     private void PlayerSkill()
@@ -305,8 +317,6 @@ public class Player : Character
 
     #endregion
     #region CooltimeCounter
-
-
     private void DashCoolCount()
     {
         dashCoolCount += Time.fixedDeltaTime;
@@ -315,6 +325,7 @@ public class Player : Character
             InputCheck += DashInput;
             CooltimeCounter -= DashCoolCount;
             dashCoolCount = 0;
+            curDashCount = maxDashable;
         }
     }
     private void InvincibleCount()
@@ -344,7 +355,7 @@ public class Player : Character
             InputCheck += SkillInput;
             BehaviorExecute -= PlayerDashMove;
             CooltimeCounter -= DashInvincibleCount;
-            CooltimeCounter += DashCoolCount;
+            if(dashCoolCount == 0) CooltimeCounter += DashCoolCount;
             directionCircle.isStop = false;
             isDashInvincible = false;
             HitInput = null;
@@ -353,37 +364,33 @@ public class Player : Character
     }
     private void ComboCount()
     {
-        comboCount += 0.02f;
-        if(comboCount>=comboTime||weaponContainer.comboCount>=weaponContainer.maxCombo) ComboEnd();
+        if (animator.IsCurStateTag(animator_Attack, 0) || animator.IsInTransition(0)) return;
+        ComboEnd();
     }
     private void ComboEnd()
     {
-        animator.SetBool(animator_Attack, false);
-        animator.Update(0f);
-        directionCircle.isStop = false;
         CooltimeCounter += AttackCooltime;
         CooltimeCounter -= ComboCount;
         InputCheck += MoveInput;
-        weaponContainer.isComboCooltime = true;
-        isComboBehaviour = false;
-        weaponContainer.comboCount = 0;
         comboCount = 0;
+        directionCircle.isStop = false;
+        weaponContainer.isAttackCooltime = true;
     }
     private void ComboCancle()
     {
-        if (!weaponContainer.weaponVFX.gameObject.activeSelf) return;
-        weaponContainer.WeaponAnimationCancle();
-        if (!isComboBehaviour) return;
+        if (!animator.IsCurStateTag(animator_Attack, 0)) return;
+        animator.SetTrigger(animator_MotionStop);
+        animator.Update(0);
         ComboEnd();
     }
 
     public void AttackCooltime()
     {
-        weaponContainer.attackCoolCount += 0.02f;
+        weaponContainer.attackCoolCount += Time.fixedDeltaTime;
         if (weaponContainer.attackCoolCount >= weaponContainer.attackCooltime)
         {
             CooltimeCounter -= AttackCooltime;
-            weaponContainer.isComboCooltime = false;
+            weaponContainer.isAttackCooltime = false;
             weaponContainer.attackCoolCount = 0f;
         }
     }
