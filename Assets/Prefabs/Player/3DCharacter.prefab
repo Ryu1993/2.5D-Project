@@ -691,16 +691,16 @@ MonoBehaviour:
   moveSpeed: 3
   _maxHp: 0
   dashSpeed: 2
-  dashCoolTime: 2
+  dashCoolTime: 1.5
   dashInvincibleTime: 0
   invincibleTime: 1
-  comboTime: 0.4
   mousePointer: {fileID: 0}
   ghostCreator: {fileID: 6549884311636988109}
   directionCircle: {fileID: 7912677038736676203}
   weaponContainer: {fileID: 6312899132770368302}
   animator: {fileID: 2947975029313614330}
   comboCount: 0
+  maxDashable: 1
 --- !u!65 &3123691951350449579
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2908,7 +2908,6 @@ MonoBehaviour:
   player: {fileID: 6549884312048641777}
   curWeapon: {fileID: 0}
   weaponVFX: {fileID: 7509207628450628334}
-  vfx: {fileID: 0}
   attackCooltime: 1
   attackCoolCount: 0
   isAttackCooltime: 0
@@ -8123,7 +8122,7 @@ PrefabInstance:
     - target: {fileID: 3662496979572467538, guid: a42c5543976ca874c8bc0e6bbf8c6eca,
         type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.02
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 3662496979572467538, guid: a42c5543976ca874c8bc0e6bbf8c6eca,
         type: 3}
@@ -8225,6 +8224,18 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: b027ba24785884d4db44172d2360a87d, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: b027ba24785884d4db44172d2360a87d, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: b027ba24785884d4db44172d2360a87d, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: b027ba24785884d4db44172d2360a87d, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0
       objectReference: {fileID: 0}
@@ -8264,7 +8275,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 9500000, guid: b027ba24785884d4db44172d2360a87d, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: b027ba24785884d4db44172d2360a87d, type: 3}
 --- !u!4 &8755145773858922639 stripped
 Transform:

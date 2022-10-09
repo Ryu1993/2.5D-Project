@@ -12,13 +12,11 @@ public class RewardCardWindow : MonoBehaviour
     {
         RewardCardWindow window;
         public Item item;
-        public bool isPick;
         public RewardManager(Item _item, RewardCardWindow _window)
         {
             window = _window;
             item = _item;
         }
-
         public void PlayerGetItem()
         {
             window.WindowBlock();
@@ -40,7 +38,6 @@ public class RewardCardWindow : MonoBehaviour
             window.WindowClose();
         }
     }
-    Player player;
     [SerializeField]
     Animator animator;
     [SerializeField]
@@ -51,19 +48,27 @@ public class RewardCardWindow : MonoBehaviour
     public int count;
     [SerializeField]
     List<RewardManager> managers = new List<RewardManager>();
+    UnityAction windowCloseEvent;
+    private readonly int pop = Animator.StringToHash("Pop");
+    private readonly int close = Animator.StringToHash("Close");
+    private readonly int reverse = Animator.StringToHash("RewardWindowCardReverse");
 
-    [SerializeField]
-    AssetLabelReference testLabel;
-    public bool isProgress;
-    public bool isComplete;
 
-    public void CloseReward()=> gameObject.SetActive(false);
+
+    public void CloseReward()
+    {
+        blockScreen.SetActive(false);
+        gameObject.SetActive(false);
+    }
     public void WindowBlock() => blockScreen.SetActive(!blockScreen.activeSelf);
-    public void WindowPop() => animator.SetTrigger("Pop");
+    public void WindowPop() => animator.SetTrigger(pop);
     public void WindowClose()
     {
-        animator.SetTrigger("Close");
+        windowCloseEvent?.Invoke();
+        windowCloseEvent = null;
+        animator.SetTrigger(close);
         animator.Update(0);
+        Time.timeScale = 1f;
     }
     public void CreateReward(AssetLabelReference label)
     {
@@ -95,20 +100,30 @@ public class RewardCardWindow : MonoBehaviour
     public void ScaleMax() => transform.GetComponent<RectTransform>().localScale = new Vector3(1, 1, 1);
     public void ScaleMin() => transform.GetComponent<RectTransform>().localScale = new Vector3(0, 0, 0);
 
-    public void OpneReward(AssetLabelReference label)
+    public void OpneReward(AssetLabelReference label,UnityAction closeEvent)
     {
-        isProgress = true;
         transform.gameObject.SetActive(true);
+        windowCloseEvent = closeEvent;
         StartCoroutine(RewardCreatePop(label));
     }
-private IEnumerator RewardCreatePop(AssetLabelReference label)
+    private IEnumerator RewardCreatePop(AssetLabelReference label)
     {
+        Time.timeScale = 0;
         WindowBlock();
         CreateReward(label);
         WindowPop();
-        yield return new WaitUntil(() => isComplete);
+        while(true)
+        {
+            if(animator.IsCurStateName(reverse,0))
+            {
+                if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.95f)
+                {
+                    break;
+                }
+            }
+            yield return null;
+        }
         WindowBlock();
-        isProgress = false;
     }
 
 

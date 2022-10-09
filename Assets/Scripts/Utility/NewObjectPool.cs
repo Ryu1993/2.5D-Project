@@ -87,7 +87,7 @@ public class NewObjectPool : Singleton<NewObjectPool>
         Transform callObject = pool.Dequeue().transform;
         callObject.position = position;
         callObject.rotation = rotate;
-        callObject.SetParent(parent);
+        callObject.SetParent(parent,true);
         return callObject;
     }
     public Transform Call(PoolInfo poolInfo,Transform parent,Quaternion rotate)
@@ -96,7 +96,7 @@ public class NewObjectPool : Singleton<NewObjectPool>
         if (pool.Count == 0) Add(poolInfo,false);
         Transform callObject = pool.Dequeue().transform;
         callObject.rotation = rotate;
-        callObject.SetParent(parent);
+        callObject.SetParent(parent,true);
         return callObject;
     }
 

@@ -1,0 +1,49 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: EnemyGroup
+  m_EditorClassIdentifier: 
+  m_GroupName: EnemyGroup
+  m_Data:
+    m_SerializedData: []
+  m_GUID: b0bf3d80f2f5bb04ea13346e7389d456
+  m_SerializeEntries:
+  - m_GUID: 62b789f990a28e644a313055dfbab8dd
+    m_Address: Assets/Prefabs/Monster/BasicSlime.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - SlimeEnemy
+    - CloseSlime
+    - BasicSlime
+  - m_GUID: 5b1140f386d69354bbe720328d10b293
+    m_Address: Assets/Prefabs/Monster/ChargeSlime.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - SlimeEnemy
+    - CloseSlime
+  - m_GUID: adec80b8a7c789446a8461b8634905b0
+    m_Address: Assets/Prefabs/Monster/RangeSlime.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - SlimeEnemy
+    - RangeSlime
+  - m_GUID: 053c1416b70d462438e950fbe247d25a
+    m_Address: Assets/Prefabs/Monster/KingSlime.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - BossMonster
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: a36bbc9cce32b754382bb97867bcb24f, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 614d072695ebd2445a412987b98b4960, type: 2}
+    - {fileID: 11400000, guid: f690e96537ce9d445a7e2dc9754fe212, type: 2}

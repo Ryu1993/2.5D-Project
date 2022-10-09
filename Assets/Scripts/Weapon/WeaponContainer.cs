@@ -9,7 +9,6 @@ public class WeaponContainer : MonoBehaviour
     public Player player;
     public Weapon curWeapon;
     public Transform weaponVFX;
-    public VisualEffect vfx;
     public float attackCooltime;
     [HideInInspector]
     public float attackCoolCount = 0;
@@ -21,67 +20,31 @@ public class WeaponContainer : MonoBehaviour
     public int comboCount = 0;
     [HideInInspector]
     public int maxCombo = 0;
-    private float afterDelay;
-    private float afterDelayCount = 0;
-    private float fowardLength;
-    private UnityAction afterDelayCounter;
-    public UnityAction weaponAttack;
-    private Animator playerAnimator;
+    public UnityAction<int> weaponAttack;
     public readonly int animator_combo = Animator.StringToHash("Combo");
 
-    private void Awake() => playerAnimator = player.animator;
-    private void FixedUpdate()=> afterDelayCounter?.Invoke();
-
-    private void AttackAfterDelay()
+    public void WeaponSet(Equip equip)
     {
-        afterDelayCount += Time.fixedDeltaTime;
-        if(afterDelayCount>afterDelay)
-        {
-            weaponVFX.gameObject.SetActive(false);
-            afterDelayCount = 0;
-            afterDelayCounter -= AttackAfterDelay;
-        }
-    }
-
-    public void WeaponSet(UnityEngine.AddressableAssets.AssetLabelReference weaponLabel)
-    {
-        if (curWeapon != null) AddressObject.Release(curWeapon.gameObject);
-        curWeapon = AddressObject.Instinate(weaponLabel,weaponVFX).GetComponent<Weapon>();
-        curWeapon.transform.localScale = Vector3.zero;
-        curWeapon.player = player;
-        curWeapon.TryGetComponent(out vfx);
+        if (curWeapon != null) DestroyImmediate(curWeapon.gameObject);
+        weaponVFX.localPosition = new Vector3(0, 0.8f, 0.8f);
+        Instantiate(equip.itemPrefab,weaponVFX).TryGetComponent(out curWeapon);
+        WeaponStatusSet(equip);
         superArmor = curWeapon.superArmor;
-        weaponAttack = curWeapon.WeaponAttack;
         maxCombo = curWeapon.maxCombo;
-        playerAnimator.SetInteger(animator_combo, maxCombo);
         attackCooltime = curWeapon.afterDelay;
-        fowardLength = curWeapon.forwardLength;
+        weaponAttack = curWeapon.WeaponAttack;
+        player.animator.SetInteger(animator_combo, maxCombo);
         curWeapon.transform.localScale = Vector3.one;
     }
 
- 
-    public void WeaponAnimationCancle()
+    public void WeaponStatusSet(Equip equip)
     {
-        weaponVFX.gameObject.SetActive(false);
-        comboCount = 0;
+        curWeapon.player = player;
+        curWeapon.damage = equip.damage;
+        curWeapon.attackRange = equip.attackRange;
+        curWeapon.afterDelay = equip.attackCooltime;
+        curWeapon.superArmor = equip.isSuperArmor;
+        curWeapon.maxCombo = equip.maxCombo;
     }
-
-    public void WeaponAnimationOn()
-    {
-        if (!weaponVFX.gameObject.activeSelf)
-        {
-            if (comboCount > maxCombo) comboCount = 0;
-            weaponVFX.localPosition = new Vector3(0, 0.5f, ((float)comboCount * fowardLength) + fowardLength);
-            weaponVFX.localRotation = Quaternion.Euler(new Vector3(0, 0,comboCount*45));
-            weaponVFX.gameObject.SetActive(true);
-            afterDelayCounter += AttackAfterDelay;
-            weaponAttack?.Invoke();
-            comboCount++;
-        }
-    }
-
-
- 
-
 
 }

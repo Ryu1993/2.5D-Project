@@ -21,5 +21,6 @@ MonoBehaviour:
   npc_pack:
     m_LabelString: 
   reward_pack:
-    m_LabelString: L1Chest
+    m_LabelString: Level1_Reward
   isReward: 1
+  level: 1

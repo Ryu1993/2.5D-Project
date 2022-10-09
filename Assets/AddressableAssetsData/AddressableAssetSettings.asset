@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 468a46d0ae32c3544b7d98094e6448a9, type: 3}
   m_Name: AddressableAssetSettings
   m_EditorClassIdentifier: 
-  m_DefaultGroup: 1aa193ed48253b64a8ce84cbd185a666
+  m_DefaultGroup: 168593272aeb05a48896f27508cd2a13
   m_CachedHash:
     serializedVersion: 2
     Hash: 00000000000000000000000000000000
@@ -42,8 +42,11 @@ MonoBehaviour:
   m_overridePlayerVersion: 
   m_GroupAssets:
   - {fileID: 11400000, guid: b843f995b1be30b4fb5238ccfdaca7b0, type: 2}
-  - {fileID: 11400000, guid: a4c50286013d20d428b973e9453f284b, type: 2}
-  - {fileID: 11400000, guid: a5f9dbdf09122334689595aa80f31eae, type: 2}
+  - {fileID: 11400000, guid: db416bab5cca73a49a6ee94d36c93c86, type: 2}
+  - {fileID: 11400000, guid: e07969a9599342e428f33ca3fc2247e0, type: 2}
+  - {fileID: 11400000, guid: 059e22468bb3ebc47a274cd56ad1e75a, type: 2}
+  - {fileID: 11400000, guid: 871274b9d99300f42b271e846bccee18, type: 2}
+  - {fileID: 11400000, guid: af4d45e4cb1adfc429b1ed5e9c757757, type: 2}
   m_BuildSettings:
     m_CompileScriptsInVirtualMode: 0
     m_CleanupStreamingAssetsAfterBuilds: 1
@@ -85,12 +88,6 @@ MonoBehaviour:
   m_LabelTable:
     m_LabelNames:
     - default
-    - TestMap_Label
-    - TestEnemy_Label
-    - TestItem_Label
-    - SceneItemPrefab
-    - TestBuff_Label
-    - TestWeapon_Label
     - Tutorial_Weapon
     - Tutorial_Artifact
     - EnemyMap
@@ -104,17 +101,16 @@ MonoBehaviour:
     - CloseSlime
     - RangeSlime
     - BasicSlime
-    - L1Chest
-    - L2Chest
-    - AllChest
     - BossMonster
     - BuffRoom
-    - BuffEventItem
-    - LV2WindSwept
     - Lv2Weapon
-    - Lv3WindSwept
     - Lv3Weapon
-    - L0Chest
+    - Lv1Weapon
+    - Lv1Buff
+    - Lv1EventBuff
+    - Lv1EventWeapon
+    - Lv2EventWeapon
+    - Lv3EventWeapon
   m_SchemaTemplates: []
   m_GroupTemplateObjects:
   - {fileID: 11400000, guid: bb16e0181677ac74b95368d51420f5dc, type: 2}

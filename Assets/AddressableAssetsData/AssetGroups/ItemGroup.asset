@@ -1,0 +1,87 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: ItemGroup
+  m_EditorClassIdentifier: 
+  m_GroupName: ItemGroup
+  m_Data:
+    m_SerializedData: []
+  m_GUID: ad3297e5d16c76c4fbfe82df2053061c
+  m_SerializeEntries:
+  - m_GUID: 1f21dc3b024c9b94c9dad32f6ba73c28
+    m_Address: Assets/ScriptableObject/Item/TutoriaArtifact.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Tutorial_Artifact
+    - BuffEventItem
+  - m_GUID: 374691b75e8da794281621d995802436
+    m_Address: Assets/ScriptableObject/Item/forTutorial/TuytorialArtifactDash.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Tutorial_Artifact
+  - m_GUID: 139c88f8f7d9218439edfcdd71ca4c8a
+    m_Address: Assets/ScriptableObject/Item/forTutorial/TutorialArtifactMove.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Tutorial_Artifact
+  - m_GUID: e315e87c82103e84f88b1747b729c30d
+    m_Address: Assets/ScriptableObject/Item/Artifact/L1_LifeUP.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Level1_Reward
+  - m_GUID: d476c6a4c70c979459d24dd5aa5c4949
+    m_Address: Assets/ScriptableObject/Item/Artifact/L1_MoveUp.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Level1_Reward
+  - m_GUID: 029a7a162d30f6947b37a7e3f150918a
+    m_Address: Assets/ScriptableObject/Item/Artifact/L1_DashUp.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Level1_Reward
+  - m_GUID: cc8c1b4ba15fb4f45a9e739532a30bb9
+    m_Address: Assets/ScriptableObject/Item/Artifact/L2_DashUp.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Level2_Reward
+  - m_GUID: 73c5a7ac5bf2acf40857404840c47a90
+    m_Address: Assets/ScriptableObject/Item/Artifact/L2_LifeUP.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Level2_Reward
+  - m_GUID: ca7152428209c1f478020a74ab8f8286
+    m_Address: Assets/ScriptableObject/Item/Artifact/L2_MoveUp.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Level2_Reward
+  - m_GUID: 4db053f4e3ff232478ae3b8356d5da8d
+    m_Address: Assets/ScriptableObject/Item/Artifact/Lv1_DashCountUP.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Level1_Reward
+    - Level2_Reward
+  - m_GUID: 00ebbaff5010a46428ea81be28325951
+    m_Address: Assets/ScriptableObject/Item/Buff/Heal.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Lv1Buff
+  - m_GUID: 89ca5be1751c0be49b0ac8bf9ca4d643
+    m_Address: Assets/ScriptableObject/Item/Buff/MoveUP.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Lv1Buff
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: a36bbc9cce32b754382bb97867bcb24f, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: af0e2689d1d775f4d982fa3c8dbf5111, type: 2}
+    - {fileID: 11400000, guid: 31e06ba61177cff47926f8f3e38d0854, type: 2}

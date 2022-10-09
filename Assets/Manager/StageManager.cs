@@ -1,13 +1,8 @@
-using JetBrains.Annotations;
+
 using System.Collections;
 using System.Collections.Generic;
-using System.Reflection;
-using Unity.VisualScripting;
-using UnityEditor.Search.Providers;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
 using UnityEngine.AI;
-using UnityEngine.SceneManagement;
 
 public class StageManager : Singleton<StageManager>
 {
@@ -85,6 +80,7 @@ public class StageManager : Singleton<StageManager>
         if(player.curStageInfo.stagLevel == lastPrevStageLevel)
         {
             player.curStageInfoList = null;
+            player.curStage = 1;
             GameManager.instance.PlayerInfoSave();
             LoadingUI.instance.SceneChange("Home");
             yield break;

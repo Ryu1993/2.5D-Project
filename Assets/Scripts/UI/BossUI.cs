@@ -13,13 +13,21 @@ public class BossUI : MonoBehaviour
     private TextMeshProUGUI bossName;
     private float maxHp;
 
+
     public void BossConnect(BossMonster boss)
     {
         bossName.text = boss.bossName;
         maxHp = boss.maxHp;
         boss.bossHpEvent += BossHpBarControll;
     }
-    public void BossHpBarControll(float curHp) => bossHpbar.fillAmount = curHp / maxHp;
+    public void BossHpBarControll(float curHp)
+    {
+        bossHpbar.fillAmount = curHp / maxHp;
+        if(curHp<=0)
+        {
+            gameObject.SetActive(false);
+        }
+    }
 
 
 

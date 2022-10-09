@@ -62,7 +62,6 @@ namespace AsyncState
         }
         protected override void EnterEvent(Character order)
         {
-            base.EnterEvent(order);
             order.curHp += startDuration;
         }
     }

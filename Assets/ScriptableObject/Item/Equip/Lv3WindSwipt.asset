@@ -15,15 +15,22 @@ MonoBehaviour:
   Type: 0
   Name: "\uCE7C\uBC14\uB78C3"
   itemCardText: 
-  simpleOptionText: "\uB0A0\uCE74\uB85C\uC6B4 \uBC14\uB78C\n\uACF5\uACA9\uB825 :
-    2\n\uCF64\uBCF4 : 4"
+  simpleOptionText: "\uACF5\uACA9\uB825:2\n\uCD5C\uB300 \uCF64\uBCF4:4\n\uBCF4\uB108\uC2A4:\uACF5\uACA9\uB825"
   backBg: {fileID: 0}
   backFrame: {fileID: 0}
   element: {fileID: 0}
   rarity: {fileID: 0}
-  cardIcon: {fileID: 1082946510, guid: f443545130963e441a211979f438c973, type: 3}
+  cardIcon: {fileID: 21300000, guid: 40c351e12b03e45d5b9a6f523dd372f0, type: 3}
   simpleIcon: {fileID: 0}
   simpleRarity: {fileID: 0}
   simpleIconFrame: {fileID: 0}
-  weaponPrefab:
-    m_LabelString: Lv3WindSwept
+  itemPrefab: {fileID: 381552562762368408, guid: ed01f0778fe9f904b8bf0d88a4340774,
+    type: 3}
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 64
+  damage: 2
+  attackCooltime: 0.3
+  attackRange: 1
+  maxCombo: 3
+  isSuperArmor: 0

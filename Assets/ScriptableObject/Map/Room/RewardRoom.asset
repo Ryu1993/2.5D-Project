@@ -21,5 +21,6 @@ MonoBehaviour:
   npc_pack:
     m_LabelString: 
   reward_pack:
-    m_LabelString: L0Chest
+    m_LabelString: Tutorial_Artifact
   isReward: 1
+  level: 0

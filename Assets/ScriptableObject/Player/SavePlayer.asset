@@ -14,10 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player_name: Save
   curEquip: {fileID: 0}
-  inventory:
-  - {fileID: 11400000, guid: d25262fba0d674640b6a80322ba34a96, type: 2}
-  - {fileID: 11400000, guid: d25262fba0d674640b6a80322ba34a96, type: 2}
-  player_maxHp: 12
+  inventory: []
+  player_maxHp: 6
   player_curHp: 6
   curStage: 0
   progressStageInfo: {fileID: 0}

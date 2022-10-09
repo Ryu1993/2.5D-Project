@@ -1,0 +1,56 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: RoomGroup
+  m_EditorClassIdentifier: 
+  m_GroupName: RoomGroup
+  m_Data:
+    m_SerializedData: []
+  m_GUID: 168593272aeb05a48896f27508cd2a13
+  m_SerializeEntries:
+  - m_GUID: c335f39f291075b4083edc6304c200a9
+    m_Address: Assets/Prefabs/Map/CrossEnemyRoom.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - EnemyMap
+    - NormalRoom
+  - m_GUID: 170e57422ff5f6d4f87dbdb69354f34e
+    m_Address: Assets/Prefabs/Map/BigRoom.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - EnemyMap
+  - m_GUID: d66fc2ee14d8d74418b0274474547980
+    m_Address: Assets/Prefabs/Map/BossRoom.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - BossRoom
+  - m_GUID: 743025eb4d8fd33428b04192d3fe3bd0
+    m_Address: Assets/Prefabs/Map/EndRoom.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - EndRoom
+  - m_GUID: cc5a550e250ed694299806b71235fae6
+    m_Address: Assets/Prefabs/Map/RewardRoom.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - RewardRoom
+  - m_GUID: 38e06637f14d0944b9b4e4d5a72211e5
+    m_Address: Assets/Prefabs/Map/BuffRoom.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - BuffRoom
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: a36bbc9cce32b754382bb97867bcb24f, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: a4af4ab6de015fe4fb7b92bf20d17208, type: 2}
+    - {fileID: 11400000, guid: ff78284e96d475e449660187245f64e9, type: 2}

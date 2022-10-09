@@ -9,6 +9,8 @@ public class UIManager : Singleton<UIManager>
     public MapUI mapUI;
     public ArtifactUI artifactUI;
     public RewardCardWindow rewardCardWindow;
+    public BlinkUI blinkUI;
+    public StatusContainerUi statusUI;
 
     protected override void Awake()
     {

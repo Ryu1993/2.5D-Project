@@ -1,0 +1,65 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: WeaponGroup
+  m_EditorClassIdentifier: 
+  m_GroupName: WeaponGroup
+  m_Data:
+    m_SerializedData: []
+  m_GUID: 6124fa5bced675243be1540f8cd2baa3
+  m_SerializeEntries:
+  - m_GUID: cc9d74fe2b79b554b968ebf452ed5bfa
+    m_Address: Assets/ScriptableObject/Item/Equip/Lv1FireBall.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Lv1Weapon
+  - m_GUID: d864f7037a983064bae9e89b4d4749de
+    m_Address: Assets/ScriptableObject/Item/Equip/Lv1Lightning.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Lv1Weapon
+  - m_GUID: 82bcbc24386f6774d85d9093c5025be7
+    m_Address: Assets/ScriptableObject/Item/Equip/Lv2Lightning.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Lv2Weapon
+  - m_GUID: 968e5d53acfd61d4ca3fa19941602448
+    m_Address: Assets/ScriptableObject/Item/Equip/Lv2FireBall.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Lv2Weapon
+  - m_GUID: 0799fb49e80f0c644bb6a1e4203867e0
+    m_Address: Assets/ScriptableObject/Item/Equip/Lv2WindSwipt.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Lv2Weapon
+  - m_GUID: 887024dad52281e4e9eecedfb992eb5d
+    m_Address: Assets/ScriptableObject/Item/Equip/Lv3FireBall.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Lv3Weapon
+  - m_GUID: 862fb91815e269f44b033847240f2b17
+    m_Address: Assets/ScriptableObject/Item/Equip/Lv3Lightning.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Lv3Weapon
+  - m_GUID: 6964352675330c849a055b0856316a2e
+    m_Address: Assets/ScriptableObject/Item/Equip/Lv3WindSwipt.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Lv3Weapon
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: a36bbc9cce32b754382bb97867bcb24f, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: f007fdb5a7c88ac49be5b340392aa52f, type: 2}
+    - {fileID: 11400000, guid: 1aafe008b76928641a57b798bd6986b0, type: 2}

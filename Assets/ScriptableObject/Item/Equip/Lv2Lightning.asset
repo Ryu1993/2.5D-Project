@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68772259fe93aa84b91e394341dd07e5, type: 3}
+  m_Name: Lv2Lightning
+  m_EditorClassIdentifier: 
+  Type: 0
+  Name: "\uBC88\uAC1C2"
+  itemCardText: 
+  simpleOptionText: "\uACF5\uACA9\uB825:2\n\uCD5C\uB300 \uCF64\uBCF4:3\n\uBCF4\uB108\uC2A4:\uBC94\uC704"
+  backBg: {fileID: 0}
+  backFrame: {fileID: 0}
+  element: {fileID: 0}
+  rarity: {fileID: 0}
+  cardIcon: {fileID: 21300000, guid: e52a8ab58cb3f4de68874cf58e6a2d39, type: 3}
+  simpleIcon: {fileID: 0}
+  simpleRarity: {fileID: 0}
+  simpleIconFrame: {fileID: 0}
+  itemPrefab: {fileID: 6530972922985257767, guid: b228a26f3140ef146be43218c839e877,
+    type: 3}
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 64
+  damage: 2
+  attackCooltime: 0.5
+  attackRange: 0.8
+  maxCombo: 2
+  isSuperArmor: 0

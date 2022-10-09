@@ -2,39 +2,33 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.VFX;
 
-public class BasicSword : Weapon , IAttackable
+public class BasicSword : Weapon
 {
-    private Collider[] colliders = new Collider[3];
     [SerializeField]
-    LayerMask layerMask;
-    [SerializeField]
-    float attackRange;
-    public override void WeaponAttack()
+    private VisualEffect vfx;
+
+    public override void WeaponAttack(int combo)
     {
+        realDamage = damage * combo;
+        transform.parent.localRotation = Quaternion.Euler(0, 0, -45 * combo + 95);
+        if(combo == 4)
+        {
+            transform.parent.localRotation = Quaternion.Euler(0, 0, 85);
+        }
+        vfx.Play();
         for(int i = 0; i < colliders.Length; i++) colliders[i] = null;
         Physics.OverlapSphereNonAlloc(transform.position, attackRange, colliders,layerMask,QueryTriggerInteraction.Collide);
-        for (int i = 0; i < colliders.Length; i++)
+        foreach(Collider collider in colliders)
         {
-            if (colliders[i]!=null)
+            if(collider!=null)
             {
-                IDamageable target = colliders[i].GetComponent<IDamageable>();
-                target?.Hit(this, transform.position);           
+                collider.TryGetComponent(out IDamageable target);
+                target?.Hit(this, transform.position);
             }
         }
     }
-
-    public void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, attackRange);
-    }
-
-
-    public void Attack(IDamageable target)
-    {
-        target.DirectHit(damage);
-    }
-
+    
 
 }

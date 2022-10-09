@@ -19,7 +19,8 @@ MonoBehaviour:
   monster_pack:
     m_LabelString: 
   npc_pack:
-    m_LabelString: BuffEventItem
+    m_LabelString: Lv1EventBuff
   reward_pack:
     m_LabelString: 
   isReward: 0
+  level: 0

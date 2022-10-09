@@ -2,24 +2,28 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Weapon : MonoBehaviour
+public abstract class Weapon : MonoBehaviour,IAttackable
 {
-    public enum WeaponType { Sword,Magic}
-    [SerializeField]
-    public WeaponType type;
-    [SerializeField]
-    public bool superArmor;
+    [HideInInspector]
     public Player player;
     [SerializeField]
-    public Sprite sprite;
-    [SerializeField]
-    protected float damage;
-    [SerializeField]
+    protected LayerMask layerMask;
+    public bool superArmor;
+    public float damage;
     public float afterDelay;
-    [SerializeField]
-    public float forwardLength;
+    public float attackRange;
     public int maxCombo;
-    public abstract void WeaponAttack();
+    protected Collider[] colliders = new Collider[8];
+    protected float realDamage;
+
+
+
+    public abstract void WeaponAttack(int combo);
+    public virtual void Attack(IDamageable target)
+    {
+        if (realDamage == 0) realDamage = damage;
+        target.DirectHit(realDamage);
+    }
 
 
 }

@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Type: 1
   Name: "\uAE43\uD138"
-  itemCardText: "\uB300\uC26C \uAC70\uB9AC +2"
-  simpleOptionText: "\uB300\uC26C \uAC70\uB9AC +2"
+  itemCardText: "\uC810\uBA78 \uC9C0\uC18D +0.3"
+  simpleOptionText: "\uC810\uBA78 \uC9C0\uC18D +0.3"
   backBg: {fileID: -1490577542, guid: 71ad172f81917dc4c88b385499ba85c4, type: 3}
   backFrame: {fileID: -1595437289, guid: 71ad172f81917dc4c88b385499ba85c4, type: 3}
   element: {fileID: -1461499335, guid: d529f63f32c1a2b438dc3ffcf58f7a73, type: 3}
@@ -24,7 +24,6 @@ MonoBehaviour:
   simpleIcon: {fileID: -1858978265, guid: b2713bbf286ea3b4d8cf4478d348ee16, type: 3}
   simpleRarity: {fileID: 1647528938, guid: b2713bbf286ea3b4d8cf4478d348ee16, type: 3}
   simpleIconFrame: {fileID: 21079388, guid: b2713bbf286ea3b4d8cf4478d348ee16, type: 3}
-  weaponPrefab:
-    m_LabelString: 
+  itemPrefab: {fileID: 0}
   artifactType: 3
-  strength: 2
+  strength: 0.3

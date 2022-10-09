@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: EventGroup
+  m_EditorClassIdentifier: 
+  m_GroupName: EventGroup
+  m_Data:
+    m_SerializedData: []
+  m_GUID: dab9be1af7e2f6249b26c702fb9ae0b2
+  m_SerializeEntries:
+  - m_GUID: 165a8ba7a1a527041a0174153d34fc63
+    m_Address: Assets/Prefabs/Item/EventItem/Lv1BuffEvent.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Lv1EventBuff
+  - m_GUID: e809e50d50d92c840b849188a223d4a4
+    m_Address: Assets/Prefabs/Item/EventItem/Lv1WeaponEvent.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Lv1EventWeapon
+  - m_GUID: 9b1bd76be00779b4683464f0ca5284b6
+    m_Address: Assets/Prefabs/Item/EventItem/Lv2WeaponEvent.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Lv2EventWeapon
+  - m_GUID: 7ab445d0a20c68e43853879e9d223a10
+    m_Address: Assets/Prefabs/Item/EventItem/Lv3WeaponEvent.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Lv3EventWeapon
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: a36bbc9cce32b754382bb97867bcb24f, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 78327143d8d15c74d97bcf72a05d64a5, type: 2}
+    - {fileID: 11400000, guid: b24929f5394c7d145bc8abe4717784bb, type: 2}

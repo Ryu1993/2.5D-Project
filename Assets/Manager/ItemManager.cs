@@ -9,7 +9,10 @@ public class ItemManager : Singleton<ItemManager>
     Dictionary<Artifact.ArtifactType,UnityAction<float>> ArtifactEffet = new Dictionary<Artifact.ArtifactType,UnityAction<float>>();
     [SerializeField]
     GameObject sceneItem;
-    NewObjectPool.PoolInfo sceneItemkey;
+    [SerializeField]
+    GameObject rewardChest;
+    NewObjectPool.PoolInfo sceneItemKey;
+    NewObjectPool.PoolInfo rewardChestKey;
     Player _player;
     Player player
     {
@@ -40,20 +43,35 @@ public class ItemManager : Singleton<ItemManager>
     public void PlayerGetWeapon(Equip equip)
     {
         UIManager.instance.weaponUI.ChangeWeapon(equip);
-        player.weaponContainer.WeaponSet(equip.weaponPrefab);
+        player.weaponContainer.WeaponSet(equip);
         GameManager.instance.playerInfo.curEquip = equip;
     }
 
-    public void CreateSceneItem(Item item, Vector3 position)
+    public SceneItem CreateSceneItem(Item item, Vector3 position)
     {
-        if (sceneItemkey == null) sceneItemkey = NewObjectPool.instance.PoolInfoSet(sceneItem,3,1);
-        SceneItem createdItem =  NewObjectPool.instance.Call(sceneItemkey, position).GetComponent<SceneItem>();
+        sceneItemKey = NewObjectPool.instance.PoolInfoSet(sceneItem,3,1);
+        NewObjectPool.instance.Call(sceneItemKey, position).TryGetComponent(out SceneItem createdItem);
         createdItem.SceneItemSet(item);
+        return createdItem;
     }
+
+    public RewardChest CreateRewardChest(AssetLabelReference label,Vector3 position,int level)
+    {
+        rewardChestKey = NewObjectPool.instance.PoolInfoSet(rewardChest, 3, 1);
+        NewObjectPool.instance.Call(rewardChestKey, position).TryGetComponent(out RewardChest createdChest);
+        createdChest.RewardSet(label,level);
+        return createdChest;
+    }
+
+
+
+
     public void ArtifactEffectAdd()
     {
         ArtifactEffet.Add(Artifact.ArtifactType.MaxHp, MaxHpUp);
-        ArtifactEffet.Add(Artifact.ArtifactType.MoveSpeed,MoveSpeedUp); 
+        ArtifactEffet.Add(Artifact.ArtifactType.MoveSpeed,MoveSpeedUp);
+        ArtifactEffet.Add(Artifact.ArtifactType.DashLength,DashLengthUp);
+        ArtifactEffet.Add(Artifact.ArtifactType.DashCount, DashCountUp);
     }
 
     private void MaxHpUp(float strength)
@@ -62,8 +80,12 @@ public class ItemManager : Singleton<ItemManager>
         player.curHp += (float)strength;
     }
     private void MoveSpeedUp(float strength)=> player.moveSpeed += strength;
-    private void DashLengthUp(float strength)=> player.dashSpeed += strength;
-
+    private void DashLengthUp(float strength)=> player.dashInvincibleTime += strength;
+    private void DashCountUp(float strength)
+    {
+        player.maxDashable += (int)strength;
+        player.curDashCount += (int)strength;
+    }
 
 
 

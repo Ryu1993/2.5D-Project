@@ -25,20 +25,17 @@ public class Player : Character
     private Transform mousePointer;
     [SerializeField]
     private GhostCreator ghostCreator;
-    [SerializeField]
-    private DirectionCircle directionCircle;
+    public DirectionCircle directionCircle;
     public WeaponContainer weaponContainer;
     public Animator animator;
     private Rigidbody rigi;
     #endregion
     #region ActionList
     private UnityAction InputCheck;
-    private UnityAction AttackBehavior;
     private UnityAction CooltimeCounter;
     private UnityAction BehaviorExecute;
     private bool isBehaviorExecuted;
     private bool isAttackBehavior;
-    private bool isComboBehaviour;
     private bool isMoveBehavior;
     private bool isDashBehavior;
     private bool isSkillBehavior;
@@ -50,9 +47,21 @@ public class Player : Character
     private float dashCoolCount = 0;
     private float dashInvincibleCount = 0;
     private float invincibleCount = 0;
-    public float comboCount = 0;
+    public int comboCount = 0;
     public int maxDashable = 1;
-    private int curDashCount = 1;
+    private int _curDashCount = 1;
+    public int curDashCount
+    {
+        get { return _curDashCount; }
+        set 
+        { 
+            _curDashCount = value;
+            dashUIcount?.Invoke(value);
+        }  
+    }
+    public UnityAction<int> dashUIcount;
+    public UnityAction<float> dashUIcooltime;
+    public UnityAction dashUIStart;
     #endregion
     #region PlayerStat
     public UnityAction<float> hpUp;
@@ -79,11 +88,12 @@ public class Player : Character
         }
     } 
     #endregion
-    private readonly int animator_Dash = Animator.StringToHash("Dash");
-    private readonly int animator_DashProgress = Animator.StringToHash("DashProgress");
+    protected readonly int animator_Dash = Animator.StringToHash("Dash");
+    protected readonly int animator_DashProgress = Animator.StringToHash("DashProgress");
     public readonly int animator_Continue = Animator.StringToHash("Continue");
     public readonly int animator_MotionStop = Animator.StringToHash("MotionStop");
     public Coroutine coUpdate;
+
 
 
     private void Awake()=> rigi = transform.GetComponent<Rigidbody>();
@@ -121,6 +131,7 @@ public class Player : Character
                 if (artifact != null) ItemManager.instance.ArtifactActivation(artifact);
             }
         }
+        UIManager.instance.blinkUI?.DashCooltimeSet(this);
         InputCheckSet();
         BehaviorExcuteSet();
         isReady = true;
@@ -172,9 +183,8 @@ public class Player : Character
     private void AttackInput()
     {
         if (!Input.GetMouseButton(0)) return;
-        if (weaponContainer.weaponAttack == null) { AttackBehavior = null; return; }
+        if (weaponContainer.weaponAttack == null) return;
         if (weaponContainer.superArmor) isSuperAttackBehavior = true;
-        AttackBehavior = weaponContainer.WeaponAnimationOn;
         isAttackBehavior = true;
     }
     private void DashInput()
@@ -222,7 +232,7 @@ public class Player : Character
     }
     private IEnumerator CoDeadCheck()
     {
-        yield return new WaitUntil(() => !animator.GetCurrentAnimatorStateInfo(0).IsName("Dead"));
+        yield return new WaitUntil(() => !animator.IsCurStateName(animator_Dead,0));
         GameManager.instance.GameOver();
     }
 
@@ -255,6 +265,7 @@ public class Player : Character
         if (isBehaviorExecuted) return; // 필요없음
         if (!isDashBehavior) return;
         if (curDashCount == 0) return;
+        gameObject.layer = 11;
         curDashCount--;
         ComboCancle();
         BehaviorExecute += PlayerDashMove;
@@ -320,9 +331,9 @@ public class Player : Character
     private void DashCoolCount()
     {
         dashCoolCount += Time.fixedDeltaTime;
+        dashUIcooltime?.Invoke(dashCoolCount / dashCoolTime);
         if (dashCoolCount >= dashCoolTime)
         {
-            InputCheck += DashInput;
             CooltimeCounter -= DashCoolCount;
             dashCoolCount = 0;
             curDashCount = maxDashable;
@@ -353,13 +364,23 @@ public class Player : Character
             InputCheck += MoveInput;
             InputCheck += AttackInput;
             InputCheck += SkillInput;
+            InputCheck += DashInput;
             BehaviorExecute -= PlayerDashMove;
             CooltimeCounter -= DashInvincibleCount;
-            if(dashCoolCount == 0) CooltimeCounter += DashCoolCount;
+            if(dashCoolCount == 0)
+            {
+                dashUIStart?.Invoke();
+                CooltimeCounter += DashCoolCount;
+            }
+            else
+            {
+                dashCoolCount = 0.02f;
+            }
             directionCircle.isStop = false;
             isDashInvincible = false;
             HitInput = null;
             dashInvincibleCount = 0;
+            gameObject.layer = 7;
         }
     }
     private void ComboCount()
@@ -394,8 +415,6 @@ public class Player : Character
             weaponContainer.attackCoolCount = 0f;
         }
     }
-
-
 
 
     #endregion

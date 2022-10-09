@@ -14,8 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Type: 2
   Name: "\uC2E0\uC18D"
-  itemCardText: "\uC774\uB3D9\uC18D\uB3C4+2\n    (60\uCD08)"
-  simpleOptionText: "\uC774\uB3D9\uC18D\uB3C4+2\n    (60\uCD08)"
+  level: 0
+  itemCardText: "\uC774\uB3D9\uC18D\uB3C4+2\n(60\uCD08)"
+  simpleOptionText: "\uC774\uB3D9\uC18D\uB3C4+2\n(60\uCD08)"
   backBg: {fileID: 0}
   backFrame: {fileID: 0}
   element: {fileID: 0}
@@ -24,7 +25,6 @@ MonoBehaviour:
   simpleIcon: {fileID: 0}
   simpleRarity: {fileID: 0}
   simpleIconFrame: {fileID: 0}
-  weaponPrefab:
-    m_LabelString: 
+  itemPrefab: {fileID: 1103892459537272, guid: a5bc136c5e87fb14888b1af7d82802f5, type: 3}
   buffType: 4
   duration: 59

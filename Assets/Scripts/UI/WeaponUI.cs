@@ -14,7 +14,6 @@ public class WeaponUI : MonoBehaviour
     public void ChangeWeapon(Equip weapon)
     {
         curWeaponImage.sprite = weapon.cardIcon;
-        curWeaponImage.SetNativeSize();
         curWeaponName.text = weapon.Name;
     }
 

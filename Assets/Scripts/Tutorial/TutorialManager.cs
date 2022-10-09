@@ -13,19 +13,14 @@ public class TutorialManager : Singleton<TutorialManager>
     [SerializeField]
     Equip baseWeapon;
     [SerializeField]
-    Artifact baseArtifact;
-    [SerializeField]
-    GameObject tutorialReward;
+    AssetLabelReference baseArtifact;
     [SerializeField]
     PlayableDirector tutorialDirector;
     [SerializeField]
     TutorialGate tutorialGate;
     [SerializeField]
     GameObject playerCamera;
-    GameObject basicWeapon;
-
     int monsterCount = 3;
-    NewObjectPool.PoolInfo pool;
 
     protected override void Awake()
     {
@@ -36,10 +31,7 @@ public class TutorialManager : Singleton<TutorialManager>
 
     private void Start()
     {
-        pool = NewObjectPool.instance.PoolInfoSet(sceneItem, 1, 1);
-        basicWeapon = NewObjectPool.instance.Call(pool, new Vector3(-3, 0, 0)).gameObject;
-        SceneItem go = basicWeapon.GetComponent<SceneItem>();
-        go.SceneItemSet(baseWeapon);
+        ItemManager.instance.CreateSceneItem(baseWeapon, new Vector3(-3,0,0));
         StartCoroutine(WeaponGetEvent());
     }
 
@@ -57,8 +49,10 @@ public class TutorialManager : Singleton<TutorialManager>
         monsterCount--;
         if(monsterCount==0)
         {
-            tutorialReward.SetActive(true);
-            StartCoroutine(RewardGetEvent(tutorialReward.GetComponent<BoxCollider>()));
+            RewardChest chest = ItemManager.instance.CreateRewardChest(baseArtifact, Vector3.zero, 0);
+            chest.closeEvent = chest.Return;
+            chest.TryGetComponent(out BoxCollider box);
+            StartCoroutine(RewardGetEvent(box));
         }
     }
 
@@ -77,8 +71,7 @@ public class TutorialManager : Singleton<TutorialManager>
     private IEnumerator RewardGetEvent(BoxCollider collider)
     {
         yield return new WaitUntil(() => collider.isTrigger);
-        tutorialGate.GateOpne();
-        
+        tutorialGate.GateOpne();    
     }
 
 

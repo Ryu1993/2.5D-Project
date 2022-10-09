@@ -24,7 +24,6 @@ MonoBehaviour:
   simpleIcon: {fileID: 0}
   simpleRarity: {fileID: 0}
   simpleIconFrame: {fileID: 0}
-  weaponPrefab:
-    m_LabelString: 
+  itemPrefab: {fileID: 1843317233059916, guid: acc0fdf52f17a6140bd3484d66046ae9, type: 3}
   buffType: 3
   duration: 1

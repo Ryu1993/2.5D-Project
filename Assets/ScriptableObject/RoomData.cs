@@ -14,5 +14,6 @@ public class RoomData : ScriptableObject
     public AssetLabelReference npc_pack;
     public AssetLabelReference reward_pack;
     public bool isReward;
+    public int level;
 
 }

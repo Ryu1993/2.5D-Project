@@ -8,6 +8,7 @@ public abstract class Item : ScriptableObject
     public enum ItemType { Equip,Artifact,Buff}
     public ItemType Type;
     public string Name;
+    public int level;
     [Header("CardInfo")]
     [TextArea]
     public string itemCardText;
@@ -22,6 +23,6 @@ public abstract class Item : ScriptableObject
     public Sprite simpleRarity;
     public Sprite simpleIconFrame;
     [Header("WeaponInfo")]
-    public AssetLabelReference weaponPrefab;
+    public GameObject itemPrefab;
 
 }

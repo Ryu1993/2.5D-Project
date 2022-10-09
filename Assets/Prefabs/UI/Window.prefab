@@ -282,7 +282,7 @@ Animator:
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: a6e744dafadd9bc4ca2df0c702dd2a4c, type: 2}
   m_CullingMode: 0
-  m_UpdateMode: 0
+  m_UpdateMode: 2
   m_ApplyRootMotion: 1
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
@@ -310,10 +310,6 @@ MonoBehaviour:
   - {fileID: 1625521734044452679}
   count: 0
   managers: []
-  testLabel:
-    m_LabelString: TestItem_Label
-  isProgress: 0
-  isComplete: 0
 --- !u!1001 &1332920453
 PrefabInstance:
   m_ObjectHideFlags: 0

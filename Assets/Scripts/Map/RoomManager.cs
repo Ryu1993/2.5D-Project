@@ -9,6 +9,7 @@ using UnityEngine.SocialPlatforms.GameCenter;
 using UnityEngine.Events;
 using UnityEngine.ResourceManagement.ResourceProviders.Simulation;
 using static MapManager;
+using JetBrains.Annotations;
 
 public class RoomManager : MonoBehaviour
 {
@@ -19,15 +20,16 @@ public class RoomManager : MonoBehaviour
     [SerializeField] protected Transform rewardPointer;
     [SerializeField] protected Transform gate;
     [SerializeField] protected Transform center;
-    protected Dictionary<Object, List<Transform>> SpawnPoint = new Dictionary<Object, List<Transform>>();
+    protected Dictionary<Object, List<Vector3>> SpawnPoint = new Dictionary<Object, List<Vector3>>();
     protected Dictionary<GateDirection,Transform> Gate = new Dictionary<GateDirection,Transform>();
     protected List<GateDirection> connectedDirection = new List<GateDirection>();
     protected List<NewObjectPool.PoolInfo> enemyPools = new List<NewObjectPool.PoolInfo>();
     protected List<GameObject> enemys = new List<GameObject>();
     protected List<GameObject> npcs = new List<GameObject>();
-    protected List<RewardChest> rewards = new List<RewardChest>();
+    protected RewardChest[] rewards;
+    protected IEventable[] eventables;
     protected UnityAction chestOpen;
-    protected UnityAction npcInteraction;
+    protected UnityAction chestReturn;
     protected int monsterCounter = 0;
 
     protected void Awake()
@@ -55,7 +57,7 @@ public class RoomManager : MonoBehaviour
             }
         }
     }
-    public void ActivateGate()
+    public virtual void ActivateGate()
     {
         foreach (GateDirection direction in connectedDirection)
         {
@@ -70,9 +72,9 @@ public class RoomManager : MonoBehaviour
         if (roomData.curRoomType == RoomData.RoomType.Boss) BossSpawn();
         if (roomData.curRoomType == RoomData.RoomType.Reward) RewardSpawn();
     }
-    public void PlayerSpawn(Transform player,MapManager.GateDirection direction)
+    public void PlayerSpawn(Transform player,GateDirection direction)
     {
-        if(direction == MapManager.GateDirection.Start) player.position = center.position;
+        if(direction == GateDirection.Start) player.position = center.position;
         else player.position = Gate[direction].transform.GetChild(0).position;
     }
     protected void EnemySpawn()
@@ -87,10 +89,9 @@ public class RoomManager : MonoBehaviour
             {
                 enemyPools.Add(NewObjectPool.instance.PoolInfoSet(enemy, 6, 3));
             }
-            Debug.Log(enemyPools.Count);
-            foreach (Transform enemyPostion in SpawnPoint[Object.Enemy])
+            foreach (Vector3 enemyPostion in SpawnPoint[Object.Enemy])
             {
-                var monster = NewObjectPool.instance.Call(enemyPools[Random.Range(0, enemyPools.Count)], enemyPostion.position).GetComponent<Monster>();
+                var monster = NewObjectPool.instance.Call(enemyPools[Random.Range(0, enemyPools.Count)], enemyPostion).GetComponent<Monster>();
                 monster.deadEvent -= SubMonsterCountEvent;
                 monster.deadEvent += SubMonsterCountEvent;
             }          
@@ -112,7 +113,8 @@ public class RoomManager : MonoBehaviour
             if (subCount < monsterCounter)
             {
                 var pool = enemyPools[Random.Range(0, enemyPools.Count)];
-                var monster = NewObjectPool.instance.Call(pool).GetComponent<Monster>();
+                NewObjectPool.instance.Call(pool).TryGetComponent(out Monster monster);
+                monster.deadEvent -= SubMonsterCountEvent;
                 monster.deadEvent += SubMonsterCountEvent;
                 monster.PoolInfoSet(pool);
             }
@@ -120,10 +122,7 @@ public class RoomManager : MonoBehaviour
 
      }
 
-    protected virtual void BossSpawn()
-    {
-    }
-
+    protected virtual void BossSpawn() { }
 
     protected void NPCSpawn()
     {
@@ -132,55 +131,64 @@ public class RoomManager : MonoBehaviour
             int count = SpawnPoint[Object.Npc].Count;
             if (count > 0)
             {
-                npcs = AddressObject.LimitInstinates(roomData.npc_pack, count);
-                IEventable[] eventables = new IEventable[npcs.Count];
+                npcs = AddressObject.LimitRandomInstinates(roomData.npc_pack, count);
+                eventables = new IEventable[npcs.Count];
                 for (int i = 0; i < npcs.Count; i++)
                 {
-                    npcs[i].transform.position = SpawnPoint[Object.Npc][i].position;
+                    npcs[i].transform.position = SpawnPoint[Object.Npc][i];
                     if(npcs[i].TryGetComponent<IEventable>(out var npc))
                     {
-                        npcInteraction += npc.EventClear;
                         eventables[i] = npc;
+                        npc.EventInteraction(NPCInteraction);
+                        npc.EventStart();
                     }
-                }
-                npcInteraction += MapManager.instance.CurMapClear;
-                foreach(var eventable in eventables)
-                {
-                    eventable.EventInteraction(npcInteraction);
                 }
             }
         }
         ActivateGate();
     }
+    protected void NPCInteraction()
+    {
+        foreach(var eventable in eventables)
+        {
+            eventable.EventClear();
+            MapManager.instance.CurMapClear();
+        }
+    }
+
     protected void RewardSpawn()
     {
         if (roomData.isReward)
         {
-            List<GameObject> rewardGo = AddressObject.LimitRandomInstinates(roomData.reward_pack, SpawnPoint[Object.Reward].Count);
-            foreach (var go in rewardGo)
+            int count = SpawnPoint[Object.Reward].Count;
+            rewards = new RewardChest[count];
+            for(int i =0;i<count;i++)
             {
-                if (go.TryGetComponent<RewardChest>(out var reward))
-                {
-                    rewards.Add(reward);
-                    chestOpen += reward.TriggerOn;
-                }
+                ItemManager.instance.CreateRewardChest(roomData.reward_pack, SpawnPoint[Object.Reward][i], roomData.level).TryGetComponent(out rewards[i]);
+                chestOpen += rewards[i].TriggerOn;
+                chestReturn += rewards[i].Return;
             }
-            for (int i = 0; i < rewards.Count; i++)
+            chestReturn += MapManager.instance.CurMapClear;
+            chestReturn += ActivateGate;
+            for(int i = 0; i<count;i++)
             {
-                rewards[i].transform.position = SpawnPoint[Object.Reward][i].position;
                 rewards[i].openEvent = chestOpen;
+                rewards[i].closeEvent = chestReturn;
             }
         }
-        else MapManager.instance.CurMapClear();
-        ActivateGate();
+        else
+        {
+            MapManager.instance.CurMapClear();
+            ActivateGate();
+        }
     }
 
-    protected List<Transform> CreateChildList(Transform transform)
+    protected List<Vector3> CreateChildList(Transform transform)
     {
-        List<Transform> childList = new List<Transform>();
+        List<Vector3> childList = new List<Vector3>();
         for (int i = 0; i < transform.childCount; i++)
         {
-            childList.Add(transform.GetChild(i));
+            childList.Add(transform.GetChild(i).position);
         }
         return childList;
     }
@@ -189,12 +197,15 @@ public class RoomManager : MonoBehaviour
     {
         foreach(GameObject go in npcs)
         {
-            if(go!=null) Addressables.Release(go);
+            if(go!=null)
+            {
+                Addressables.Release(go);
+                if(go!=null)
+                {
+                    DestroyImmediate(go);
+                }
+            }
 
-        }
-        foreach(RewardChest go in rewards)
-        {
-            if (go != null) Addressables.Release(go.gameObject);
         }
     }
 
